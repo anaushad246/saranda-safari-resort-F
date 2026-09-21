@@ -1,211 +1,253 @@
 import React from 'react';
-import { Home, Trees, Check, X, AlertTriangle, Moon, Shield, Calendar, ArrowRight } from 'lucide-react';
-import { Section, Container, Heading, Button, Card, Badge } from '../components/ui/Primitives';
-import { stayInventory } from '../content/stayInventory';
-import { resortInfo } from '../content/resortInfo';
+import { 
+  Calendar, 
+  Sparkles,
+  Users,
+  MapPin
+} from 'lucide-react';
+import { Container, Button } from '../components/ui/Primitives';
+import { stayContent } from '../content/stayInventory';
 
 export function StayPage({ onOpenBooking }) {
   return (
-    <div className="w-full">
-      {/* Header */}
-      <section className="bg-[#0E261C] text-[#F9F6F0] py-16 md:py-24 border-b border-[#C5A059]/30">
-        <Container className="text-center max-w-4xl">
-          <Badge variant="gold" className="mb-4">Overnight Capacity: Max 25 Guests</Badge>
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white tracking-tight">
-            Accommodations & Inventory
+    <div className="w-full bg-[#FDFBF7]">
+      {/* 1. Hero — Clean, Editorial & Atmospheric */}
+      <section className="relative bg-[#0E261C] text-[#F9F6F0] pt-10 sm:pt-14 pb-8 sm:pb-12 border-b border-[#C5A059]/30 overflow-hidden">
+        {/* Subtle decorative glow */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:24px_24px]" />
+
+        <Container className="relative z-10 max-w-4xl px-4 sm:px-6 text-center">
+          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white tracking-tight leading-tight">
+            {stayContent.heroTitle}
           </h1>
-          <p className="mt-4 text-base sm:text-lg text-[#DFCA95] leading-relaxed max-w-2xl mx-auto">
-            Traditional red-and-white brick cottages, an authentic wooden log house, and starlit riverfront camping.
+
+          <p className="mt-4 text-sm sm:text-base text-[#DFCA95] font-light leading-relaxed max-w-3xl mx-auto">
+            {stayContent.heroDescription}
           </p>
+        </Container>
+
+        {/* Large Scenic Accommodation Image Frame */}
+        <div className="mt-8 max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="relative rounded-2xl overflow-hidden border border-[#C5A059]/40 shadow-2xl aspect-[16/8] sm:aspect-[21/8] bg-black/40">
+            <img
+              src={stayContent.heroImage}
+              alt="Accommodations at Saranda Safari Resort"
+              className="w-full h-full object-cover"
+              loading="eager"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+            <div className="absolute bottom-3 left-4 sm:left-6 text-xs text-[#F9F6F0]/90 font-light flex items-center gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-[#E5C378]" />
+              <span>Quiet stays along the Karo River & forest canopy</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. Signature Stays — Main Section */}
+      <section className="py-10 sm:py-14">
+        <Container className="max-w-6xl px-4 sm:px-6">
+          <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+            <span className="text-xs font-cinzel uppercase tracking-widest text-[#8F6C27] font-bold block mb-1">
+              Boutique Collection
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#143628] tracking-tight">
+              Signature Stays
+            </h2>
+            <p className="mt-1.5 text-xs sm:text-sm text-[#143628]/75">
+              Each distinct retreat features its own unique character, verandas, and forest settings.
+            </p>
+          </div>
+
+          {/* Top Feature Duo: Riverwood & Cherry Blossom (Large Feature Cards) */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-10">
+            {stayContent.featuredCottages.map((cottage) => (
+              <article
+                key={cottage.id}
+                className="bg-white rounded-2xl overflow-hidden border border-[#EADFC9]/90 shadow-[0_2px_14px_rgba(20,54,40,0.05)] hover:shadow-[0_12px_32px_rgba(20,54,40,0.1)] transition-all duration-300 flex flex-col group"
+              >
+                {/* Visual Photograph Frame */}
+                <div className="relative aspect-[16/10] overflow-hidden bg-[#0E261C]/5">
+                  <img
+                    src={cottage.image}
+                    alt={cottage.name}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+
+                  {/* Top Badge: Units & Capacity */}
+                  <div className="absolute top-3.5 left-3.5 bg-[#0E261C]/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-[#C5A059]/40 shadow-sm flex items-center gap-2 text-xs text-[#E5C378] font-cinzel font-semibold">
+                    <Users className="w-3.5 h-3.5 text-[#C5A059]" />
+                    <span>{cottage.capacity}</span>
+                    <span className="w-1 h-1 rounded-full bg-[#C5A059]" />
+                    <span className="text-[#F9F6F0]/85 text-[11px] font-normal">{cottage.cottageCount}</span>
+                  </div>
+                </div>
+
+                {/* Content Body */}
+                <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#143628] tracking-tight group-hover:text-[#B38F46] transition-colors">
+                      {cottage.name}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-[#8F6C27] font-serif italic mt-1 mb-3">
+                      {cottage.tagline || cottage.subtitle}
+                    </p>
+
+                    <p className="text-xs sm:text-[13px] text-[#143628]/80 leading-relaxed font-light mb-3">
+                      {cottage.description}
+                    </p>
+
+                    {cottage.setting && (
+                      <div className="flex items-start gap-2 text-[11px] text-[#8F6C27] bg-[#FDFBF7] p-2.5 rounded-lg border border-[#EADFC9]">
+                        <MapPin className="w-3.5 h-3.5 text-[#8F6C27] shrink-0 mt-0.5" />
+                        <span className="leading-snug">{cottage.setting}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-6 pt-4 border-t border-[#EADFC9]/60 flex items-center justify-between">
+                    <span className="text-xs text-[#143628]/60 font-cinzel font-medium">
+                      Riverside Vantage
+                    </span>
+                    <Button
+                      variant="terracotta"
+                      size="sm"
+                      onClick={onOpenBooking}
+                      icon={Calendar}
+                      className="text-xs py-2 px-4 font-semibold cursor-pointer"
+                    >
+                      Check Availability
+                    </Button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          {/* Remaining Four: Editorial 2x2 Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            {stayContent.otherCottages.map((cottage) => (
+              <article
+                key={cottage.id}
+                className="bg-white rounded-xl overflow-hidden border border-[#EADFC9]/85 shadow-[0_2px_12px_rgba(20,54,40,0.04)] hover:shadow-[0_10px_26px_rgba(20,54,40,0.08)] transition-all duration-300 flex flex-col group"
+              >
+                {/* Visual Photograph Frame */}
+                <div className="relative aspect-[16/10] overflow-hidden bg-[#0E261C]/5">
+                  <img
+                    src={cottage.image}
+                    alt={cottage.name}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+
+                  {/* Top Badge: Units & Capacity */}
+                  <div className="absolute top-3 left-3 bg-[#0E261C]/90 backdrop-blur-md px-2.5 py-1 rounded-full border border-[#C5A059]/40 shadow-sm flex items-center gap-1.5 text-[11px] text-[#E5C378] font-cinzel font-semibold">
+                    <Users className="w-3 h-3 text-[#C5A059]" />
+                    <span>{cottage.capacity}</span>
+                    <span className="w-1 h-1 rounded-full bg-[#C5A059]" />
+                    <span className="text-[#F9F6F0]/85 text-[10px] font-normal">{cottage.cottageCount}</span>
+                  </div>
+                </div>
+
+                {/* Content Body */}
+                <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#143628] tracking-tight group-hover:text-[#B38F46] transition-colors">
+                      {cottage.name}
+                    </h3>
+                    <p className="text-xs text-[#8F6C27] font-serif italic mt-0.5 mb-2.5">
+                      {cottage.tagline || cottage.subtitle}
+                    </p>
+
+                    <p className="text-xs sm:text-[13px] text-[#143628]/80 leading-relaxed font-light mb-3">
+                      {cottage.description}
+                    </p>
+
+                    {cottage.setting && (
+                      <div className="flex items-start gap-1.5 text-[11px] text-[#8F6C27] bg-[#FDFBF7] p-2 rounded-lg border border-[#EADFC9]">
+                        <MapPin className="w-3 h-3 text-[#8F6C27] shrink-0 mt-0.5" />
+                        <span className="leading-snug">{cottage.setting}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-5 pt-3.5 border-t border-[#EADFC9]/60 flex items-center justify-between">
+                    <span className="text-[11px] text-[#143628]/60 font-cinzel">
+                      Resort Grounds
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={onOpenBooking}
+                      icon={Calendar}
+                      className="text-xs py-1.5 px-3.5 !border-[#C5A059] !text-[#143628] hover:!bg-[#143628] hover:!text-[#DFCA95] cursor-pointer"
+                    >
+                      Check Availability
+                    </Button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         </Container>
       </section>
 
-      {/* Transparent Amenities Audit Section */}
-      <Section background="cream-deep">
-        <Container>
-          <Heading
-            level={2}
-            badge="Honest & Transparent"
-            align="center"
-            subheading="Clear expectations for a tranquil, nature-focused retreat"
-          >
-            Resort Facilities Audit
-          </Heading>
+      {/* 3. Camping — Separate Standalone Experience */}
+      <section className="py-10 sm:py-14 bg-[#F4ECE1]/50 border-t border-[#EADFC9]/80">
+        <Container className="max-w-5xl px-4 sm:px-6">
+          <div className="bg-white rounded-2xl overflow-hidden border border-[#EADFC9] shadow-lg grid grid-cols-1 md:grid-cols-12">
+            {/* Image on Left/Top */}
+            <div className="md:col-span-6 relative aspect-[16/10] md:aspect-auto overflow-hidden bg-[#0E261C]/5">
+              <img
+                src={stayContent.campingExperience.image}
+                alt={stayContent.campingExperience.title}
+                loading="lazy"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent md:hidden" />
+              <div className="absolute top-3 left-3 bg-[#0E261C]/90 backdrop-blur-md px-3 py-1 rounded-full border border-[#C5A059]/40 text-xs text-[#E5C378] font-cinzel font-semibold">
+                {stayContent.campingExperience.capacity}
+              </div>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {Object.entries(resortInfo.amenitiesStatus).map(([key, item]) => (
-              <Card key={key} className="p-6">
-                <div className="flex items-center gap-2 mb-2">
-                  {item.available ? (
-                    <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
-                      <Check className="w-4 h-4" />
-                    </div>
-                  ) : (
-                    <div className="w-6 h-6 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
-                      <AlertTriangle className="w-3.5 h-3.5" />
-                    </div>
-                  )}
-                  <h4 className="font-serif font-bold text-sm text-[#143628]">{item.title}</h4>
-                </div>
-                <p className="text-xs text-[#143628]/75 leading-relaxed pl-8">
-                  {item.desc}
+            {/* Content on Right */}
+            <div className="md:col-span-6 p-6 sm:p-8 flex flex-col justify-between">
+              <div>
+                <span className="text-[10px] font-cinzel uppercase tracking-widest text-[#8F6C27] font-bold block mb-1">
+                  Wilderness Night
+                </span>
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#143628]">
+                  {stayContent.campingExperience.title}
+                </h3>
+                <p className="text-xs text-[#8F6C27] font-serif italic mt-0.5 mb-3">
+                  {stayContent.campingExperience.subtitle}
                 </p>
-              </Card>
-            ))}
-          </div>
+                <p className="text-xs text-[#143628]/80 leading-relaxed font-light mb-4">
+                  {stayContent.campingExperience.description}
+                </p>
+              </div>
 
-          <div className="p-4 rounded-lg bg-[#F4EFE6] border border-[#C5A059]/40 text-center text-xs text-[#143628]/80 italic">
-            "{resortInfo.photoDisclaimer}"
-          </div>
-        </Container>
-      </Section>
-
-      {/* Accommodation Inventory Detailed Breakdown */}
-      <Section background="cream">
-        <Container>
-          <Heading
-            level={2}
-            badge="Unit Details & Rules"
-            align="center"
-            subheading="Review capacity guidelines, bed types, and inclusions"
-          >
-            The Four Accommodation Choices
-          </Heading>
-
-          <div className="space-y-12">
-            {stayInventory.units.map((unit) => (
-              <Card key={unit.id} className="p-8 md:p-10 border-[#C5A059]/40">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                  
-                  {/* Left Column: Details */}
-                  <div className="lg:col-span-8 space-y-4">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <Badge variant={unit.type === 'camping' ? 'terracotta' : 'gold'}>
-                        {unit.tag}
-                      </Badge>
-                      <span className="text-xs font-semibold text-[#8F6C27]">
-                        {unit.unitCount} Unit(s) Available
-                      </span>
-                      <span className="text-xs text-[#143628]/70">
-                        • {unit.timings}
-                      </span>
-                    </div>
-
-                    <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#143628]">
-                      {unit.name}
-                    </h3>
-
-                    <p className="text-sm sm:text-base text-[#143628]/85 leading-relaxed">
-                      {unit.description}
-                    </p>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 text-xs sm:text-sm">
-                      <div className="bg-[#F9F6F0] p-3 rounded border border-[#E8DFCE]">
-                        <span className="font-bold text-[#143628] block">Bedding:</span>
-                        <span className="text-[#143628]/80 mt-0.5 block">{unit.bedConfiguration}</span>
-                      </div>
-                      <div className="bg-[#F9F6F0] p-3 rounded border border-[#E8DFCE]">
-                        <span className="font-bold text-[#143628] block">Bathroom:</span>
-                        <span className="text-[#143628]/80 mt-0.5 block">{unit.bathroom}</span>
-                      </div>
-                    </div>
-
-                    <div className="pt-2">
-                      <span className="text-xs uppercase font-semibold text-[#8F6C27] block mb-2">Unit Inclusions & Features:</span>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#143628]/80">
-                        {unit.amenities.map((am, i) => (
-                          <div key={i} className="flex items-center gap-2">
-                            <Check className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-                            <span>{am}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right Column: Pricing & Strict Capacity Guard */}
-                  <div className="lg:col-span-4 bg-[#F4EFE6] rounded-lg p-6 border border-[#E8DFCE] flex flex-col justify-between space-y-4">
-                    <div>
-                      <div className="border-b border-[#E8DFCE] pb-3 mb-3">
-                        <span className="text-xs uppercase tracking-wider font-semibold text-[#8F6C27] block">
-                          Official Tariff Schedule
-                        </span>
-                        <span className="text-[11px] text-emerald-800 font-medium">
-                          {unit.mealInclusion}
-                        </span>
-                      </div>
-
-                      {unit.type === 'camping' ? (
-                        <div className="space-y-2 text-sm">
-                          <div className="flex justify-between">
-                            <span>Per Person:</span>
-                            <span className="font-bold text-[#143628]">₹1,499</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Couple:</span>
-                            <span className="font-bold text-[#143628]">₹2,999</span>
-                          </div>
-                          <div className="text-[11px] text-[#143628]/70 pt-1">
-                            Tent 1: 2 Guests • Tent 2: 3 Guests (Total 5 Camping)
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="space-y-2 text-sm">
-                          <div className="flex justify-between">
-                            <span>1 Adult:</span>
-                            <span className="font-bold text-[#143628]">₹3,000</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>2 Adults:</span>
-                            <span className="font-bold text-[#143628]">₹4,000</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>3 Adults:</span>
-                            <span className="font-bold text-[#143628]">₹5,400</span>
-                          </div>
-                          {unit.pricingTiers[4] ? (
-                            <div className="flex justify-between border-t border-[#E8DFCE] pt-1.5 text-[#143628]">
-                              <span className="font-semibold">4 Adults:</span>
-                              <span className="font-bold text-[#143628]">₹6,600</span>
-                            </div>
-                          ) : (
-                            <div className="border-t border-[#E8DFCE] pt-1.5 text-[11px] text-red-700 font-semibold">
-                              Strict Capacity: 3 Guests Max (4th guest prohibited)
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      <div className="mt-4 pt-3 border-t border-[#E8DFCE] text-xs text-[#143628]/75 space-y-1">
-                        <div>• Children &lt;5: Free</div>
-                        <div>• Children 5–10: {unit.type === 'camping' ? '₹750' : '₹700'}</div>
-                      </div>
-                    </div>
-
-                    <Button
-                      variant="terracotta"
-                      size="md"
-                      onClick={onOpenBooking}
-                      className="w-full"
-                      icon={Calendar}
-                    >
-                      Book This Unit
-                    </Button>
-                  </div>
-
-                </div>
-              </Card>
-            ))}
-          </div>
-
-          <div className="mt-12 p-6 rounded-lg bg-[#143628] text-[#F9F6F0] text-center max-w-2xl mx-auto space-y-2">
-            <h4 className="font-serif text-lg font-bold text-[#DFCA95]">Inventory Policy Notice</h4>
-            <p className="text-xs text-[#F9F6F0]/85">
-              {stayInventory.inventoryNote}
-            </p>
+              <div className="pt-4 border-t border-[#EADFC9] flex items-center justify-between">
+                <span className="text-xs text-[#143628]/70 font-cinzel">
+                  Tent Pitches
+                </span>
+                <Button
+                  variant="terracotta"
+                  size="sm"
+                  onClick={onOpenBooking}
+                  icon={Calendar}
+                  className="text-xs py-2 px-4 font-semibold cursor-pointer"
+                >
+                  Book Camping
+                </Button>
+              </div>
+            </div>
           </div>
         </Container>
-      </Section>
+      </section>
     </div>
   );
 }

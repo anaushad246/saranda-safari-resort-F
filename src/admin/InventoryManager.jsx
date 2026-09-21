@@ -1,16 +1,37 @@
-﻿import React, { useState, useEffect } from 'react';
-import { Calendar, Shield, AlertTriangle, Plus, Trash2, CheckCircle2, Lock, Home, Tent } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { 
+  Calendar, 
+  Shield, 
+  AlertTriangle, 
+  Plus, 
+  Trash2, 
+  CheckCircle2, 
+  Lock, 
+  Home, 
+  Tent, 
+  XCircle, 
+  Clock, 
+  Filter 
+} from 'lucide-react';
 import { apiGetUnits, apiGetBlocks, apiCreateBlock, apiDeleteBlock } from '../services/api';
 
 const DEFAULT_UNITS = [
-  { _id: 'u1', name: 'Red-and-White Cottage 1', code: 'RW-1', type: 'red_and_white_cottage', maxAdults: 3, capacityNote: 'Base 2 + 1 extra cot (Max 3 adults strictly)' },
-  { _id: 'u2', name: 'Red-and-White Cottage 2', code: 'RW-2', type: 'red_and_white_cottage', maxAdults: 3, capacityNote: 'Base 2 + 1 extra cot (Max 3 adults strictly)' },
-  { _id: 'u3', name: 'Red-and-White Cottage 3', code: 'RW-3', type: 'red_and_white_cottage', maxAdults: 3, capacityNote: 'Base 2 + 1 extra cot (Max 3 adults strictly)' },
-  { _id: 'u4', name: 'Red-and-White Cottage 4', code: 'RW-4', type: 'red_and_white_cottage', maxAdults: 3, capacityNote: 'Base 2 + 1 extra cot (Max 3 adults strictly)' },
-  { _id: 'u5', name: 'Wooden Log House', code: 'WL-1', type: 'wooden_log_house', maxAdults: 4, capacityNote: 'Hand-crafted log cottage (Max 4 adults)' },
-  { _id: 'u6', name: 'Other Cottage', code: 'OC-1', type: 'other_cottage', maxAdults: 4, capacityNote: 'Private standalone cottage (Max 4 adults)' },
-  { _id: 'u7', name: 'Camping Tent A', code: 'TENT-A', type: 'camping_tent', maxAdults: 2, capacityNote: 'Double occupancy safari tent (Max 2 guests)' },
-  { _id: 'u8', name: 'Camping Tent B', code: 'TENT-B', type: 'camping_tent', maxAdults: 3, capacityNote: 'Triple occupancy safari tent (Max 3 guests)' }
+  { _id: 'u-rw1', name: 'Riverwood', code: 'RW-01', type: 'riverwood', maxAdults: 4, capacityNote: 'Riverside log chalet (Max 4 guests)' },
+  { _id: 'u-cb1', name: 'Cherry Blossom 1', code: 'CB-01', type: 'cherry_blossom', maxAdults: 3, capacityNote: 'Prime river view veranda (Max 3 guests)' },
+  { _id: 'u-cb2', name: 'Cherry Blossom 2', code: 'CB-02', type: 'cherry_blossom', maxAdults: 3, capacityNote: 'Prime river view veranda (Max 3 guests)' },
+  { _id: 'u-cb3', name: 'Cherry Blossom 3', code: 'CB-03', type: 'cherry_blossom', maxAdults: 3, capacityNote: 'Prime river view veranda (Max 3 guests)' },
+  { _id: 'u-cb4', name: 'Cherry Blossom 4', code: 'CB-04', type: 'cherry_blossom', maxAdults: 3, capacityNote: 'Prime river view veranda (Max 3 guests)' },
+  { _id: 'u-aa1', name: 'Autumn Abode 1', code: 'AA-01', type: 'autumn_abode', maxAdults: 4, capacityNote: 'Golden sunrise pillars (Max 4 guests)' },
+  { _id: 'u-aa2', name: 'Autumn Abode 2', code: 'AA-02', type: 'autumn_abode', maxAdults: 4, capacityNote: 'Golden sunrise pillars (Max 4 guests)' },
+  { _id: 'u-aa3', name: 'Autumn Abode 3', code: 'AA-03', type: 'autumn_abode', maxAdults: 4, capacityNote: 'Golden sunrise pillars (Max 4 guests)' },
+  { _id: 'u-sa1', name: 'Spring Abode 1', code: 'SA-01', type: 'spring_abode', maxAdults: 4, capacityNote: 'Open lawn view veranda (Max 4 guests)' },
+  { _id: 'u-sa2', name: 'Spring Abode 2', code: 'SA-02', type: 'spring_abode', maxAdults: 4, capacityNote: 'Open lawn view veranda (Max 4 guests)' },
+  { _id: 'u-sa3', name: 'Spring Abode 3', code: 'SA-03', type: 'spring_abode', maxAdults: 4, capacityNote: 'Open lawn view veranda (Max 4 guests)' },
+  { _id: 'u-sa4', name: 'Spring Abode 4', code: 'SA-04', type: 'spring_abode', maxAdults: 4, capacityNote: 'Open lawn view veranda (Max 4 guests)' },
+  { _id: 'u-gm1', name: 'Gulmohar', code: 'GM-01', type: 'gulmohar', maxAdults: 3, capacityNote: 'Rustic red timber outlook (Max 3 guests)' },
+  { _id: 'u-aw1', name: 'Amberwood', code: 'AW-01', type: 'amberwood', maxAdults: 4, capacityNote: 'Canopy shade sanctuary (Max 4 guests)' },
+  { _id: 'u-t1', name: 'Camping Tent A', code: 'TENT-A', type: 'camping_tent', maxAdults: 2, capacityNote: 'Double occupancy riverside tent (Max 2 guests)' },
+  { _id: 'u-t2', name: 'Camping Tent B', code: 'TENT-B', type: 'camping_tent', maxAdults: 3, capacityNote: 'Triple occupancy riverside tent (Max 3 guests)' }
 ];
 
 export function InventoryManager() {
@@ -18,6 +39,7 @@ export function InventoryManager() {
   const [blocks, setBlocks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
+  const [filterState, setFilterState] = useState('all'); // 'all', 'active', 'deactive'
 
   // New Block Form state
   const [selectedUnitId, setSelectedUnitId] = useState('');
@@ -48,7 +70,7 @@ export function InventoryManager() {
       setBlocks([
         {
           _id: 'b-demo-1',
-          unitId: 'u5',
+          unitId: 'u-gm1',
           startDate: '2026-10-20',
           endDate: '2026-10-22',
           reason: 'maintenance',
@@ -121,8 +143,84 @@ export function InventoryManager() {
     return String(d);
   };
 
+  const todayStr = new Date().toISOString().split('T')[0];
+
+  const getUnitStatus = (unit) => {
+    // 1. Check unit schema status
+    if (unit.status && unit.status !== 'active') {
+      return {
+        state: 'deactive',
+        label: 'Deactive (' + unit.status + ')',
+        badgeColor: 'bg-rose-100 text-rose-800 border-rose-200',
+        dotColor: 'bg-rose-600',
+        reason: unit.status
+      };
+    }
+
+    // 2. Check blocks for this unit or entire resort
+    const unitBlocks = blocks.filter(b => {
+      const bUnitId = typeof b.unitId === 'object' ? b.unitId?._id : b.unitId;
+      return !bUnitId || bUnitId === unit._id || bUnitId === unit.code;
+    });
+
+    if (!unitBlocks.length) {
+      return {
+        state: 'active',
+        label: 'Active & Available',
+        badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+        dotColor: 'bg-emerald-600'
+      };
+    }
+
+    // Check if active today
+    const currentBlock = unitBlocks.find(b => {
+      const start = formatDateStr(b.startDate);
+      const end = formatDateStr(b.endDate);
+      return todayStr >= start && todayStr <= end;
+    });
+
+    if (currentBlock) {
+      const isAllResort = !currentBlock.unitId;
+      return {
+        state: 'deactive',
+        label: isAllResort ? 'Deactive (Resort Hold)' : 'Deactive / Blocked',
+        badgeColor: 'bg-rose-100 text-rose-800 border-rose-300',
+        dotColor: 'bg-rose-600',
+        reason: currentBlock.reason,
+        until: formatDateStr(currentBlock.endDate),
+        blockId: currentBlock._id
+      };
+    }
+
+    // Check upcoming block
+    const upcomingBlock = unitBlocks.find(b => {
+      const start = formatDateStr(b.startDate);
+      return start > todayStr;
+    });
+
+    if (upcomingBlock) {
+      return {
+        state: 'upcoming',
+        label: 'Active (Upcoming Block)',
+        badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
+        dotColor: 'bg-amber-500',
+        from: formatDateStr(upcomingBlock.startDate),
+        until: formatDateStr(upcomingBlock.endDate),
+        reason: upcomingBlock.reason,
+        blockId: upcomingBlock._id
+      };
+    }
+
+    return {
+      state: 'active',
+      label: 'Active & Available',
+      badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+      dotColor: 'bg-emerald-600'
+    };
+  };
+
   const getUnitName = (target) => {
-    if (!target) return 'Entire Resort (All 8 Units)';
+    if (!target) return 'Entire Resort (All Units)';
     if (typeof target === 'object' && target.name) {
       return `${target.name} (${target.code || ''})`.trim();
     }
@@ -130,6 +228,16 @@ export function InventoryManager() {
     const found = units.find(u => u._id === unitId || u.code === unitId);
     return found ? `${found.name} (${found.code})` : 'Specific Unit';
   };
+
+  const activeUnitsCount = units.filter(u => getUnitStatus(u).state === 'active' || getUnitStatus(u).state === 'upcoming').length;
+  const deactiveUnitsCount = units.length - activeUnitsCount;
+
+  const filteredUnits = units.filter(u => {
+    const status = getUnitStatus(u);
+    if (filterState === 'active') return status.state === 'active' || status.state === 'upcoming';
+    if (filterState === 'deactive') return status.state === 'deactive';
+    return true;
+  });
 
   return (
     <div className="space-y-8">
@@ -139,16 +247,22 @@ export function InventoryManager() {
         <div>
           <div className="flex items-center gap-2">
             <Shield className="w-5 h-5 text-[#C5A059]" />
-            <h3 className="font-cinzel text-lg font-bold text-white">Resort Inventory Control</h3>
+            <h3 className="font-cinzel text-lg font-bold text-white">Resort Inventory & Unit Status</h3>
           </div>
           <p className="text-xs text-[#DFCA95] mt-1">
             Total Overnight Capacity: <strong className="text-white">Strictly 25 guests</strong> across 6 cottages & 2 safari tents. 
-            No AC, No Wi-Fi, Generator-free peaceful retreat.
+            Units marked <span className="text-emerald-300 font-semibold">Active</span> appear in website searches; <span className="text-rose-300 font-semibold">Deactive / Blocked</span> units are hidden.
           </p>
         </div>
-        <div className="flex items-center gap-2 bg-[#0E261C] px-3 py-1.5 rounded-lg border border-[#C5A059]/20 text-xs text-[#DFCA95]">
-          <Lock className="w-3.5 h-3.5 text-[#C5A059]" />
-          <span>Active Units: {units.length} / 8</span>
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <div className="flex items-center gap-1.5 bg-[#0E261C] px-3 py-1.5 rounded-lg border border-emerald-500/30 text-emerald-300 font-medium">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Active: {activeUnitsCount}</span>
+          </div>
+          <div className="flex items-center gap-1.5 bg-[#0E261C] px-3 py-1.5 rounded-lg border border-rose-500/30 text-rose-300 font-medium">
+            <span className="w-2 h-2 rounded-full bg-rose-400" />
+            <span>Deactive: {deactiveUnitsCount}</span>
+          </div>
         </div>
       </div>
 
@@ -161,29 +275,118 @@ export function InventoryManager() {
         </div>
       )}
 
-      {/* Grid of 8 Units */}
+      {/* Grid of Accommodation Units with Status Badges */}
       <div>
-        <h4 className="font-cinzel text-base font-bold text-[#143628] mb-3 flex items-center gap-2">
-          <Home className="w-4 h-4 text-[#C5A059]" />
-          Accommodation Units (Estd. 1998)
-        </h4>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+          <h4 className="font-cinzel text-base font-bold text-[#143628] flex items-center gap-2">
+            <Home className="w-4 h-4 text-[#C5A059]" />
+            Accommodation Units ({units.length})
+          </h4>
+
+          {/* Status Quick Filter Buttons */}
+          <div className="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-1 text-xs">
+            <button
+              onClick={() => setFilterState('all')}
+              className={`px-3 py-1 rounded-md font-medium transition-all ${
+                filterState === 'all' ? 'bg-white text-[#143628] shadow-xs font-bold' : 'text-gray-600 hover:text-black'
+              }`}
+            >
+              All ({units.length})
+            </button>
+            <button
+              onClick={() => setFilterState('active')}
+              className={`px-3 py-1 rounded-md font-medium transition-all flex items-center gap-1.5 ${
+                filterState === 'active' ? 'bg-emerald-100 text-emerald-800 shadow-xs font-bold' : 'text-gray-600 hover:text-emerald-700'
+              }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+              Active ({activeUnitsCount})
+            </button>
+            <button
+              onClick={() => setFilterState('deactive')}
+              className={`px-3 py-1 rounded-md font-medium transition-all flex items-center gap-1.5 ${
+                filterState === 'deactive' ? 'bg-rose-100 text-rose-800 shadow-xs font-bold' : 'text-gray-600 hover:text-rose-700'
+              }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-600" />
+              Deactive / Blocked ({deactiveUnitsCount})
+            </button>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {units.map((u) => {
+          {filteredUnits.map((u) => {
             const isTent = (u.unitType || u.type) === 'camping_tent';
+            const status = getUnitStatus(u);
+            const isDeactive = status.state === 'deactive';
+
             return (
-              <div key={u._id} className="bg-white p-4 rounded-xl border border-[#143628]/10 shadow-sm hover:border-[#C5A059] transition-all">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-[#143628]/10 text-[#143628]">
-                    {u.code}
-                  </span>
-                  {isTent ? (
-                    <Tent className="w-4 h-4 text-[#C25E3E]" />
-                  ) : (
-                    <Home className="w-4 h-4 text-[#143628]" />
+              <div 
+                key={u._id} 
+                className={`bg-white p-4 rounded-xl border shadow-sm transition-all flex flex-col justify-between ${
+                  isDeactive 
+                    ? 'border-rose-300 bg-rose-50/20' 
+                    : 'border-[#143628]/10 hover:border-[#C5A059]'
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-[#143628]/10 text-[#143628]">
+                      {u.code}
+                    </span>
+                    
+                    {/* Status Badge */}
+                    <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${status.badgeColor}`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${status.dotColor} ${status.state === 'active' ? 'animate-pulse' : ''}`} />
+                      {status.label}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    {isTent ? (
+                      <Tent className="w-4 h-4 text-[#C25E3E] shrink-0" />
+                    ) : (
+                      <Home className="w-4 h-4 text-[#143628] shrink-0" />
+                    )}
+                    <h5 className="font-cinzel text-sm font-bold text-[#143628] truncate">{u.name}</h5>
+                  </div>
+
+                  <p className="text-[11px] text-[#143628]/70 mt-1">{u.capacityNote}</p>
+
+                  {/* Operational Status Info */}
+                  {isDeactive && (
+                    <div className="mt-2.5 p-2 rounded-lg bg-rose-50 border border-rose-200 text-[11px] text-rose-800">
+                      <div className="flex items-center gap-1 font-semibold">
+                        <XCircle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                        <span className="capitalize">{status.reason || 'Blocked for Maintenance'}</span>
+                      </div>
+                      {status.until && (
+                        <span className="text-[10px] text-rose-600 block mt-0.5">
+                          Until {status.until}
+                        </span>
+                      )}
+                      {status.blockId && (
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteBlock(status.blockId)}
+                          className="mt-1.5 text-[10px] font-bold text-rose-700 hover:text-rose-900 underline cursor-pointer"
+                        >
+                          Reopen / Activate Now
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  {status.state === 'upcoming' && (
+                    <div className="mt-2.5 p-2 rounded-lg bg-amber-50 border border-amber-200 text-[10px] text-amber-800">
+                      <div className="flex items-center gap-1 font-semibold">
+                        <Clock className="w-3 h-3 text-amber-600 shrink-0" />
+                        <span>Reserved {status.from} to {status.until}</span>
+                      </div>
+                    </div>
                   )}
                 </div>
-                <h5 className="font-cinzel text-sm font-bold text-[#143628]">{u.name}</h5>
-                <p className="text-[11px] text-[#143628]/70 mt-1">{u.capacityNote}</p>
+
                 <div className="mt-3 pt-2 border-t border-gray-100 flex items-center justify-between text-[11px]">
                   <span className="text-gray-500">Max Adults:</span>
                   <span className="font-bold text-[#143628]">{u.maxAdults}</span>
@@ -201,15 +404,15 @@ export function InventoryManager() {
         <div className="lg:col-span-5 bg-white p-6 rounded-xl border border-[#143628]/10 shadow-sm">
           <h4 className="font-cinzel text-base font-bold text-[#143628] mb-1 flex items-center gap-2">
             <Plus className="w-4 h-4 text-[#C5A059]" />
-            Block Dates (Maintenance / Private)
+            Block / Deactivate Unit Dates
           </h4>
           <p className="text-xs text-gray-500 mb-5">
-            Blocked dates are immediately hidden from public website availability searches.
+            Blocked units are immediately deactivated from website searches for the selected dates.
           </p>
 
           <form onSubmit={handleCreateBlock} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-[#143628] mb-1">Select Unit to Block</label>
+              <label className="block text-xs font-semibold text-[#143628] mb-1">Select Unit to Block / Deactivate</label>
               <select
                 value={selectedUnitId}
                 onChange={(e) => setSelectedUnitId(e.target.value)}
@@ -246,7 +449,7 @@ export function InventoryManager() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#143628] mb-1">Reason for Block</label>
+              <label className="block text-xs font-semibold text-[#143628] mb-1">Reason for Deactivation / Block</label>
               <select
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
@@ -278,7 +481,7 @@ export function InventoryManager() {
               disabled={isSubmitting}
               className="w-full py-2.5 px-4 rounded-lg bg-[#143628] text-[#DFCA95] hover:bg-[#0E261C] text-xs font-bold transition-colors disabled:opacity-50 cursor-pointer"
             >
-              {isSubmitting ? 'Blocking Dates...' : 'Apply Date Block'}
+              {isSubmitting ? 'Blocking Dates...' : 'Apply Date Block / Deactivate'}
             </button>
           </form>
         </div>
@@ -289,13 +492,13 @@ export function InventoryManager() {
             <h4 className="font-cinzel text-base font-bold text-[#143628]">
               Active Blocked Periods ({blocks.length})
             </h4>
-            <span className="text-[11px] text-gray-500">Unblock to make available</span>
+            <span className="text-[11px] text-gray-500">Click trash icon to reopen / activate</span>
           </div>
 
           {blocks.length === 0 ? (
             <div className="text-center py-12 text-gray-400 text-xs">
               <Calendar className="w-8 h-8 mx-auto mb-2 text-gray-300" />
-              No active date blocks. All units are open for booking.
+              No active date blocks. All units are active and open for booking.
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -311,27 +514,26 @@ export function InventoryManager() {
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {blocks.map((b) => (
-                    <tr key={b._id} className="hover:bg-gray-50/80">
-                      <td className="py-3 pr-3 font-semibold text-[#143628]">
-                        {getUnitName(b.unit || b.unitId)}
+                    <tr key={b._id} className="hover:bg-gray-50">
+                      <td className="py-2.5 pr-3 font-semibold text-[#143628]">
+                        {getUnitName(b.unitId || b.unit)}
                       </td>
-                      <td className="py-3 px-3 font-mono text-[11px] text-gray-600">
-                        {b.startDate} → {b.endDate}
+                      <td className="py-2.5 px-3 text-gray-600 font-mono text-[11px]">
+                        {formatDateStr(b.startDate)} to {formatDateStr(b.endDate)}
                       </td>
-                      <td className="py-3 px-3">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase bg-amber-50 text-amber-800 border border-amber-200">
-                          {b.reason?.replace('_', ' ')}
+                      <td className="py-2.5 px-3">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 capitalize">
+                          {b.reason ? b.reason.replace('_', ' ') : 'Blocked'}
                         </span>
                       </td>
-                      <td className="py-3 px-3 text-gray-500 italic max-w-[140px] truncate">
+                      <td className="py-2.5 px-3 text-gray-500 text-[11px]">
                         {b.notes || '—'}
                       </td>
-                      <td className="py-3 pl-3 text-right">
+                      <td className="py-2.5 pl-3 text-right">
                         <button
-                          type="button"
                           onClick={() => handleDeleteBlock(b._id)}
-                          className="p-1.5 text-rose-600 hover:bg-rose-50 rounded transition-colors cursor-pointer"
-                          title="Remove block / Reopen dates"
+                          className="p-1.5 text-rose-600 hover:text-rose-800 hover:bg-rose-50 rounded transition-colors cursor-pointer"
+                          title="Remove block and reactivate unit"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -343,9 +545,7 @@ export function InventoryManager() {
             </div>
           )}
         </div>
-
       </div>
-
     </div>
   );
 }

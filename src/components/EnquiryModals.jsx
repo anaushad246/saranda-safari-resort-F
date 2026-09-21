@@ -294,10 +294,12 @@ Please provide venue availability and quotation.`;
               onChange={(e) => setEventType(e.target.value)}
               className="w-full bg-white border border-[#E8DFCE] rounded-md px-3 py-2 text-xs text-[#143628]"
             >
+              <option value="Destination Wedding Package (Up to 30 Guests - ₹24,000/night)">Destination Wedding Package (Up to 30 Guests — ₹24,000/night)</option>
+              <option value="Destination Wedding Package (31–50 Guests - ₹35,000/night)">Destination Wedding Package (31–50 Guests — ₹35,000/night)</option>
+              <option value="Destination Wedding Package (51–80 Guests - ₹52,000/night)">Destination Wedding Package (51–80 Guests — ₹52,000/night)</option>
               <option value="Family Gathering / Reunion">Family Gathering / Reunion</option>
-              <option value="Intimate Wedding / Reception">Intimate Wedding / Reception</option>
+              <option value="Festival / Puja / Seasonal Gathering">Festival / Puja / Seasonal Gathering</option>
               <option value="Corporate Retreat / Workshop">Corporate Retreat / Workshop</option>
-              <option value="Community / Cultural Gathering">Community / Cultural Gathering</option>
             </select>
           </div>
 

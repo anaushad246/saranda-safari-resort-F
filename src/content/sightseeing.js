@@ -1,72 +1,82 @@
 // Verified Sightseeing Destinations & Assistance Request Workflow
-// Single Source of Truth based on Handover Document
-// Quotation-based: No fixed direct checkout.
+// Single Source of Truth based on Client Handover Specification
+// Note: Internal quotation rates are strictly kept offline. Public site shows approximate one-way distances and enquiry-led workflow.
 
 export const sightseeingContent = {
-  sectionTitle: "Sightseeing & Excursions",
-  sectionSubtitle: "Explore scenic waterfalls, panoramic hill sunset points, and ancient forest temples.",
-  processNotice: "Sightseeing trips are arranged via our network of reliable local vehicles. Submit an enquiry for your preferred destinations, and our resort team will coordinate vehicle availability and provide an exact quotation.",
+  heroBadge: "Sightseeing & Assistance",
+  heroTitle: "Explore Beyond the Resort",
+  heroSubtitle: "Discover waterfalls, riverside landscapes, hilltop sunsets and places of worship during your stay. Whether you prefer a relaxed outing or a day exploring the surroundings, our team can help you plan your visit.",
+  heroImage: "/sightseeing-hero.jpg",
 
   destinations: [
     {
       id: "jhikra-waterfall",
       name: "Jhikra Waterfall",
       category: "Natural Waterfall",
-      tag: "Hidden Cascade",
-      description: "A secluded perennial forest cascade tumbling down multi-tiered dark rock shelves surrounded by dense sal trees and wild ferns.",
-      distanceNote: "Short excursion from resort; requires brief walking trail down rocky steps.",
-      bestTime: "Post-monsoon and winter months (October through March)",
-      highlights: ["Cool rock pools", "Forest shade", "Scenic nature trail"]
+      distance: "10.7 km · one way",
+      description: "A secluded multi-tiered forest cascade tumbling down rock shelves into cool natural pools.",
+      image: "/jhikraWaterfall.png"
     },
     {
       id: "pacheri-waterfall",
       name: "Pacheri Waterfall",
-      category: "Natural Waterfall",
-      tag: "River Cascade",
-      description: "A wider cascade forming natural swirling rock pools, ideal for photography and observing riverine wildlife in their natural habitat.",
-      distanceNote: "Scenic drive through Keonjhar valley road.",
-      bestTime: "September through February",
-      highlights: ["Vibrant waterfall sprays", "Rocky riverbank picnics", "Birdlife"]
+      category: "River Cascade",
+      distance: "17.2 km · one way",
+      description: "A wide, scenic river cascade forming natural swirling rock pools in the Keonjhar valley.",
+      image: "/PacheriWaterfall.jpg"
     },
     {
       id: "kiriburu-sunset",
       name: "Kiriburu Sunset Point",
-      category: "Hill Vantage Point",
-      tag: "Panoramic 180° Vista",
-      description: "Famous panoramic hilltop overlooking the 'land of seven hundred hills'. Watch the evening mist settle over the endless ridgelines of Saranda as the sun sets in blazing amber and crimson.",
-      distanceNote: "Approx. 45–60 minute scenic hill ascent drive.",
-      bestTime: "Late afternoon arrival (4:30 PM recommended)",
-      highlights: ["Spectacular hill horizons", "Cool alpine evening breeze", "Sunset photography"]
+      category: "Hilltop Vantage",
+      distance: "20 km · one way",
+      description: "Famous panoramic hilltop vista overlooking the endless rolling 700 hills of Saranda at dusk.",
+      image: "/KiriburuSunsetPoint.png"
     },
     {
       id: "pundul-river",
-      name: "Pundul River Valley",
-      category: "River Landscape",
-      tag: "Pristine Valley Waters",
-      description: "A clear hill stream winding through gravel banks and quiet forest valleys, offering quiet riverbank spots away from regular tourist footfall.",
-      distanceNote: "Countryside drive through local tribal hamlets.",
-      bestTime: "Morning or mid-day",
-      highlights: ["Crystal shallow waters", "Quiet reading spots", "River stones"]
+      name: "Pundul River",
+      category: "Riverside Landscape",
+      distance: "20 km · one way",
+      description: "A clear hill stream winding through gravel banks and quiet forest valleys away from tourist crowds.",
+      image: "/sightseeing-pundul.jpg"
     },
     {
       id: "mirgsingha-temple",
       name: "Mirgsingha Temple",
-      category: "Heritage & Culture",
-      tag: "Sacred Shrine",
-      description: "An ancient regional temple reverently set amidst natural rock outcrops and shaded groves, deeply venerated by surrounding villages.",
-      distanceNote: "Local cultural excursion.",
-      bestTime: "Morning hours",
-      highlights: ["Local tribal heritage", "Tranquil spiritual ambiance", "Historic architecture"]
+      category: "Sacred Shrine",
+      distance: "25 km · one way",
+      description: "An ancient regional stone temple reverently set amidst natural rock outcrops and sal trees.",
+      image: "/sightseeing-mirgsingha.jpg"
     },
     {
       id: "jateshwar-temple",
       name: "Jateshwar Temple",
-      category: "Heritage & Culture",
-      tag: "Forest Shiva Shrine",
-      description: "A venerated Shiva shrine situated in a quiet forest clearing, drawing pilgrims and nature seekers with its peaceful wooded surroundings.",
-      distanceNote: "Can be combined with local valley exploration.",
-      bestTime: "Morning hours",
-      highlights: ["Sacred forest grove", "Peaceful bells & mantras", "Ancient stone carvings"]
+      category: "Forest Shiva Shrine",
+      distance: "28 km · one way",
+      description: "A venerated forest Shiva shrine in a quiet woodland clearing, known for its tranquil spiritual presence.",
+      image: "/sightseeing-jateshwar.jpg"
     }
-  ]
+  ],
+
+  moreToExploreTitle: "Also available on enquiry",
+  moreToExplore: [
+    { name: "Thalkobad", note: "Deep Forest Village & Historic Post" },
+    { name: "Ghaghirathi Waterfall", note: "Secluded Forest Cascade" },
+    { name: "Maa Tarini Temple", note: "Venerated Regional Shrine" },
+    { name: "Leopard Caves Trek", note: "Escorted Rocky Ridge Trail" }
+  ],
+  moreToExploreNote: "Exact routes, place names and access arrangements will be confirmed when planning your visit.",
+
+  exploreModesTitle: "Explore your way",
+  exploreModesSubtitle: "Choose the level of assistance that suits your travel style:",
+  exploreModes: [
+    { id: "vehicle", label: "Vehicle only", desc: "Bolero with experienced local driver for your group" },
+    { id: "guide", label: "Guide only", desc: "Local guide joins your own vehicle to navigate trails" },
+    { id: "both", label: "Vehicle + Guide", desc: "Full assistance: vehicle and knowledgeable local guide" },
+    { id: "self", label: "Own vehicle / No assistance", desc: "Self-guided outing with our team's route advice" }
+  ],
+  exploreAssistanceNote: "Bolero vehicles and local guides can be arranged in advance, subject to availability.",
+
+  planningNote: "Sightseeing is arranged separately from your stay. Final quotation is confirmed before payment. Visits depend on weather, local access and permissions."
 };

@@ -57,7 +57,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
     const baseStayTotal = baseRatePerNight * nights;
 
     // Children 5–10 calculations
-    const childRatePerNight = isCamping ? 750 : 700;
+    const childRatePerNight = isCamping ? (r.camping.child || 750) : (r.addons.childCottage || 700);
     const childrenTotal = children5to10 * childRatePerNight * nights;
 
     // Non-veg meal supplements
@@ -73,7 +73,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
     if (includeBonfire && !isCamping) {
       // Min 2 paying guests
       const billableBonfireGuests = Math.max(2, adults);
-      bonfireTotal = billableBonfireGuests * 250 * nights;
+      bonfireTotal = billableBonfireGuests * (r.addons.bonfire || 250) * nights;
     }
 
     const grandTotal = baseStayTotal + childrenTotal + nonVegTotal + bonfireTotal;
@@ -321,7 +321,7 @@ Please confirm availability for these dates.`;
               <div>
                 <span className="font-bold">Capacity Limitation Rule:</span>
                 <p className="mt-0.5">
-                  The 4 Red-and-White Cottages are strictly limited to 3 guests maximum. For parties of 4 adults, please select our <strong>Wooden Log House</strong> or <strong>Other cottage</strong>, or book two separate cottages.
+                  Cherry Blossom and Gulmohar are limited to 3 guests maximum. For parties of 4 adults, please select <strong>Riverwood</strong>, <strong>Autumn Abode</strong>, <strong>Spring Abode</strong>, or <strong>Amberwood</strong>.
                 </p>
 
               </div>

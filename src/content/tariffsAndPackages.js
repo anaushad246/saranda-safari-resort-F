@@ -1,154 +1,411 @@
-// Official Tariffs, Non-Veg Supplements & Packages
-// Single Source of Truth based on Handover Document
+// Official Tariffs, Packages & Pricing Architecture
+// Single Source of Truth based on Client Handover Specification & Approved Package Postings
+// Note: Tariff values and inclusions are consumed by both the public catalogue and booking/enquiry engine.
 
 export const tariffsAndPackages = {
-  // 1. Overnight Cottage & Log House Tariff
-  overnightCottage: {
-    title: "Cottage & Wooden Log House — One Night",
-    checkInTime: "9:00 AM",
-    checkOutTime: "9:00 AM next day",
-    mealInclusion: "Includes vegetarian breakfast, lunch, and dinner.",
-    rates: [
-      { guests: 1, rate: 3000, note: "Single occupancy in private cottage" },
-      { guests: 2, rate: 4000, note: "Double occupancy (₹2,000 per person)" },
-      { guests: 3, rate: 5400, note: "Triple occupancy (₹1,800 per person)" },
-      { 
-        guests: 4, 
-        rate: 6600, 
-        note: "Quad occupancy (₹1,650 per person) — Valid ONLY on Wooden Log House and Other cottage", 
-        restrictedUnits: ["wooden-log-house", "other-cottage"] // Enforce guard!
+  // Hero Meta
+  heroTitle: "Packages",
+  heroSubtitle: "Made for Slow Days & Special Moments",
+  heroDescription: "From a few quiet hours in nature to an overnight stay, camping experience, long-term homestay or educational excursion, choose the package that suits your time and occasion.",
+  heroImage: "/package-cottage.jpg",
+  heroTagline: "Stay • Unwind • Learn • Celebrate",
+
+  // 1. OVERNIGHT STAYS
+  overnight: {
+    title: "Overnight Stays",
+    subtitle: "Settle into nature with a cottage stay, open-air camping, or special long-term retreats.",
+
+    // 1A. Standard Stays (Core Booking Engine)
+    standardStays: [
+      {
+        id: "cottage-stay",
+        name: "One Night Cottage Stay",
+        tagline: "Traditional brick cottage or handcrafted wooden log house",
+        image: "/stay-cottage.jpg",
+        bookingType: "BOOKING",
+        pricingModel: "GUEST_SLABS",
+        timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day",
+        pricingSummary: "From ₹3,000 / night",
+        tariffs: [
+          { guests: "1 guest", rate: 3000, note: "Single occupancy" },
+          { guests: "2 guests", rate: 4000, note: "₹2,000 per person" },
+          { guests: "3 guests", rate: 5400, note: "₹1,800 per person" },
+          { guests: "4 guests", rate: 6600, note: "Valid on log house & other 4-person cottage" }
+        ],
+        inclusions: [
+          "Vegetarian breakfast, lunch and dinner included",
+          "Private cottage with attached western bath & verandah",
+          "Electricity with generator backup & ceiling fans"
+        ],
+        exclusions: [
+          "Evening snacks & bonfire (available as add-ons)",
+          "Non-vegetarian supplements",
+          "Sightseeing, guides & station transfers"
+        ],
+        notes: "Same rates apply to the wooden log house. 4-person rate applies only to the log house and other 4-person cottage."
+      },
+      {
+        id: "overnight-camping",
+        name: "Overnight Camping",
+        tagline: "Sleep beneath the trees close to the Karo River",
+        image: "/package-camping.jpg",
+        bookingType: "BOOKING",
+        pricingModel: "PER_PERSON_OR_COUPLE",
+        timings: "Check-in: 4:00 PM | Check-out: 9:00 AM next day",
+        pricingSummary: "₹1,499 / person • ₹2,999 / couple",
+        tariffs: [
+          { label: "Per person", rate: 1499, note: "Individual camping berth" },
+          { label: "Couple", rate: 2999, note: "2 guests in double tent" }
+        ],
+        inclusions: [
+          "Vegetarian dinner & breakfast included",
+          "Starlight evening bonfire included",
+          "Weatherproof canvas tents with bedding & pillows",
+          "Dedicated shared clean toilet & bath facilities"
+        ],
+        exclusions: [
+          "Lunch & mid-day stay (check-in is 4:00 PM)",
+          "Non-vegetarian food supplements",
+          "Personal toiletries"
+        ],
+        notes: "Hot water available on request. 2 tents total: Tent 1 (2 guests), Tent 2 (3 guests) = 5 camping capacity."
       }
     ],
-    childrenRates: [
-      { ageGroup: "Children under 5 years", rate: 0, label: "Free" },
-      { ageGroup: "Children aged 5 to 10 years", rate: 700, label: "₹700 per child (includes all 3 meals)" },
-      { ageGroup: "Children aged 11+ years", rate: null, label: "Regular adult rate applies" }
-    ],
-    bonfireAddon: {
-      rate: 250,
-      unit: "per person",
-      minGuests: 2,
-      note: "Arranged in designated bonfire hearth with seasoned firewood (minimum 2 paying guests)."
+
+    // 1B. Special Stays (Women's Retreat & Extended Homestay)
+    specialStays: [
+      {
+        id: "womens-nature-retreat",
+        name: "Women’s Nature Retreat",
+        tagline: "Solo Women Travelers Welcome • Safe, serene and close to nature",
+        badge: "Special Women Travel Tariff",
+        image: "/package-womens-retreat.jpg",
+        bookingType: "ENQUIRY",
+        pricingModel: "SHARING_SLABS",
+        timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day",
+        pricingSummary: "From ₹1,499 / night",
+        description: "Unwind in nature at Saranda Safari Resort — a peaceful, secure getaway designed for women, friends and small groups. Settle into peaceful cottages, relax on open lawns with gazebos, and enjoy an unhurried riverside escape.",
+        tariffs: [
+          { label: "Solo Woman Stay", rate: 1499, note: "Private peaceful cottage" },
+          { label: "2 Women Sharing", rate: 2499, note: "₹1,250 per person" },
+          { label: "3 Women Sharing", rate: 3300, note: "₹1,100 per person" },
+          { label: "4 Women Sharing", rate: 4200, note: "₹1,050 per person" }
+        ],
+        weekdayOffer: "10% OFF on weekday advance bookings — Solo stay from ₹1,350 / night",
+        inclusions: [
+          "Peaceful cottage accommodation",
+          "Access to open lawns, gazebo and Karo riverbank",
+          "Safe and secure resort environment",
+          "Bonfire on request"
+        ],
+        exclusions: [
+          "Meals (can be arranged separately on request)",
+          "Sightseeing & transport"
+        ],
+        notes: "Accommodation tariff only. Prior booking required. Verified contact: 7008307064."
+      },
+      {
+        id: "extended-homestay",
+        name: "Extended Homestay for Two",
+        tagline: "Stay longer. Feel at home. • Unwind, Explore, Belong",
+        badge: "Long-Term Nature Living",
+        image: "/package-homestay.jpg",
+        bookingType: "ENQUIRY",
+        pricingModel: "DURATION_SLABS",
+        timings: "Weekly & Monthly Flexible Stay",
+        pricingSummary: "From ₹10,500 (7 Nights for Two)",
+        description: "More than a stay, a closer connection to nature. Designed for couples, remote professionals, or friends seeking an unhurried, extended retreat by the Karo River with self-cooking kitchen facilities.",
+        tariffs: [
+          { duration: "7 Nights", rate: 10500, perNight: "₹1,500 / night for two" },
+          { duration: "15 Nights", rate: 19500, perNight: "₹1,300 / night for two" },
+          { duration: "30 Nights", rate: 33000, perNight: "₹1,100 / night for two" }
+        ],
+        inclusions: [
+          "Rates for two guests sharing one cottage",
+          "Self-cooking kitchen & basic utensils",
+          "Water, electricity & on-site parking included",
+          "Housekeeping twice weekly • Linen changed weekly"
+        ],
+        optionalScooty: [
+          { duration: "1 Day", rate: 400 },
+          { duration: "7 Days", rate: 2450 },
+          { duration: "15 Days", rate: 4500 },
+          { duration: "30 Days", rate: 7500 }
+        ],
+        terms: [
+          "Groceries and cooking gas extra",
+          "Scooty rental: Two helmets included, petrol extra, 60 km/day allowance (extra ₹3/km)",
+          "₹3,000 refundable cottage security deposit",
+          "Special dates and peak periods quoted separately"
+        ],
+        notes: "Advance booking recommended. Verified contact: 7008307064."
+      }
+    ]
+  },
+
+  // 2. DAY & EVENING PACKAGES (ENQUIRY Mode)
+  dayAndEvening: {
+    title: "Day & Evening Visits",
+    subtitle: "Short visits, daytime cottage use, and starlit gatherings by the fire.",
+    packages: [
+      {
+        id: "hourly-stay",
+        name: "Hourly Stay (6 Hours)",
+        badge: "Cook • Relax • Reconnect",
+        tagline: "Private cottage day-use for families & travel groups",
+        image: "/stay-spring.jpg",
+        bookingType: "ENQUIRY",
+        pricingModel: "GROUP_SLABS",
+        timings: "6 Hours Day-Use (Advance slot)",
+        pricingSummary: "From ₹2,500",
+        startingPrice: 2500,
+        startingUnit: "up to 5 guests",
+        description: "A flexible 6-hour private cottage rental for transit travellers, day-trippers, and families who want a comfortable base to relax, freshen up, or cook lunch together.",
+        tariffs: [
+          { slab: "Up to 5 guests", rate: 2500 },
+          { slab: "6 to 10 guests", rate: 3500 },
+          { slab: "11 to 15 guests", rate: 4500 }
+        ],
+        extras: [
+          { item: "Additional guest", rate: 250, unit: "per person beyond slab" },
+          { item: "Extra hour", rate: 500, unit: "per hour extension" },
+          { item: "Extra cottage", rate: 1000, unit: "second cottage usage" }
+        ],
+        inclusions: [
+          "Private cottage and attached washroom for 6 hours",
+          "Access to resort kitchen, gas stove and cooking utensils",
+          "Use of lawns, common areas and open verandah"
+        ],
+        exclusions: [
+          "Ingredients & provisions (guests bring their own groceries/masalas)",
+          "Overnight sleeping accommodation",
+          "Cook/chef service (available on separate enquiry)"
+        ],
+        notes: "These are day-use group capacities, not sleeping capacities. Final timings and operating details confirmed upon enquiry."
+      },
+      {
+        id: "evening-under-stars",
+        name: "Evening Under the Stars",
+        badge: "Bonfire & Hearth",
+        tagline: "Bonfire, barbecue and night skies by the Karo River",
+        image: "/package-bonfire.jpg",
+        bookingType: "ENQUIRY",
+        pricingModel: "TIERED_PER_PERSON",
+        timings: "6:00 PM – 11:00 PM (Min 2 guests)",
+        pricingSummary: "From ₹399 / person",
+        startingPrice: 399,
+        startingUnit: "per person",
+        description: "Gather with friends or family on the riverfront lawn around a warm wood-log fire beneath unpolluted starlit skies.",
+        dinnerPricing: {
+          veg: 250,
+          nonVeg: 350,
+          unit: "per person"
+        },
+        tariffs: [
+          { tier: 1, name: "Bonfire", rate: "₹399/person", includes: "Wood-log hearth, seating & ambient lawn setting" },
+          { tier: 2, name: "Bonfire + Snacks", rate: "₹549/person", includes: "Bonfire plus hot tea & evening snacks" },
+          { tier: 3, name: "Bonfire + Barbecue", rate: "₹699/person", includes: "Bonfire plus freshly grilled barbecue portions" },
+          { tier: 4, name: "Bonfire + Snacks + Barbecue", rate: "₹849/person", includes: "Complete evening spread before dinner" },
+          { tier: 5, name: "Bonfire + Snacks + BBQ + Dinner", rate: "₹1,099 – ₹1,199/person", includes: "Full five-course evening hearth experience (Veg ₹1,099 / Non-Veg ₹1,199)" }
+        ],
+        optionalAddons: [
+          { item: "Vegetarian Dinner", rate: 250, unit: "per person" },
+          { item: "Non-Vegetarian Dinner", rate: 350, unit: "per person" }
+        ],
+        extras: [
+          { item: "Vegetarian Dinner", rate: 250, unit: "per person" },
+          { item: "Non-Vegetarian Dinner", rate: 350, unit: "per person" }
+        ],
+        inclusions: [
+          "Dedicated outdoor fire pit with seasoned sal wood",
+          "Riverside lawn seating & stargazing atmosphere",
+          "Outdoor service by resort team"
+        ],
+        exclusions: [
+          "Overnight cottage accommodation",
+          "Hard beverages (strictly regulated)",
+          "Transport/transfers"
+        ],
+        notes: "Minimum 2 paying guests. Pre-booking required by 3:00 PM on the day of the visit. Optional dinner available at ₹250 (Veg) or ₹350 (Non-Veg) per person."
+      },
+      {
+        id: "evening-pause",
+        name: "An Evening Pause in Nature",
+        badge: "Riverbank Tea",
+        tagline: "A peaceful 2-hour late afternoon breath of fresh air",
+        image: "/exp-sunset.jpg",
+        bookingType: "ENQUIRY",
+        pricingModel: "ENTRY_FEE",
+        timings: "4:00 PM – 6:00 PM",
+        pricingSummary: "Adult ₹100 • Child ₹50",
+        startingPrice: 100,
+        startingUnit: "adult entry",
+        description: "Pause by the peaceful Karo River as afternoon softens toward dusk. Stroll the lawns, watch birds return to the trees, and enjoy a quiet pause far from highway noise.",
+        tariffs: [
+          { category: "Adults", rate: 100, label: "₹100 per person" },
+          { category: "Children (5–10 yrs)", rate: 50, label: "₹50 per child" },
+          { category: "Children under 5", rate: 0, label: "Free" }
+        ],
+        inclusions: [
+          "Riverfront lawn access and walking grounds (4 PM–6 PM)",
+          "Restroom facilities"
+        ],
+        exclusions: [
+          "Tea/coffee/snacks are not yet confirmed as included (enquiry-led)",
+          "Cottage access or room use",
+          "Bonfire"
+        ],
+        notes: "Food and beverage inclusions are subject to confirmation with resort staff on the day of visit."
+      }
+    ]
+  },
+
+  // 3. GROUP & EDUCATIONAL EXPERIENCES
+  groupAndEducational: {
+    title: "Group & Educational Experiences",
+    subtitle: "Curated outdoor learning, nature education, and team discovery for young minds along the Karo River.",
+    package: {
+      id: "school-excursions",
+      name: "School Excursions & Nature Camps",
+      badge: "Learning Beyond Classrooms",
+      tagline: "Where Nature Becomes a Classroom • For Classes I – XII",
+      image: "/package-school-excursion.jpg",
+      bookingType: "ENQUIRY",
+      timings: "9:30 AM – 4:00 PM (Full Day Itinerary)",
+      pricingSummary: "From ₹349 / student",
+      description: "A day of discovery, learning, and outdoor fun in the lap of nature. Designed specifically for school students to explore forest biodiversity, bird watching, and team sports in a safe and secure setting.",
+      schoolSlabs: [
+        { name: "Junior Nature Day", classes: "Classes I – V", rate: 349 },
+        { name: "Nature Explorer", classes: "Classes VI – VIII", rate: 399 },
+        { name: "Nature & Sports Day", classes: "Classes IX – XII", rate: 449 }
+      ],
+      inclusions: [
+        "Welcome drink on arrival",
+        "Morning snack",
+        "Nutritious student lunch",
+        "Evening snack before departure",
+        "Guided nature walk & bird identification",
+        "Tree & plant exploration with wildlife talks",
+        "Cricket, badminton, table tennis & games",
+        "Nature quiz, competitions, prizes & certificates",
+        "Use of play areas and basic sports equipment"
+      ],
+      teacherRules: [
+        "1 Teacher Complimentary per 10 students",
+        "Principal / Head Teacher Complimentary",
+        "Minimum group size: 20 students",
+        "For 50+ students: special discounted rates (₹375 onwards)",
+        "Non-veg (chicken) lunch option: ₹50 extra per student",
+        "Special sessions with Invited Nature Educators for Classes IX – XII"
+      ],
+      itinerary: [
+        { time: "09:30 – 10:00", activity: "Arrival & welcome drink" },
+        { time: "10:00 – 11:00", activity: "Nature trail & bird watching" },
+        { time: "11:00 – 11:20", activity: "Morning snack" },
+        { time: "11:20 – 12:00", activity: "Nature education activity (tree ID, wildlife, ecology)" },
+        { time: "12:00 – 01:15", activity: "Sports & team games (cricket, badminton, TT)" },
+        { time: "01:15 – 02:00", activity: "Nutritious lunch" },
+        { time: "02:00 – 02:30", activity: "Rest & free recreation on the green lawns" },
+        { time: "02:30 – 03:15", activity: "Nature quiz / treasure hunt / fun competitions" },
+        { time: "03:15 – 03:40", activity: "Prize ceremony & certificates" },
+        { time: "03:40 – 04:00", activity: "Evening snack & departure" }
+      ],
+      contact: "7008307064"
     }
   },
 
-  // 2. Overnight Camping Tariff
+  // 4. CELEBRATIONS & EVENTS (EVENT_QUOTE Mode)
+  celebrations: {
+    title: "Gather, Celebrate, Remember",
+    subtitle: "Open riverfront lawns and ancient tree canopies for intimate gatherings and milestone occasions.",
+    image: "/resort-hero.jpg",
+    notice: "Important: Launch overnight stay capacity is strictly 25 guests. Event groups exceeding 25 guests can celebrate on the lawn and grounds with customized day/evening arrangements.",
+    events: [
+      {
+        id: "weddings-parties",
+        name: "Open for Weddings & Parties",
+        subtitle: "Special Destination Wedding Accommodation Packages",
+        tagline: "Enchanting outdoor celebrations amidst ancient trees & Karo riverfront lawns",
+        image: "/package-weddings.jpg",
+        advanceNotice: "Advance Booking Required — Please Pre-Book 6 Months in Advance",
+        pricingType: "SLAB_TARIFF",
+        pricingSummary: "Slabs from ₹24,000 / night",
+        description: "Celebrate your dream wedding, milestone anniversary, or grand family gathering framed by mature sal trees, river breezes, and starlit skies. Complete accommodation slabs, sprawling riverfront lawns, banquet pandals, and tailored catering create an unforgettable destination experience.",
+        features: [
+          "Food & Accommodation Available",
+          "Banquet / Pandals Available on Request",
+          "Beautiful open lawns in a natural setting",
+          "Ideal for weddings, parties and family gatherings"
+        ],
+        accommodationPackages: [
+          { slab: "Up to 30 Guests", rate: "₹ 24,000", per: "/ night" },
+          { slab: "31–50 Guests", rate: "₹ 35,000", per: "/ night" },
+          { slab: "51–80 Guests", rate: "₹ 52,000", per: "/ night" }
+        ],
+        pricingNotes: [
+          "Accommodation only",
+          "Food, banquet, pandal, decoration, music and other event arrangements will be charged separately."
+        ],
+        bookingPhone: "7008307064"
+      },
+      {
+        id: "new-year-puja",
+        name: "New Year, Puja & Seasonal Gatherings",
+        subtitle: "Festival & Seasonal Lawn Events",
+        tagline: "Festival get-togethers, family reunions & holiday celebrations",
+        image: "/resort-hero.jpg",
+        pricingType: "INDICATIVE_RANGE",
+        pricingSummary: "Indicative venue pricing (Quotation-based)",
+        description: "Celebrate Durga Puja, Diwali, New Year, or Holi surrounded by the wilderness of Saranda. Expansive open grounds allow customized shamianas, sound setups, and holiday buffet banquets.",
+        indicativeRanges: [
+          { group: "Up to 30 guests", range: "₹20,000 – ₹22,000" },
+          { group: "31 to 50 guests", range: "₹28,000 – ₹32,000" },
+          { group: "51 to 100 guests", range: "₹40,000 – ₹48,000" },
+          { group: "101 to 150 guests", range: "₹50,000 – ₹60,000" },
+          { group: "151 to 200 guests", range: "₹65,000 – ₹75,000" },
+          { group: "Above 200 guests", range: "Custom Quotation" }
+        ],
+        extraDetails: [
+          "Additional cottage, cleaning/waste handling, and extra-hour charges can apply.",
+          "Generator power, sound system, and festival pandal can be arranged separately."
+        ],
+        bookingPhone: "7008307064"
+      }
+    ]
+  },
+
+  // Backward-compatibility properties for HomePage Section 4
+  overnightCottage: {
+    title: "Cottages & Wooden Log House — One Night",
+    timings: "9:00 AM Check-in to 9:00 AM Next Day",
+    rates: [
+      { guests: 1, rate: 3000, note: "Single occupancy" },
+      { guests: 2, rate: 4000, note: "Double occupancy (₹2,000/person)" },
+      { guests: 3, rate: 5400, note: "Triple occupancy (₹1,800/person)" },
+      { guests: 4, rate: 6600, note: "Quad occupancy (Log House / Other Cottage)" }
+    ]
+  },
+
   overnightCamping: {
     title: "Wilderness Camping — One Night",
-    checkInTime: "4:00 PM",
-    checkOutTime: "9:00 AM next day",
-    mealInclusion: "Includes vegetarian dinner, breakfast, evening bonfire, and shared bath/washroom facilities.",
+    timings: "4:00 PM Check-in to 9:00 AM Next Day",
     rates: [
-      { type: "Individual Guest", rate: 1499, label: "₹1,499 per person" },
-      { type: "Couple", rate: 2999, label: "₹2,999 per couple (strictly ₹2,999, never ₹2,998)" }
-    ],
-    childrenRates: [
-      { ageGroup: "Children under 5 years", rate: 0, label: "Free" },
-      { ageGroup: "Children aged 5 to 10 years", rate: 750, label: "₹750 per child (includes meals & tent space)" },
-      { ageGroup: "Children aged 11+ years", rate: 1499, label: "Regular camping rate (₹1,499)" }
+      { type: "Per Person", rate: 1499 },
+      { type: "Couple", rate: 2999 }
     ]
   },
 
-  // 3. Official Non-Veg Supplements Table (Packages default to veg)
-  nonVegSupplements: {
-    title: "Non-Vegetarian Meal Supplements",
-    description: "All our standard overnight packages include pure vegetarian meals prepared fresh with local village produce. Non-vegetarian additions are available as per the official supplement schedule below:",
-    items: [
-      {
-        item: "Chicken or Fish Preparation",
-        price: 150,
-        unit: "per person per meal",
-        description: "Freshly prepared local homestyle chicken curry or seasonal river/pond fish."
-      },
-      {
-        item: "Cottage Stay Non-Veg Meal Plan",
-        price: 300,
-        unit: "per person per stay",
-        description: "Covers non-vegetarian preparations for both Lunch and Dinner during a 24-hour cottage stay."
-      },
-      {
-        item: "Camping Non-Veg Dinner Plan",
-        price: 150,
-        unit: "per person per stay",
-        description: "Covers chicken/fish dinner supplement during an overnight camping stay."
-      },
-      {
-        item: "Child Non-Veg Supplement (Ages 5–10)",
-        price: 75,
-        unit: "per child per meal",
-        description: "Portion-adjusted chicken or fish curry for children aged 5 to 10."
-      },
-      {
-        item: "Mutton / Prawns Special Preparations",
-        price: null,
-        unit: "On separate advance quotation",
-        description: "Subject to local market availability; requires at least 24-hour advance notice."
-      }
-    ]
-  },
-
-  // 4. An Evening Pause in Nature (Day Visit)
-  eveningNatureVisit: {
-    title: "An Evening Pause in Nature",
-    timing: "4:00 PM – 6:00 PM",
-    pricing: [
-      { category: "Adults", rate: 100, label: "₹100 per adult" },
-      { category: "Children (Ages 5–10)", rate: 50, label: "₹50 per child" },
-      { category: "Children under 5", rate: 0, label: "Free entry" }
-    ],
-    pendingClarification: "Please note: Tea, coffee, and evening snacks are [P] pending final confirmation whether included or available for separate on-site purchase.",
-    experience: "Access to resort riverside lawns, mango orchards, and scenic walking trails during late golden hours."
-  },
-
-  // 5. Evening Under the Stars (5 Discrete Tiers)
-  eveningUnderTheStars: {
-    title: "Evening Under the Stars",
-    timing: "6:00 PM – 11:00 PM",
-    description: "An atmospheric evening gathering on the riverfront lawn around a crackling wood fire.",
-    tiers: [
-      { tier: 1, name: "Bonfire Experience Only", rate: 399, perPerson: true, includes: "River lawn access, log fire hearth, outdoor seating under starlight" },
-      { tier: 2, name: "Bonfire + Evening Snacks", rate: 549, perPerson: true, includes: "Log bonfire + hot freshly made vegetarian appetizers & tea/coffee" },
-      { tier: 3, name: "Bonfire + Barbecue", rate: 699, perPerson: true, includes: "Log bonfire + fresh coal barbecue skewers" },
-      { tier: 4, name: "Bonfire + Snacks + Barbecue", rate: 849, perPerson: true, includes: "Log bonfire + appetizers, snacks, and live barbecue" },
-      { tier: 5, name: "Bonfire + Complete Dinner Buffet", rate: "1,099 – 1,199", perPerson: true, includes: "Bonfire, evening snacks, barbecue skewers, and full dinner" }
-    ],
-    dinnerAddonOption: {
-      veg: 250,
-      nonVeg: 350,
-      note: "Optional dinner buffet add-on for Tiers 1–4: ₹250 (Vegetarian) or ₹350 (Non-Vegetarian) per person."
-    }
-  },
-
-  // 6. Hourly Day-Use Stays (Marked [P] Pending operating hours & deposit)
-  hourlyStays: {
-    title: "Hourly Stays (6-Hour Day Cottage Use)",
-    statusNote: "[P] Enquiry-led only. Operating hours and refundable security deposit are pending final operational confirmation.",
-    duration: "6 Hours",
-    tiers: [
-      { range: "Up to 5 Guests", rate: 2500, label: "₹2,500 (1 cottage)" },
-      { range: "6 to 10 Guests", rate: 3500, label: "₹3,500 (1–2 cottages)" },
-      { range: "11 to 15 Guests", rate: 4500, label: "₹4,500 (2 cottages)" }
-    ],
-    extras: [
-      { item: "Additional Guest Beyond Tier", rate: 250, unit: "per person" },
-      { item: "Extra Hour Extension", rate: 500, unit: "per hour" },
-      { item: "Extra Cottage Designation", rate: 1000, unit: "per cottage" }
-    ]
-  },
-
-  // 7. Event Venue Hire (Indicative Venue Range, 6 Months Pre-booking)
+  // Backward-compatibility references for existing modals:
   eventVenue: {
-    title: "Private Events & Gatherings Venue",
-    indicativeRange: "₹20,000 to ₹75,000+",
-    preBookingRequirement: "Minimum 6 months advance pre-booking required.",
-    paymentTerms: "50% advance to block date; 100% full balance payable BEFORE the event begins.",
-    criticalCapacityWarning: "Important: Overnight accommodation is strictly capped at 25 guests across all cottages, log house, and tents. Events with larger attendee lists must arrange external accommodations for guests exceeding 25.",
-    extras: [
-      { item: "Additional Cottage Room", rate: "₹3,000 – ₹4,000", unit: "per cottage" },
-      { item: "Post-Event Cleaning & Waste Management", rate: "₹3,000 – ₹5,000", unit: "per event" },
-      { item: "Additional Venue Hour", rate: 3000, unit: "per hour" }
-    ]
+    title: "Private Gatherings & Lawn Events",
+    indicativeRange: "Indicative venue pricing on quotation",
+    preBookingRequirement: "Advance notice required; 6-month window for weddings & large groups",
+    criticalCapacityWarning: "Overnight room capacity is strictly 25 guests. Event groups can celebrate on the grounds with day/evening arrangements."
   },
 
-  taxPolicyNote: "No tax is added to the published package tariffs. All supplementary options (non-veg, bonfire, extra hours) are itemized transparently. The total payable amount is visible in full prior to booking."
+  diningPolicy: {
+    title: "Dining Policy & Add-ons",
+    notice: "Vegetarian meals included in standard overnight stays.",
+    subtext: "Breakfast, lunch, and dinner included in overnight cottage and camping stays are vegetarian homestyle meals prepared fresh. Fresh local non-vegetarian dishes (Desi Chicken, River Fish, Egg Curry) are available as separate paid supplements on prior notice."
+  }
 };

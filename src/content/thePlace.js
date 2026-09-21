@@ -12,7 +12,9 @@ export const thePlaceContent = {
 
   "Established in 1998, Saranda Safari Resort offers a peaceful retreat in Nimture, Bolani, Odisha, near the Karo River. With riverside views, mature mango orchards and open green spaces, it is a place to step away from busy routines and enjoy the simple pleasure of being close to nature.",
 
-  "Here, mornings unfold to the chirping of birds and sunlight filtering through the leaves. Take a leisurely walk beneath the trees, pause in the shade of the mango orchard, or settle down with a cup of tea and a view of the river. Whether you choose a cottage, our wooden log house or a night in a tent, there is room to rest, reconnect and enjoy unhurried moments with the people you love."
+  "Here, mornings unfold to the chirping of birds and sunlight filtering through the leaves. Take a leisurely walk beneath the trees, pause in the shade of the mango orchard, or settle down with a cup of tea and a view of the river.",
+  "Whether you choose a cottage, our wooden log house or a night in a tent, there is room to rest, reconnect and enjoy unhurried moments with the people you love.As evening settles over the grounds, conversation, shared meals and the warmth of a bonfire make space for memories that linger.",
+  "Come for a stay. Leave with a little of nature’s peace."
 ]
   },
 

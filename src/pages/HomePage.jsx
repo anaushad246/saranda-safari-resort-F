@@ -29,18 +29,27 @@ export function HomePage({
           "A little closer to nature. A little further from the everyday."
           October 2026 Pre-Booking Notice & Quick Booking Bar
          ========================================================================= */}
-      <section className="relative min-h-[85vh] flex flex-col justify-center bg-[#0E261C] text-[#F9F6F0] py-20 border-b border-[#C5A059]/30 overflow-hidden">
-        {/* Subtle Background Pattern resembling tall sal tree trunks and soft moonlight */}
-        <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:24px_24px]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0E261C] via-[#143628]/80 to-[#0E261C]/90 pointer-events-none" />
+      <section className="relative min-h-[90vh] flex flex-col justify-center bg-[#0E261C] text-[#F9F6F0] py-20 border-b border-[#C5A059]/30 overflow-hidden">
+        {/* Main Property Photograph Background */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-105 transition-transform duration-1000 ease-out"
+          style={{ backgroundImage: "url('/resort-hero.jpg')" }}
+        />
+
+        {/* Sophisticated Multi-stop Dark Forest Overlay for optimal typography legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0E261C]/85 via-[#0E261C]/65 to-[#0E261C]/95 pointer-events-none" />
+        <div className="absolute inset-0 bg-black/25 pointer-events-none" />
+
+        {/* Subtle ambient gold starlight pattern */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:24px_24px]" />
 
         <Container className="relative z-10 text-center max-w-5xl">
           {/* Elephant Badge & Foundation Year */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#143628] border border-[#C5A059]/40 text-[#DFCA95] text-xs font-medium uppercase tracking-widest mb-6 shadow-sm">
+          {/* <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#143628] border border-[#C5A059]/40 text-[#DFCA95] text-xs font-medium uppercase tracking-widest mb-6 shadow-sm">
             <span>Established 1998</span>
             <span>•</span>
             <span>Village Nimture, Bolani, Odisha</span>
-          </div>
+          </div> */}
 
           <h1 className="font-cinzel tracking-wider text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#F9F6F0] leading-tight">
             {resortInfo.name}
@@ -50,32 +59,24 @@ export function HomePage({
             {resortInfo.tagline}
           </p>
 
-          <p className="max-w-2xl mx-auto text-sm sm:text-base text-[#F9F6F0]/80 mt-4 leading-relaxed font-sans">
+          <p className="max-w-2xl mx-auto text-base sm:text-xl text-[#F9F6F0] mt-4 font-serif leading-relaxed">
             "{resortInfo.subtext}"
           </p>
 
+          <p className="max-w-3xl mx-auto text-sm sm:text-base text-[#F9F6F0]/85 mt-4 leading-relaxed font-sans">
+            Unwind among trees, open lawns and peaceful surroundings at Saranda Safari Resort in Nimture, Bolani, Odisha. Enjoy a cottage stay, settle into our wooden log house, or spend a night camping beneath the open sky.
+          </p>
+
           {/* October 2026 Season Pre-Booking Banner */}
-          <div className="mt-8 inline-block bg-[#143628]/90 border border-[#C5A059]/60 rounded-xl p-4 max-w-xl mx-auto shadow-md backdrop-blur-sm">
-            <div className="flex items-center justify-center gap-2 text-xs font-semibold text-[#DFCA95] uppercase tracking-wider">
+          <div className="mt-8 inline-block bg-[#143628]/90 border border-[#C5A059]/60 rounded-xl px-5 py-3 max-w-xl mx-auto shadow-md backdrop-blur-sm">
+            <div className="flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold text-[#DFCA95] tracking-wide">
               <span className="w-2 h-2 rounded-full bg-[#C5A059] animate-ping" />
               <span>{resortInfo.preBookingNotice}</span>
             </div>
-            <p className="text-xs text-[#F9F6F0]/80 mt-1">
-              Secure your stay with 50% advance. Non-refundable advance with a 7-day reschedule window. Full 100% refund guarantee if resort cancels.
-            </p>
           </div>
 
-          {/* Action CTAs */}
+          {/* Action CTAs: Explore Our Stays | Check Availability | WhatsApp Us */}
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Button
-              variant="terracotta"
-              size="lg"
-              onClick={onOpenBooking}
-              icon={Calendar}
-            >
-              Check Availability
-            </Button>
-
             <Button
               variant="outline-light"
               size="lg"
@@ -83,6 +84,15 @@ export function HomePage({
               icon={ArrowRight}
             >
               Explore Our Stays
+            </Button>
+
+            <Button
+              variant="terracotta"
+              size="lg"
+              onClick={onOpenBooking}
+              icon={Calendar}
+            >
+              Check Availability
             </Button>
 
             <a
@@ -97,7 +107,7 @@ export function HomePage({
           </div>
 
           {/* Quick Booking Strip Bar */}
-          <div className="mt-14 max-w-4xl mx-auto bg-white/95 backdrop-blur-md text-[#143628] rounded-xl p-4 shadow-xl border border-[#E8DFCE] hidden sm:grid grid-cols-4 gap-4 text-left items-center">
+          {/* <div className="mt-14 max-w-4xl mx-auto bg-white/95 backdrop-blur-md text-[#143628] rounded-xl p-4 shadow-xl border border-[#E8DFCE] hidden sm:grid grid-cols-4 gap-4 text-left items-center">
             <div className="border-r border-[#E8DFCE] pr-3">
               <span className="text-[11px] uppercase tracking-wider font-semibold text-[#8F6C27] block">Season</span>
               <span className="text-sm font-serif font-bold text-[#143628]">Oct 2026 Stays</span>
@@ -120,374 +130,492 @@ export function HomePage({
                 Reserve Stay
               </Button>
             </div>
-          </div>
+          </div> */}
         </Container>
       </section>
 
       {/* =========================================================================
           SECTION 2: THE PLACE (PREVIEW)
-          Short introduction and link to The Place
+          Compact editorial bridge between Hero and Stay
          ========================================================================= */}
-      <Section id="the-place-preview" background="cream">
+      <Section id="the-place-preview" background="cream" className="!py-10 sm:!py-12 lg:!py-14">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-7 space-y-6">
-              <Heading
-                level={2}
-                badge="The Heritage & Setting"
-                align="left"
-                subheading="The Land of Seven Hundred Hills & Whispering Sal"
+          <div className="mx-auto max-w-3xl text-center">
+
+            <p className="text-[10px] sm:text-xs font-medium uppercase tracking-[0.18em] text-[#8F6C27]">
+              Village Nimture, Bolani, Odisha
+            </p>
+
+            <h2 className="mt-2 font-serif text-3xl font-bold leading-tight text-[#143628] sm:text-4xl">
+              The Place
+            </h2>
+
+            <p className="mt-2 font-serif text-base italic text-[#143628]/70 sm:text-lg">
+              The Land of Seven Hundred Hills &amp; Whispering Sal
+            </p>
+
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#143628]/80 sm:text-base sm:leading-7">
+              Nestled along the gentle curves of the Karo River, Saranda Safari
+              Resort is a tranquil forest retreat surrounded by rolling hills,
+              magnificent sal trees and mature mango orchards. A peaceful
+              sanctuary to slow down, breathe fresh air, and reconnect with nature.
+            </p>
+
+            <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs font-medium text-[#8F6C27] sm:text-sm">
+              <span>Karo Riverfront</span>
+              <span aria-hidden="true">•</span>
+              <span>Sal Forests</span>
+              <span aria-hidden="true">•</span>
+              <span>Mango Orchards</span>
+            </div>
+
+            <div className="mt-5">
+              <Button
+                variant="forest"
+                size="md"
+                onClick={() => onNavigate('the-place')}
+                icon={ArrowRight}
               >
-                A Sanctuary Bordered by River & Forest
-              </Heading>
-
-              <p className="text-base sm:text-lg text-[#143628]/85 leading-relaxed">
-                {thePlaceContent.shortSummary}
-              </p>
-
-              <p className="text-sm text-[#143628]/75 leading-relaxed">
-                Founded in 1998, Saranda Safari Resort was created for travellers seeking the simple, profound rhythms of nature: the fresh morning mist rising off the Karo River, the golden foliage of sal trees, the shade of mature mango orchards, and starry nights around the fire hearth.
-              </p>
-
-              {/* 4 Quick Highlights */}
-              <div className="grid grid-cols-2 gap-4 pt-2">
-                {thePlaceContent.highlights.map((item, idx) => (
-                  <div key={idx} className="border-l-2 border-[#C5A059] pl-3 py-1">
-                    <h4 className="font-serif font-semibold text-sm text-[#143628]">{item.title}</h4>
-                    <p className="text-xs text-[#143628]/70 mt-0.5 line-clamp-2">{item.description}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="pt-4">
-                <Button
-                  variant="forest"
-                  size="md"
-                  onClick={() => onNavigate('the-place')}
-                  icon={ArrowRight}
-                >
-                  Read The Full Story & Seasonal Guide
-                </Button>
-              </div>
+                Explore The Place
+              </Button>
             </div>
 
-            {/* Visual Card / Summary Box */}
-            <div className="lg:col-span-5">
-              <Card className="bg-[#F4EFE6] border-[#C5A059]/40 p-8 space-y-6 shadow-sm">
-                <div className="w-12 h-12 rounded-full bg-[#143628] text-[#C5A059] flex items-center justify-center">
-                  <Trees className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-serif text-2xl font-bold text-[#143628]">What Defines Saranda</h3>
-                  <p className="text-xs text-[#8F6C27] font-medium tracking-wide uppercase mt-1">Village Nimture, Bolani, Keonjhar</p>
-                </div>
-                
-                <ul className="space-y-3 text-xs sm:text-sm text-[#143628]/85">
-                  <li className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-emerald-700 shrink-0" />
-                    <span>Direct riverfront access along the gentle Karo River</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-emerald-700 shrink-0" />
-                    <span>Land of seven hundred hills & magnificent sal trees</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-emerald-700 shrink-0" />
-                    <span>Established in 1998 — over 25 years of quiet presence</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-emerald-700 shrink-0" />
-                    <span>Unplugged atmosphere for genuine mental tranquility</span>
-                  </li>
-                </ul>
-
-                <div className="border-t border-[#E8DFCE] pt-4 text-xs text-[#143628]/70 italic">
-                  "{resortInfo.photoDisclaimer}"
-                </div>
-              </Card>
-            </div>
           </div>
         </Container>
       </Section>
 
       {/* =========================================================================
           SECTION 3: STAY (PREVIEW)
-          Accommodation preview and link to Stay
+          Visual-first, 2 main built stays (Slideable on mobile, 2-col on desktop)
          ========================================================================= */}
-      <Section id="stay-preview" background="cream-deep">
+      <Section id="stay-preview" background="cream-deep" className="!py-10 sm:!py-12 lg:!py-14">
         <Container>
-          <Heading
-            level={2}
-            badge="Accommodation Overview"
-            align="center"
-            subheading="Authentic, peaceful stays for up to 25 overnight guests"
-          >
-            Our Cottages, Log House & Camping
-          </Heading>
+          <div className="mx-auto max-w-5xl">
+            
+            {/* Heading */}
+            <div className="text-center mb-6 sm:mb-8">
+              <p className="text-[10px] sm:text-xs font-medium uppercase tracking-[0.18em] text-[#8F6C27]">
+                Accommodation
+              </p>
+              <h2 className="mt-1 font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-[#143628]">
+                Where You Stay
+              </h2>
+              <p className="mt-2 font-serif text-sm sm:text-base italic text-[#143628]/75 max-w-xl mx-auto">
+                Comfortable stays surrounded by forest, open lawns and the quiet of nature.
+              </p>
+            </div>
 
-          {/* Truth-in-Marketing Amenities Strip */}
-          <div className="mb-10 bg-white/90 rounded-lg p-4 border border-[#E8DFCE] grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div>
-              <span className="text-xs font-bold text-emerald-800 flex items-center justify-center gap-1">
-                <Check className="w-4 h-4" /> Electricity Available
-              </span>
-              <span className="text-[11px] text-[#143628]/70 block mt-0.5">Connected across units</span>
-            </div>
-            <div>
-              <span className="text-xs font-bold text-emerald-800 flex items-center justify-center gap-1">
-                <Check className="w-4 h-4" /> Attached Bathrooms
-              </span>
-              <span className="text-[11px] text-[#143628]/70 block mt-0.5">In all cottages & log house</span>
-            </div>
-            <div>
-              <span className="text-xs font-bold text-[#8F6C27] flex items-center justify-center gap-1">
-                <AlertTriangle className="w-4 h-4" /> No Air Conditioning
-              </span>
-              <span className="text-[11px] text-[#143628]/70 block mt-0.5">Ceiling fans & forest breeze</span>
-            </div>
-            <div>
-              <span className="text-xs font-bold text-[#8F6C27] flex items-center justify-center gap-1">
-                <Moon className="w-4 h-4" /> Disconnect to Reconnect
-              </span>
-              <span className="text-[11px] text-[#143628]/70 block mt-0.5">No Wi-Fi / No power backup</span>
-            </div>
-          </div>
-
-          {/* 3 Unit Preview Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {stayInventory.units.slice(0, 3).map((unit) => (
-              <Card key={unit.id} className="flex flex-col justify-between p-6">
+            {/* Stays Container: Slideable on mobile, 2-column grid on desktop */}
+            <div className="flex lg:grid lg:grid-cols-2 gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-3 lg:pb-0 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
+              
+              {/* Card 1: Riverwood */}
+              <div 
+                onClick={() => onNavigate('stay')}
+                className="w-[85vw] sm:w-[380px] lg:w-auto shrink-0 snap-center bg-white rounded-xl border border-[#E8DFCE] overflow-hidden shadow-xs hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
+              >
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <Badge variant={unit.type === 'camping' ? 'terracotta' : 'gold'}>
-                      {unit.tag}
-                    </Badge>
-                    <span className="text-xs font-semibold text-[#8F6C27]">
-                      {unit.unitCount} Unit{unit.unitCount > 1 ? 's' : ''}
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#143628]">
+                    <img 
+                      src="/RIVERWOODCOTTAGE.jpeg" 
+                      alt="Riverwood"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <span className="absolute top-3 left-3 bg-[#143628]/90 backdrop-blur-xs text-[#DFCA95] text-[11px] font-semibold px-2.5 py-1 rounded-full">
+                      1 Exclusive Unit • 4 Guests
                     </span>
                   </div>
-
-                  <h3 className="font-serif text-2xl font-bold text-[#143628]">{unit.name}</h3>
-                  <p className="text-xs text-[#143628]/75 mt-2 line-clamp-3 leading-relaxed">
-                    {unit.description}
-                  </p>
-
-                  <div className="mt-4 pt-4 border-t border-[#E8DFCE] space-y-1.5 text-xs text-[#143628]/80">
-                    <div className="flex justify-between">
-                      <span className="font-medium">Capacity:</span>
-                      <span className="font-bold text-[#143628]">Max {unit.maxAdultsPerUnit} Guests</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">Bath:</span>
-                      <span>{unit.type === 'camping' ? 'Shared Facilities' : 'Private Attached'}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">Meals:</span>
-                      <span className="text-emerald-800 font-medium">Veg Meals Included</span>
-                    </div>
+                  <div className="p-4 sm:p-5">
+                    <h3 className="font-serif text-lg sm:text-xl font-bold text-[#143628] group-hover:text-[#C25E3E] transition-colors">
+                      Riverwood
+                    </h3>
+                    <p className="text-xs text-[#8F6C27] font-serif italic mt-0.5 mb-1">
+                      The warmth of wood, the calm of the riverside.
+                    </p>
+                    <p className="text-xs sm:text-sm text-[#143628]/80 mt-1 leading-relaxed">
+                      Riverside location, rustic wooden charm, and a leisurely river-facing veranda watching the changing light over the water.
+                    </p>
                   </div>
                 </div>
+                <div className="px-4 sm:px-5 pb-4 pt-2 border-t border-[#E8DFCE]/60 flex items-center justify-between text-xs font-semibold text-[#8F6C27]">
+                  <span>From ₹3,000 / night</span>
+                  <span className="text-[#143628] group-hover:text-[#C25E3E] flex items-center gap-1">
+                    Explore Stay <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </div>
 
-                <div className="mt-6 pt-4 border-t border-[#E8DFCE]">
-                  <div className="flex items-baseline justify-between mb-3">
-                    <span className="text-xs text-[#8F6C27] font-semibold">Starting from</span>
-                    <span className="font-serif text-xl font-bold text-[#143628]">
-                      ₹{unit.pricingTiers[1] || unit.pricingTiers.perPerson}
-                      <span className="text-xs font-sans font-normal text-[#143628]/70"> / night</span>
+              {/* Card 2: Cherry Blossom */}
+              <div 
+                onClick={() => onNavigate('stay')}
+                className="w-[85vw] sm:w-[380px] lg:w-auto shrink-0 snap-center bg-white rounded-xl border border-[#E8DFCE] overflow-hidden shadow-xs hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
+              >
+                <div>
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#143628]">
+                    <img 
+                      src="/CHERRYBLOSSOM.jpeg" 
+                      alt="Cherry Blossom"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <span className="absolute top-3 left-3 bg-[#143628]/90 backdrop-blur-xs text-[#DFCA95] text-[11px] font-semibold px-2.5 py-1 rounded-full">
+                      4 Units • 3 Guests / Unit
                     </span>
                   </div>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full"
-                    onClick={() => onNavigate('stay')}
-                    icon={ArrowRight}
-                  >
-                    View Room Details
-                  </Button>
+                  <div className="p-4 sm:p-5">
+                    <h3 className="font-serif text-lg sm:text-xl font-bold text-[#143628] group-hover:text-[#C25E3E] transition-colors">
+                      Cherry Blossom
+                    </h3>
+                    <p className="text-xs text-[#8F6C27] font-serif italic mt-0.5 mb-1">
+                      A peaceful retreat with our finest river views.
+                    </p>
+                    <p className="text-xs sm:text-sm text-[#143628]/80 mt-1 leading-relaxed">
+                      Direct Karo River vantage, white walls with red accents, graceful arched verandas, and peaceful open lawns.
+                    </p>
+                  </div>
                 </div>
-              </Card>
-            ))}
-          </div>
+                <div className="px-4 sm:px-5 pb-4 pt-2 border-t border-[#E8DFCE]/60 flex items-center justify-between text-xs font-semibold text-[#8F6C27]">
+                  <span>From ₹3,000 / night</span>
+                  <span className="text-[#143628] group-hover:text-[#C25E3E] flex items-center gap-1">
+                    Explore Stays <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </div>
 
-          <div className="mt-12 text-center">
-            <Button
-              variant="forest"
-              size="lg"
-              onClick={() => onNavigate('stay')}
-              icon={ArrowRight}
-            >
-              View All 4 Accommodation Types & Inventory Rules
-            </Button>
+            </div>
+
+            {/* Mobile Swipe Hint Indicator */}
+            <p className="text-center text-[11px] text-[#143628]/60 mt-2 lg:hidden">
+              ← Swipe to explore stays →
+            </p>
+
+            {/* Secondary Stays Line */}
+            <div className="mt-6 text-center text-xs text-[#143628]/80 max-w-2xl mx-auto space-y-1.5">
+              <div>
+                <span>Also explore: </span>
+                <strong className="text-[#143628]">Autumn Abode</strong> (3 Units • 4 Guests/Unit) • 
+                <strong className="text-[#143628]"> Spring Abode</strong> (4 Units • 4 Guests/Unit) • 
+                <strong className="text-[#143628]"> Gulmohar</strong> (1 Unit • 3 Guests) • 
+                <strong className="text-[#143628]"> Amberwood</strong> (1 Unit • 4 Guests)
+              </div>
+              <div className="text-[11px] text-[#8F6C27] font-medium">
+                Plus <strong className="text-[#143628]">Wilderness Camping Tents</strong> (2 Tents • 5 Guests Total) by the Karo River
+              </div>
+            </div>
+
+            {/* Bottom CTA */}
+            <div className="mt-5 text-center">
+              <Button
+                variant="forest"
+                size="md"
+                onClick={() => onNavigate('stay')}
+                icon={ArrowRight}
+              >
+                Explore All Stays &amp; Tariffs
+              </Button>
+            </div>
+
           </div>
         </Container>
       </Section>
 
       {/* =========================================================================
           SECTION 4: TEN EXPERIENCES (PREVIEW)
-          Preview of 10 experiences with official titles & link to Experiences
+          Inspiring visual gateway: Ten Ways to Slow Down
+          Desktop: 3-image composition | Mobile: horizontal swipeable
          ========================================================================= */}
-      <Section id="experiences-preview" background="cream">
+      <Section id="experiences-preview" background="cream" className="!py-10 sm:!py-12 lg:!py-14">
         <Container>
-          <Heading
-            level={2}
-            badge="Outdoor Life"
-            align="center"
-            subheading={experiencesContent.tagline}
-          >
-            {experiencesContent.sectionTitle}
-          </Heading>
+          <div className="mx-auto max-w-6xl">
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {experiencesContent.experiences.slice(0, 4).map(exp => (
-              <Card key={exp.id} className="flex flex-col justify-between p-6">
+            {/* Header */}
+            <div className="text-center mb-6 sm:mb-8">
+              <p className="text-[10px] sm:text-xs font-medium uppercase tracking-[0.18em] text-[#8F6C27]">
+                Outdoor Life
+              </p>
+              <h2 className="mt-1 font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-[#143628]">
+                Ten Ways to Slow Down
+              </h2>
+              <p className="mt-2 font-serif text-sm sm:text-base italic text-[#143628]/75 max-w-xl mx-auto">
+                From forest trails and waterfalls to hilltop sunsets and quiet moments by the Karo.
+              </p>
+            </div>
+
+            {/* 3 Visual Previews (Slideable on mobile, 3-column grid on desktop) */}
+            <div className="flex lg:grid lg:grid-cols-3 gap-4 sm:gap-5 overflow-x-auto snap-x snap-mandatory pb-3 lg:pb-0 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
+              
+              {/* Card 01: Leopard Caves Trail */}
+              <div 
+                onClick={() => onNavigate('experiences')}
+                className="w-[80vw] sm:w-[320px] lg:w-auto shrink-0 snap-center bg-white rounded-xl border border-[#E8DFCE] overflow-hidden shadow-xs hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
+              >
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-cinzel text-xs font-bold text-[#C5A059]">{exp.number}</span>
-                    <span className="text-[11px] uppercase tracking-wider text-[#8F6C27] font-semibold">{exp.category}</span>
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#143628]">
+                    <img 
+                      src="/exp-leopard-caves.jpg" 
+                      alt="Leopard Caves Trail"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <span className="absolute top-2.5 left-2.5 bg-[#143628]/90 backdrop-blur-xs text-[#DFCA95] text-[10px] font-bold px-2.5 py-0.5 rounded-full font-cinzel">
+                      01 • Wilderness Hike
+                    </span>
                   </div>
-
-                  <h3 className="font-serif text-lg font-bold text-[#143628] leading-snug">
-                    {exp.title}
-                  </h3>
-
-                  <p className="text-xs text-[#143628]/75 mt-2 leading-relaxed">
-                    {exp.shortDescription}
-                  </p>
-
-                  {/* MANDATORY SAFETY WARNING FOR EXPERIENCE #4 */}
-                  {exp.safetyWarning && (
-                    <div className="mt-3 p-2.5 rounded bg-amber-50 border border-amber-300 text-[11px] text-amber-950 flex items-start gap-1.5">
-                      <AlertTriangle className="w-3.5 h-3.5 text-amber-700 shrink-0 mt-0.5" />
-                      <span>{exp.safetyWarning}</span>
-                    </div>
-                  )}
+                  <div className="p-4">
+                    <h3 className="font-serif text-base sm:text-lg font-bold text-[#143628] group-hover:text-[#C25E3E] transition-colors leading-snug">
+                      Leopard Caves Trail
+                    </h3>
+                    <p className="text-xs text-[#143628]/75 mt-1.5 leading-relaxed">
+                      A rugged, scenic natural trail through towering sal trees up to ancient cave formations.
+                    </p>
+                  </div>
                 </div>
-
-                <div className="mt-4 pt-3 border-t border-[#E8DFCE] flex items-center justify-between text-xs text-[#8F6C27]">
-                  <span>{exp.tag}</span>
-                  <span className="text-[#143628]/60 font-medium">Nature Immersion</span>
+                <div className="px-4 pb-3.5 pt-2 border-t border-[#E8DFCE]/50 flex items-center justify-between text-xs font-semibold text-[#8F6C27]">
+                  <span>Forest &amp; Ridges</span>
+                  <span className="text-[#143628] group-hover:text-[#C25E3E] flex items-center gap-1">
+                    View <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
                 </div>
-              </Card>
+              </div>
 
-            ))}
-          </div>
+              {/* Card 02: Waterfalls Exploration */}
+              <div 
+                onClick={() => onNavigate('experiences')}
+                className="w-[80vw] sm:w-[320px] lg:w-auto shrink-0 snap-center bg-white rounded-xl border border-[#E8DFCE] overflow-hidden shadow-xs hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
+              >
+                <div>
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#143628]">
+                    <img 
+                      src="/exp-waterfalls.jpg" 
+                      alt="Waterfalls Exploration"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <span className="absolute top-2.5 left-2.5 bg-[#143628]/90 backdrop-blur-xs text-[#DFCA95] text-[10px] font-bold px-2.5 py-0.5 rounded-full font-cinzel">
+                      02 • Excursion
+                    </span>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-serif text-base sm:text-lg font-bold text-[#143628] group-hover:text-[#C25E3E] transition-colors leading-snug">
+                      Waterfalls Exploration
+                    </h3>
+                    <p className="text-xs text-[#143628]/75 mt-1.5 leading-relaxed">
+                      Pristine cascade points hidden in green ravines, with natural freshwater pools.
+                    </p>
+                  </div>
+                </div>
+                <div className="px-4 pb-3.5 pt-2 border-t border-[#E8DFCE]/50 flex items-center justify-between text-xs font-semibold text-[#8F6C27]">
+                  <span>Cascades &amp; Pools</span>
+                  <span className="text-[#143628] group-hover:text-[#C25E3E] flex items-center gap-1">
+                    View <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </div>
 
-          <div className="mt-12 text-center">
-            <Button
-              variant="forest"
-              size="lg"
-              onClick={() => onNavigate('experiences')}
-              icon={ArrowRight}
-            >
-              Explore All 10 Experiences & Guides
-            </Button>
+              {/* Card 03: Kiriburu Sunset Point */}
+              <div 
+                onClick={() => onNavigate('experiences')}
+                className="w-[80vw] sm:w-[320px] lg:w-auto shrink-0 snap-center bg-white rounded-xl border border-[#E8DFCE] overflow-hidden shadow-xs hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
+              >
+                <div>
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#143628]">
+                    <img 
+                      src="/exp-sunset.jpg" 
+                      alt="Kiriburu Sunset Point"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <span className="absolute top-2.5 left-2.5 bg-[#143628]/90 backdrop-blur-xs text-[#DFCA95] text-[10px] font-bold px-2.5 py-0.5 rounded-full font-cinzel">
+                      03 • Sunset Vantage
+                    </span>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-serif text-base sm:text-lg font-bold text-[#143628] group-hover:text-[#C25E3E] transition-colors leading-snug">
+                      Kiriburu Sunset Point
+                    </h3>
+                    <p className="text-xs text-[#143628]/75 mt-1.5 leading-relaxed">
+                      Golden hour over the vast rolling ridges of the land of seven hundred hills.
+                    </p>
+                  </div>
+                </div>
+                <div className="px-4 pb-3.5 pt-2 border-t border-[#E8DFCE]/50 flex items-center justify-between text-xs font-semibold text-[#8F6C27]">
+                  <span>Hilltop Panorama</span>
+                  <span className="text-[#143628] group-hover:text-[#C25E3E] flex items-center gap-1">
+                    View <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Mobile swipe hint */}
+            <p className="text-center text-[11px] text-[#143628]/60 mt-2 lg:hidden">
+              ← Swipe to explore experiences →
+            </p>
+
+            {/* Secondary note */}
+            <div className="mt-5 text-center text-xs text-[#143628]/75">
+              <span>10 experiences • Every season brings something different</span>
+            </div>
+
+            {/* CTA */}
+            <div className="mt-4 text-center">
+              <Button
+                variant="forest"
+                size="md"
+                onClick={() => onNavigate('experiences')}
+                icon={ArrowRight}
+              >
+                Explore Experiences
+              </Button>
+            </div>
+
           </div>
         </Container>
       </Section>
 
       {/* =========================================================================
           SECTION 5: PACKAGES & TARIFFS (PREVIEW)
-          Tariffs preview and link to Packages
+          Tightened padding & margins (Slideable on mobile, 3-col on desktop)
          ========================================================================= */}
-      <Section id="packages-preview" background="cream-deep">
+      <Section id="packages-preview" background="cream-deep" className="!py-10 sm:!py-12 lg:!py-14">
         <Container>
-          <Heading
-            level={2}
-            badge="Transparent Pricing"
-            align="center"
-            subheading="Standard tariffs with vegetarian meals included • 9 AM check-in"
-          >
-            Packages & Official Tariffs
-          </Heading>
+          <div className="text-center mb-5 sm:mb-6">
+            <p className="text-[10px] sm:text-xs font-medium uppercase tracking-[0.18em] text-[#8F6C27]">
+              Transparent Pricing
+            </p>
+            <h2 className="mt-1 font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-[#143628]">
+              Packages &amp; Official Tariffs
+            </h2>
+            <p className="mt-1.5 font-serif text-sm sm:text-base italic text-[#143628]/75 max-w-xl mx-auto">
+              Standard tariffs with vegetarian meals included • 9:00 AM check-in
+            </p>
+          </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Slideable on mobile, 3-column grid on desktop with disciplined gaps */}
+          <div className="flex lg:grid lg:grid-cols-3 gap-3.5 sm:gap-5 overflow-x-auto snap-x snap-mandatory pb-2.5 lg:pb-0 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
             
-            {/* Cottage Overnight Tariff Card */}
-            <Card className="p-6">
-              <Badge variant="forest" className="mb-3">24-Hour Cottage Stay</Badge>
-              <h3 className="font-serif text-2xl font-bold text-[#143628]">Cottages & Log House</h3>
-              <p className="text-xs text-[#143628]/75 mt-1">9:00 AM Check-in to 9:00 AM Next Day</p>
-              
-              <div className="mt-4 divide-y divide-[#E8DFCE] text-xs">
-                {tariffsAndPackages.overnightCottage.rates.map(tier => (
-                  <div key={tier.guests} className="py-2.5 flex justify-between items-center">
-                    <div>
-                      <span className="font-semibold text-[#143628]">{tier.guests} Adult{tier.guests > 1 ? 's' : ''}</span>
-                      {tier.guests === 4 && (
-                        <span className="block text-[10px] text-[#C25E3E] font-medium">Log House / Other Cottage Only</span>
-                      )}
+            {/* Card 1: Cottage Overnight Tariff */}
+            <Card className="w-[82vw] sm:w-[340px] lg:w-auto shrink-0 snap-center p-4 sm:p-5 flex flex-col justify-between shadow-xs">
+              <div>
+                <div className="w-full h-36 sm:h-40 rounded-lg overflow-hidden mb-3 relative border border-[#E8DFCE]/80">
+                  <img 
+                    src="/package-cottage.jpg" 
+                    alt="Cottages & Log House" 
+                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  <div className="absolute top-2 right-2">
+                    <Badge variant="forest">24-Hour Stay</Badge>
+                  </div>
+                </div>
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-[#143628]">Cottages &amp; Log House</h3>
+                <p className="text-[11px] sm:text-xs text-[#143628]/70 mt-0.5">9:00 AM Check-in to 9:00 AM Next Day</p>
+                
+                <div className="mt-3 divide-y divide-[#E8DFCE]/80 text-xs">
+                  {tariffsAndPackages.overnightCottage.rates.map(tier => (
+                    <div key={tier.guests} className="py-1.5 flex justify-between items-center">
+                      <div>
+                        <span className="font-semibold text-[#143628]">{tier.guests} Adult{tier.guests > 1 ? 's' : ''}</span>
+                        {tier.guests === 4 && (
+                          <span className="block text-[10px] text-[#C25E3E] font-medium">Riverwood, Autumn, Spring, Amberwood</span>
+                        )}
+                      </div>
+                      <span className="font-serif font-bold text-sm text-[#143628]">₹{tier.rate.toLocaleString('en-IN')}</span>
                     </div>
-                    <span className="font-serif font-bold text-sm text-[#143628]">₹{tier.rate.toLocaleString('en-IN')}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-4 pt-3 border-t border-[#E8DFCE] text-xs text-[#8F6C27] flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-emerald-700" />
-                <span>Includes Veg Breakfast, Lunch & Dinner</span>
-              </div>
-            </Card>
-
-            {/* Camping Overnight Tariff Card */}
-            <Card className="p-6">
-              <Badge variant="terracotta" className="mb-3">Riverside Camping</Badge>
-              <h3 className="font-serif text-2xl font-bold text-[#143628]">Wilderness Tents</h3>
-              <p className="text-xs text-[#143628]/75 mt-1">4:00 PM Check-in to 9:00 AM Next Day</p>
-
-              <div className="mt-4 divide-y divide-[#E8DFCE] text-xs">
-                {tariffsAndPackages.overnightCamping.rates.map((tier, idx) => (
-                  <div key={idx} className="py-2.5 flex justify-between items-center">
-                    <span className="font-semibold text-[#143628]">{tier.type}</span>
-                    <span className="font-serif font-bold text-sm text-[#143628]">₹{tier.rate.toLocaleString('en-IN')}</span>
-                  </div>
-                ))}
-                <div className="py-2.5 flex justify-between items-center">
-                  <span className="font-semibold text-[#143628]">Child (5–10 yrs)</span>
-                  <span className="font-serif font-bold text-sm text-[#143628]">₹750</span>
+                  ))}
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-[#E8DFCE] text-xs text-[#8F6C27] flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-emerald-700" />
-                <span>Includes Dinner, Breakfast, Bonfire & Shared Bath</span>
+              <div className="mt-3 pt-2.5 border-t border-[#E8DFCE] text-[11px] sm:text-xs text-[#8F6C27] flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+                <span>Includes Veg Breakfast, Lunch &amp; Dinner</span>
               </div>
             </Card>
 
-            {/* Non-Veg Supplements & Evening Preview Card */}
-            <Card className="p-6">
-              <Badge variant="gold" className="mb-3">Supplements & Day Visits</Badge>
-              <h3 className="font-serif text-2xl font-bold text-[#143628]">Add-ons & Day Use</h3>
-              <p className="text-xs text-[#143628]/75 mt-1">Enhance your stay or visit for the evening</p>
+            {/* Card 2: Camping Overnight Tariff */}
+            <Card className="w-[82vw] sm:w-[340px] lg:w-auto shrink-0 snap-center p-4 sm:p-5 flex flex-col justify-between shadow-xs">
+              <div>
+                <div className="w-full h-36 sm:h-40 rounded-lg overflow-hidden mb-3 relative border border-[#E8DFCE]/80">
+                  <img 
+                    src="/package-camping.jpg" 
+                    alt="Wilderness Tents" 
+                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  <div className="absolute top-2 right-2">
+                    <Badge variant="terracotta">Riverside Camping</Badge>
+                  </div>
+                </div>
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-[#143628]">Wilderness Tents</h3>
+                <p className="text-[11px] sm:text-xs text-[#143628]/70 mt-0.5">4:00 PM Check-in to 9:00 AM Next Day</p>
 
-              <div className="mt-4 divide-y divide-[#E8DFCE] text-xs">
-                <div className="py-2.5 flex justify-between items-center">
-                  <span>Non-Veg Chicken/Fish</span>
-                  <span className="font-serif font-bold text-[#143628]">₹150 / meal</span>
-                </div>
-                <div className="py-2.5 flex justify-between items-center">
-                  <span>Cottage Lunch+Dinner Non-Veg</span>
-                  <span className="font-serif font-bold text-[#143628]">₹300 / stay</span>
-                </div>
-                <div className="py-2.5 flex justify-between items-center">
-                  <span>Cottage Bonfire Hearth</span>
-                  <span className="font-serif font-bold text-[#143628]">₹250 / person (min 2)</span>
-                </div>
-                <div className="py-2.5 flex justify-between items-center">
-                  <span>Evening Pause (4–6 PM)</span>
-                  <span className="font-serif font-bold text-[#143628]">₹100 / adult</span>
+                <div className="mt-3 divide-y divide-[#E8DFCE]/80 text-xs">
+                  {tariffsAndPackages.overnightCamping.rates.map((tier, idx) => (
+                    <div key={idx} className="py-1.5 flex justify-between items-center">
+                      <span className="font-semibold text-[#143628]">{tier.type}</span>
+                      <span className="font-serif font-bold text-sm text-[#143628]">₹{tier.rate.toLocaleString('en-IN')}</span>
+                    </div>
+                  ))}
+                  <div className="py-1.5 flex justify-between items-center">
+                    <span className="font-semibold text-[#143628]">Child (5–10 yrs)</span>
+                    <span className="font-serif font-bold text-sm text-[#143628]">₹750</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-[#E8DFCE] text-xs text-[#143628]/70">
-                5-tier Evening Under the Stars (₹399 to ₹1,199) & Hourly Stays available.
+              <div className="mt-3 pt-2.5 border-t border-[#E8DFCE] text-[11px] sm:text-xs text-[#8F6C27] flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+                <span>Includes Dinner, Breakfast, Bonfire &amp; Bath</span>
+              </div>
+            </Card>
+
+            {/* Card 3: Non-Veg Supplements & Add-ons */}
+            <Card className="w-[82vw] sm:w-[340px] lg:w-auto shrink-0 snap-center p-4 sm:p-5 flex flex-col justify-between shadow-xs">
+              <div>
+                <div className="w-full h-36 sm:h-40 rounded-lg overflow-hidden mb-3 relative border border-[#E8DFCE]/80">
+                  <img 
+                    src="/package-bonfire.jpg" 
+                    alt="Add-ons, Bonfires & Day Use" 
+                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  <div className="absolute top-2 right-2">
+                    <Badge variant="gold">Bonfire &amp; Day Use</Badge>
+                  </div>
+                </div>
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-[#143628]">Add-ons &amp; Day Use</h3>
+                <p className="text-[11px] sm:text-xs text-[#143628]/70 mt-0.5">Enhance your stay or visit for the evening</p>
+
+                <div className="mt-3 divide-y divide-[#E8DFCE]/80 text-xs">
+                  <div className="py-1.5 flex justify-between items-center">
+                    <span>Non-Veg Chicken/Fish</span>
+                    <span className="font-serif font-bold text-[#143628]">₹150 / meal</span>
+                  </div>
+                  <div className="py-1.5 flex justify-between items-center">
+                    <span>Cottage Lunch+Dinner Non-Veg</span>
+                    <span className="font-serif font-bold text-[#143628]">₹300 / stay</span>
+                  </div>
+                  <div className="py-1.5 flex justify-between items-center">
+                    <span>Cottage Bonfire Hearth</span>
+                    <span className="font-serif font-bold text-[#143628]">₹250 / person</span>
+                  </div>
+                  <div className="py-1.5 flex justify-between items-center">
+                    <span>Evening Pause (4–6 PM)</span>
+                    <span className="font-serif font-bold text-[#143628]">₹100 / adult</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-3 pt-2.5 border-t border-[#E8DFCE] text-[11px] text-[#143628]/70">
+                Evening Under the Stars (₹399–₹1,199) &amp; Hourly Stays.
               </div>
             </Card>
 
           </div>
 
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
+          {/* Mobile swipe hint */}
+          <p className="text-center text-[11px] text-[#143628]/60 mt-2 lg:hidden">
+            ← Swipe to explore packages →
+          </p>
+
+          {/* Bottom CTAs: tightened spacing */}
+          <div className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
             <Button
               variant="terracotta"
               size="md"
@@ -503,7 +631,7 @@ export function HomePage({
               onClick={() => onNavigate('packages')}
               icon={ArrowRight}
             >
-              View All Tariffs, Supplements & Events
+              View All Tariffs &amp; Supplements
             </Button>
 
             <Button
@@ -520,113 +648,266 @@ export function HomePage({
 
       {/* =========================================================================
           SECTION 6: SIGHTSEEING (PREVIEW)
-          Sightseeing preview and assistance request
+          Excursions preview & custom coordination assistance
+          Desktop: 3-col compact cards | Mobile: horizontal slideable
          ========================================================================= */}
-      <Section id="sightseeing-preview" background="cream">
+      <Section id="sightseeing-preview" background="cream" className="!py-10 sm:!py-12 lg:!py-14">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-6 space-y-5">
-              <Heading
-                level={2}
-                badge="Excursions & Waterfalls"
-                align="left"
-                subheading="Natural cascades, viewpoints, and forest temples"
-              >
-                Explore Surrounding Sights
-              </Heading>
-
-              <p className="text-sm sm:text-base text-[#143628]/85 leading-relaxed">
-                Saranda Safari Resort serves as an ideal launchpad to explore the waterfalls and scenic highlights of the Keonjhar–Saranda borderlands. Excursions are arranged via trusted local vehicles with custom quotations.
+          <div className="mx-auto max-w-5xl">
+            
+            {/* Heading */}
+            <div className="text-center mb-5 sm:mb-6">
+              <p className="text-[10px] sm:text-xs font-medium uppercase tracking-[0.18em] text-[#8F6C27]">
+                Excursions &amp; Beyond
               </p>
+              <h2 className="mt-1 font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-[#143628]">
+                Explore Surrounding Sights
+              </h2>
+              <p className="mt-1.5 font-serif text-sm sm:text-base italic text-[#143628]/75 max-w-xl mx-auto">
+                Natural cascades, valley rivers, and ancient forest shrines — Saranda serves as the peaceful basecamp for day excursions.
+              </p>
+            </div>
 
-              <div className="space-y-2.5 pt-2">
-                {sightseeingContent.destinations.slice(0, 3).map(dest => (
-                  <div key={dest.id} className="p-3 bg-white rounded border border-[#E8DFCE] flex justify-between items-center">
-                    <div>
-                      <h4 className="font-serif font-bold text-sm text-[#143628]">{dest.name}</h4>
-                      <span className="text-[11px] text-[#8F6C27]">{dest.tag}</span>
-                    </div>
-                    <span className="text-xs text-[#143628]/70">{dest.category}</span>
+            {/* 3 Diverse Destination Cards: Slideable on mobile, 3-column grid on desktop */}
+            <div className="flex lg:grid lg:grid-cols-3 gap-3.5 sm:gap-5 overflow-x-auto snap-x snap-mandatory pb-2.5 lg:pb-0 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
+              
+              {/* Card 1: Jhikra & Pacheri Waterfalls */}
+              <div 
+                onClick={() => onNavigate('sightseeing')}
+                className="w-[80vw] sm:w-[320px] lg:w-auto shrink-0 snap-center bg-white rounded-xl border border-[#E8DFCE] p-5 shadow-xs hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#C5A059] bg-[#143628] px-2 py-0.5 rounded-full font-sans">
+                      Waterfalls
+                    </span>
+                    <span className="text-[11px] text-[#8F6C27] font-medium">Day Excursion</span>
                   </div>
-                ))}
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#143628] group-hover:text-[#C25E3E] transition-colors leading-snug">
+                    Jhikra &amp; Pacheri Waterfalls
+                  </h3>
+                  <p className="text-xs text-[#143628]/75 mt-1.5 leading-relaxed">
+                    Hidden natural cascade points nestled within lush green forest ravines with clear rocky wading pools.
+                  </p>
+                </div>
+                <div className="pt-3 mt-3 border-t border-[#E8DFCE]/60 flex items-center justify-between text-xs font-semibold text-[#8F6C27]">
+                  <span>Scenic Cascades</span>
+                  <span className="text-[#143628] group-hover:text-[#C25E3E] flex items-center gap-1">
+                    Details <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
               </div>
 
-              <div className="pt-3 flex items-center gap-3">
-                <Button
-                  variant="forest"
-                  size="md"
-                  onClick={() => onNavigate('sightseeing')}
-                  icon={ArrowRight}
-                >
-                  View All Destinations
-                </Button>
-
-                <Button
-                  variant="terracotta"
-                  size="md"
-                  onClick={onOpenSightseeing}
-                  icon={MapPin}
-                >
-                  Request Sightseeing Quote
-                </Button>
+              {/* Card 2: Pundul River Valley */}
+              <div 
+                onClick={() => onNavigate('sightseeing')}
+                className="w-[80vw] sm:w-[320px] lg:w-auto shrink-0 snap-center bg-white rounded-xl border border-[#E8DFCE] p-5 shadow-xs hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#DFCA95] bg-[#143628] px-2 py-0.5 rounded-full font-sans">
+                      River Valley
+                    </span>
+                    <span className="text-[11px] text-[#8F6C27] font-medium">Scenic Landscape</span>
+                  </div>
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#143628] group-hover:text-[#C25E3E] transition-colors leading-snug">
+                    Pundul River Valley
+                  </h3>
+                  <p className="text-xs text-[#143628]/75 mt-1.5 leading-relaxed">
+                    Gentle flowing valley waters and open riverside meadows framed by the undulating forested hills.
+                  </p>
+                </div>
+                <div className="pt-3 mt-3 border-t border-[#E8DFCE]/60 flex items-center justify-between text-xs font-semibold text-[#8F6C27]">
+                  <span>Pristine Waters</span>
+                  <span className="text-[#143628] group-hover:text-[#C25E3E] flex items-center gap-1">
+                    Details <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
               </div>
+
+              {/* Card 3: Ancient Forest Shrines */}
+              <div 
+                onClick={() => onNavigate('sightseeing')}
+                className="w-[80vw] sm:w-[320px] lg:w-auto shrink-0 snap-center bg-white rounded-xl border border-[#E8DFCE] p-5 shadow-xs hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#DFCA95] bg-[#143628] px-2 py-0.5 rounded-full font-sans">
+                      Heritage
+                    </span>
+                    <span className="text-[11px] text-[#8F6C27] font-medium">Cultural Shrines</span>
+                  </div>
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#143628] group-hover:text-[#C25E3E] transition-colors leading-snug">
+                    Mirgsingha &amp; Jateshwar Temples
+                  </h3>
+                  <p className="text-xs text-[#143628]/75 mt-1.5 leading-relaxed">
+                    Revered woodland shrines deeply woven into local forest folklore and quiet spiritual heritage.
+                  </p>
+                </div>
+                <div className="pt-3 mt-3 border-t border-[#E8DFCE]/60 flex items-center justify-between text-xs font-semibold text-[#8F6C27]">
+                  <span>Sacred Woods</span>
+                  <span className="text-[#143628] group-hover:text-[#C25E3E] flex items-center gap-1">
+                    Details <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </div>
+
             </div>
 
-            <div className="lg:col-span-6">
-              <Card className="bg-[#F4EFE6] border-[#C5A059]/40 p-8 space-y-4">
-                <div className="w-10 h-10 rounded-full bg-[#C25E3E] text-white flex items-center justify-center">
-                  <MapPin className="w-5 h-5" />
-                </div>
-                <h3 className="font-serif text-2xl font-bold text-[#143628]">Sightseeing Assistance Workflow</h3>
-                <p className="text-xs text-[#143628]/80 leading-relaxed">
-                  To ensure maximum flexibility, sightseeing trips are not fixed online items. Instead, we coordinate with vetted local drivers to provide clean vehicles, accurate timing around sunset, and fair local quotations.
-                </p>
+            {/* Mobile swipe hint */}
+            <p className="text-center text-[11px] text-[#143628]/60 mt-2 lg:hidden">
+              ← Swipe to explore destinations →
+            </p>
 
-                <div className="border-t border-[#E8DFCE] pt-3 text-xs text-[#8F6C27] font-semibold space-y-1">
-                  <div>✓ Kiriburu Sunset Point (Spectacular panoramic hill views)</div>
-                  <div>✓ Jhikra & Pacheri Waterfalls (Cool cascading pools)</div>
-                  <div>✓ Mirgsingha & Jateshwar Ancient Forest Temples</div>
-                </div>
-              </Card>
+            {/* Service Note */}
+            <div className="mt-5 text-center text-xs text-[#143628]/75">
+              <span>Day excursions arranged on request with trusted local vehicle coordination.</span>
             </div>
+
+            {/* CTAs */}
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+              <Button
+                variant="forest"
+                size="md"
+                onClick={() => onNavigate('sightseeing')}
+                icon={ArrowRight}
+              >
+                View All Destinations
+              </Button>
+
+              <Button
+                variant="terracotta"
+                size="md"
+                onClick={onOpenSightseeing}
+                icon={MapPin}
+              >
+                Request Excursion Quote
+              </Button>
+            </div>
+
           </div>
         </Container>
       </Section>
 
       {/* =========================================================================
           SECTION 7: GETTING HERE (PREVIEW)
-          Getting Here preview and pickup request
+          Route & access preview with 3 travel pillars (Slideable on mobile, 3-col desktop)
          ========================================================================= */}
-      <Section id="getting-here-preview" background="cream-deep">
+      <Section id="getting-here-preview" background="cream-deep" className="!py-10 sm:!py-12 lg:!py-14">
         <Container>
-          <Heading
-            level={2}
-            badge="Travel & Route Guide"
-            align="center"
-            subheading="Reaching Village Nimture, P.O. Bolani, District Keonjhar, Odisha"
-          >
-            How to Reach the Resort
-          </Heading>
+          <div className="mx-auto max-w-5xl">
+            
+            {/* Heading */}
+            <div className="text-center mb-5 sm:mb-6">
+              <p className="text-[10px] sm:text-xs font-medium uppercase tracking-[0.18em] text-[#8F6C27]">
+                Location &amp; Access
+              </p>
+              <h2 className="mt-1 font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-[#143628]">
+                Getting to Saranda
+              </h2>
+              <p className="mt-1.5 font-serif text-sm sm:text-base italic text-[#143628]/75 max-w-xl mx-auto">
+                Village Nimture, Bolani, Keonjhar, Odisha — accessible by direct rail, scenic highways, and connecting flights.
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            {gettingHereContent.railheads.map((rail, idx) => (
-              <Card key={idx} className="p-6">
-                <span className="text-xs font-cinzel font-bold text-[#C5A059] block mb-1">Railhead #{idx + 1}</span>
-                <h3 className="font-serif text-lg font-bold text-[#143628]">{rail.station}</h3>
-                <div className="text-xs text-[#C25E3E] font-semibold mt-0.5">{rail.distance} ({rail.travelTime})</div>
-                <p className="text-xs text-[#143628]/75 mt-2 line-clamp-2">{rail.connectivity}</p>
-              </Card>
-            ))}
-          </div>
+            {/* 3 Travel Modes: Slideable on mobile, 3-column grid on desktop */}
+            <div className="flex lg:grid lg:grid-cols-3 gap-3.5 sm:gap-5 overflow-x-auto snap-x snap-mandatory pb-2.5 lg:pb-0 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
+              
+              {/* Pillar 1: Nearest Railhead */}
+              <div 
+                onClick={() => onNavigate('getting-here')}
+                className="w-[80vw] sm:w-[320px] lg:w-auto shrink-0 snap-center bg-white rounded-xl border border-[#E8DFCE] p-5 shadow-xs hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#C5A059] bg-[#143628] px-2 py-0.5 rounded-full font-sans">
+                      Nearest Railhead
+                    </span>
+                    <span className="text-[11px] text-[#C25E3E] font-semibold">15 km • 25 mins</span>
+                  </div>
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#143628] group-hover:text-[#C25E3E] transition-colors leading-snug">
+                    Barbil Station (BBL)
+                  </h3>
+                  <p className="text-xs text-[#143628]/75 mt-1.5 leading-relaxed">
+                    Closest station to the resort. Regular direct trains from Howrah (Kolkata) and Tatanagar (Jamshedpur).
+                  </p>
+                </div>
+                <div className="pt-3 mt-3 border-t border-[#E8DFCE]/60 flex items-center justify-between text-xs font-semibold text-[#8F6C27]">
+                  <span>Local Highway Transfer</span>
+                  <span className="text-[#143628] group-hover:text-[#C25E3E] flex items-center gap-1">
+                    Route <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </div>
 
-          <div className="bg-white/80 rounded-lg p-6 border border-[#E8DFCE] max-w-3xl mx-auto text-center space-y-4">
-            <h4 className="font-serif text-xl font-bold text-[#143628]">Airports & Private Transfers</h4>
-            <p className="text-xs sm:text-sm text-[#143628]/80 max-w-xl mx-auto">
-              Nearest connecting airports: <strong>Ranchi</strong>, <strong>Jharsuguda</strong>, and <strong>Bhubaneswar</strong>. Private pickup and drop can be arranged upon advance notice.
+              {/* Pillar 2: Major Rail Junctions */}
+              <div 
+                onClick={() => onNavigate('getting-here')}
+                className="w-[80vw] sm:w-[320px] lg:w-auto shrink-0 snap-center bg-white rounded-xl border border-[#E8DFCE] p-5 shadow-xs hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#DFCA95] bg-[#143628] px-2 py-0.5 rounded-full font-sans">
+                      Major Terminals
+                    </span>
+                    <span className="text-[11px] text-[#C25E3E] font-semibold">2.5–3 hrs by road</span>
+                  </div>
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#143628] group-hover:text-[#C25E3E] transition-colors leading-snug">
+                    Rourkela &amp; Tatanagar
+                  </h3>
+                  <p className="text-xs text-[#143628]/75 mt-1.5 leading-relaxed">
+                    Nationwide major rail hubs connected to Delhi, Mumbai, Kolkata, and South India with scenic road transfers.
+                  </p>
+                </div>
+                <div className="pt-3 mt-3 border-t border-[#E8DFCE]/60 flex items-center justify-between text-xs font-semibold text-[#8F6C27]">
+                  <span>100–150 km Highway</span>
+                  <span className="text-[#143628] group-hover:text-[#C25E3E] flex items-center gap-1">
+                    Route <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </div>
+
+              {/* Pillar 3: Connecting Airports */}
+              <div 
+                onClick={() => onNavigate('getting-here')}
+                className="w-[80vw] sm:w-[320px] lg:w-auto shrink-0 snap-center bg-white rounded-xl border border-[#E8DFCE] p-5 shadow-xs hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#DFCA95] bg-[#143628] px-2 py-0.5 rounded-full font-sans">
+                      Airports
+                    </span>
+                    <span className="text-[11px] text-[#C25E3E] font-semibold">Scheduled Flights</span>
+                  </div>
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#143628] group-hover:text-[#C25E3E] transition-colors leading-snug">
+                    Ranchi &amp; Jharsuguda
+                  </h3>
+                  <p className="text-xs text-[#143628]/75 mt-1.5 leading-relaxed">
+                    Domestic airports with daily flights from metro cities. Private pickup cars arranged upon advance notice.
+                  </p>
+                </div>
+                <div className="pt-3 mt-3 border-t border-[#E8DFCE]/60 flex items-center justify-between text-xs font-semibold text-[#8F6C27]">
+                  <span>Airport Taxi Transfer</span>
+                  <span className="text-[#143628] group-hover:text-[#C25E3E] flex items-center gap-1">
+                    Route <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Mobile swipe hint */}
+            <p className="text-center text-[11px] text-[#143628]/60 mt-2 lg:hidden">
+              ← Swipe to explore travel routes →
             </p>
 
+            {/* Pickup Note */}
+            <div className="mt-5 text-center text-xs text-[#143628]/75">
+              <span>Private pickup and drop can be arranged from any station or airport upon advance notice.</span>
+            </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            {/* CTAs */}
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
               <Button
                 variant="forest"
                 size="md"
@@ -645,41 +926,65 @@ export function HomePage({
                 Request Station / Airport Pickup
               </Button>
             </div>
+
           </div>
         </Container>
       </Section>
 
       {/* =========================================================================
           SECTION 8: FAQ & CONTACT FOOTER (PREVIEW)
-          FAQ preview, official contact details, 100% refund policy reminder
+          FAQ preview, official helpdesk, 100% refund guarantee & footer
          ========================================================================= */}
-      <footer className="bg-[#0E261C] text-[#F9F6F0] pt-16 pb-12 border-t-2 border-[#C5A059]">
+      <footer className="bg-[#0E261C] text-[#F9F6F0] pt-10 sm:pt-12 pb-8 sm:pb-10 border-t-2 border-[#C5A059]">
         <Container>
           {/* Top Grid: FAQ Highlights & Official Details */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-12 border-b border-[#C5A059]/30">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-8 sm:pb-10 border-b border-[#C5A059]/30">
             
-            {/* Left: Brand Identity & Address */}
+            {/* Left: Brand Identity, Location & Direct Helpdesk (5 cols) */}
             <div className="lg:col-span-5 space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#143628] flex items-center justify-center text-[#C5A059] border border-[#C5A059]/40">
-                  <Trees className="w-5 h-5" />
+                <div className="w-11 h-11 rounded-full bg-[#143628] flex items-center justify-center border border-[#C5A059]/50 overflow-hidden shadow-xs shrink-0">
+                  <img
+                    src="/logo.jpeg"
+                    alt="Saranda Safari Resort"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = '/logo.jpg';
+                    }}
+                  />
                 </div>
                 <div>
-                  <h3 className="font-cinzel text-xl font-bold text-white">{resortInfo.name}</h3>
-                  <span className="text-xs text-[#DFCA95] tracking-widest uppercase">{resortInfo.tagline}</span>
+                  <h3 className="font-cinzel text-lg sm:text-xl font-bold text-white leading-tight">
+                    {resortInfo.name}
+                  </h3>
+                  <span className="text-[10px] sm:text-xs text-[#DFCA95] tracking-[0.16em] uppercase block mt-0.5">
+                    {resortInfo.tagline}
+                  </span>
                 </div>
               </div>
 
               <p className="text-xs text-[#F9F6F0]/80 leading-relaxed max-w-md">
-                Established in 1998, Saranda Safari Resort is an authentic, peaceful retreat situated in Village Nimture along the Karo River in District Keonjhar, Odisha.
+                A quiet forest retreat in Village Nimture along the Karo River in District Keonjhar, Odisha. Welcoming guests with authentic cottage stays, wooden cabin living, and starlit camping.
               </p>
 
-              <div className="text-xs text-[#DFCA95] space-y-1">
-                <div><strong>Address:</strong> {resortInfo.address.fullAddress}</div>
-                <div><strong>Desk Hours:</strong> {resortInfo.contact.deskHours}</div>
+              <div className="text-xs text-[#DFCA95] space-y-1.5 pt-1">
+                <div>
+                  <span className="text-white font-medium">Address: </span>
+                  {resortInfo.address.fullAddress}
+                </div>
+                <div>
+                  <span className="text-white font-medium">Reception Desk: </span>
+                  {resortInfo.contact.deskHours}
+                </div>
+                <div>
+                  <span className="text-white font-medium">Direct Phone: </span>
+                  <a href={`tel:${resortInfo.contact.phoneRaw}`} className="text-[#DFCA95] hover:text-white underline font-semibold">
+                    {resortInfo.contact.phone}
+                  </a>
+                </div>
               </div>
 
-              <div className="pt-2 flex items-center gap-3">
+              <div className="pt-2 flex flex-wrap items-center gap-2.5">
                 <Button
                   variant="terracotta"
                   size="sm"
@@ -689,63 +994,90 @@ export function HomePage({
                   Check Availability
                 </Button>
 
+                <a
+                  href={`https://wa.me/${resortInfo.contact.whatsappNumberRaw}?text=${encodeURIComponent("Hello, I am enquiring about stay bookings at Saranda Safari Resort.")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md bg-emerald-800 hover:bg-emerald-700 text-white text-xs font-semibold border border-emerald-500/40 transition-colors"
+                >
+                  <MessageSquare className="w-3.5 h-3.5 text-emerald-200" />
+                  <span>WhatsApp Us</span>
+                </a>
+
                 <Button
                   variant="outline-light"
                   size="sm"
                   onClick={() => onNavigate('contact')}
                 >
-                  Contact & FAQs
+                  Helpdesk &amp; Policies
                 </Button>
               </div>
             </div>
 
-            {/* Right: Essential FAQs Preview */}
-            <div className="lg:col-span-7 space-y-3">
-              <h4 className="font-serif text-lg font-bold text-[#DFCA95] mb-2 flex items-center gap-2">
-                <HelpCircle className="w-5 h-5 text-[#C5A059]" />
-                Essential Booking & Policy Questions
-              </h4>
+            {/* Right: Essential FAQs & 100% Refund Protection Guarantee (7 cols) */}
+            <div className="lg:col-span-7 space-y-3.5">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <h4 className="font-serif text-base sm:text-lg font-bold text-[#DFCA95] flex items-center gap-2">
+                  <HelpCircle className="w-4 h-4 text-[#C5A059]" />
+                  Essential Booking &amp; Policy FAQs
+                </h4>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('contact')}
+                  className="text-xs text-[#DFCA95] hover:text-white underline cursor-pointer"
+                >
+                  View All 16 FAQs &rarr;
+                </button>
+              </div>
 
+              {/* 100% Full Refund Guarantee Banner */}
+              <div className="p-3.5 rounded-lg bg-[#143628] border border-emerald-500/50 flex items-start gap-3 shadow-xs">
+                <Shield className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-serif font-bold text-xs sm:text-sm text-white">100% Full Refund Guarantee</span>
+                    <span className="text-[9px] uppercase font-bold bg-emerald-600 text-white px-2 py-0.5 rounded-full">Resort Promise</span>
+                  </div>
+                  <p className="text-[11px] text-[#F9F6F0]/80 mt-1 leading-relaxed">
+                    If Saranda Safari Resort cancels a booking due to road washouts, extreme weather, or operational reasons, 100% of all amounts paid is refunded in full.
+                  </p>
+                </div>
+              </div>
+
+              {/* 3 Quick Verified FAQs */}
               <div className="space-y-2 text-xs">
                 {faqsAndPolicies.faqs.slice(0, 3).map((faq) => (
-                  <div key={faq.id} className="bg-[#143628] rounded p-3 border border-[#C5A059]/20">
+                  <div key={faq.id} className="bg-[#143628]/80 rounded-lg p-3 border border-[#C5A059]/20">
                     <span className="font-bold text-[#DFCA95] block">{faq.question}</span>
-                    <p className="text-[#F9F6F0]/80 mt-1 line-clamp-2">{faq.answer}</p>
+                    <p className="text-[#F9F6F0]/80 mt-1 line-clamp-2 leading-relaxed">{faq.answer}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="pt-2 flex justify-between items-center text-xs text-[#DFCA95]">
-                <span>Pre-booking for October 2026 onwards • 50% advance to confirm</span>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('contact')}
-                  className="underline hover:text-white cursor-pointer"
-                >
-                  Read all 11 FAQs & Policies →
-                </button>
+              <div className="pt-1 text-[11px] text-[#DFCA95]/85">
+                Pre-booking open for October 2026 onwards • 50% advance to confirm booking
               </div>
             </div>
 
           </div>
 
           {/* Bottom Disclaimers & Copyright */}
-          <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#F9F6F0]/60 gap-4 text-center sm:text-left">
+          <div className="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#F9F6F0]/60 gap-4 text-center sm:text-left">
             <div>
-              <p>© {new Date().getFullYear()} {resortInfo.name}. All Rights Reserved. Established 1998.</p>
+              <p>© {new Date().getFullYear()} {resortInfo.name}. All Rights Reserved. Established in Village Nimture.</p>
               <p className="text-[11px] text-[#DFCA95]/70 mt-0.5">
                 "{resortInfo.photoDisclaimer}" • {resortInfo.taxDisplayNote}
               </p>
             </div>
 
             <div className="flex items-center gap-4 text-[11px]">
-              <button type="button" onClick={() => onNavigate('contact')} className="hover:text-white underline">
+              <button type="button" onClick={() => onNavigate('contact')} className="hover:text-white underline cursor-pointer">
                 100% Resort Refund Policy
               </button>
-              <button type="button" onClick={() => onNavigate('contact')} className="hover:text-white underline">
+              <button type="button" onClick={() => onNavigate('contact')} className="hover:text-white underline cursor-pointer">
                 Pets Policy
               </button>
-              <button type="button" onClick={() => onNavigate('the-place')} className="hover:text-white underline">
+              <button type="button" onClick={() => onNavigate('the-place')} className="hover:text-white underline cursor-pointer">
                 Seasons Guide
               </button>
             </div>

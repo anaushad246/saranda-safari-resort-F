@@ -35,6 +35,13 @@ export const gettingHereContent = {
       travelTime: "Approx. 2.5 to 3 hours by road",
       connectivity: "Alternative connection followed by a road transfer",
       recommendedFor: "Best connected major terminal for nationwide visitors arriving by long-distance trains."
+    },
+    {
+      station: "Tatanagar",
+      distance: "150 km",
+      travelTime: "Approx. 2.5 to 3 hours by road",
+      connectivity: "Alternative connection followed by a road transfer",
+      recommendedFor: "Best connected major terminal for nationwide visitors arriving by long-distance trains."
     }
   ],
 

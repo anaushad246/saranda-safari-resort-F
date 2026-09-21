@@ -18,8 +18,10 @@ import { AdminDashboard } from './admin/AdminDashboard';
 
 export function App() {
   const [currentPage, setCurrentPage] = useState(() => {
-    if (window.location.hash === '#admin' || window.location.pathname.startsWith('/admin')) {
-      return 'admin';
+    if (typeof window !== 'undefined') {
+      if (window.location.hash === '#admin' || window.location.pathname.startsWith('/admin')) {
+        return 'admin';
+      }
     }
     return 'home';
   });
@@ -45,30 +47,45 @@ export function App() {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 400);
     };
-    const handleHashChange = () => {
-      if (window.location.hash === '#admin') {
+
+    const handleUrlSync = () => {
+      const isAdmin = window.location.hash === '#admin' || window.location.pathname.startsWith('/admin');
+      if (isAdmin) {
         setCurrentPage('admin');
-      } else if (currentPage === 'admin' && window.location.hash === '') {
+      } else {
         setCurrentPage('home');
       }
     };
 
     window.addEventListener('scroll', handleScroll);
-    window.addEventListener('hashchange', handleHashChange);
+    window.addEventListener('hashchange', handleUrlSync);
+    window.addEventListener('popstate', handleUrlSync);
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('hashchange', handleUrlSync);
+      window.removeEventListener('popstate', handleUrlSync);
     };
-  }, [currentPage]);
+  }, []);
 
   const navigateTo = (pageId) => {
     setCurrentPage(pageId);
     if (pageId === 'admin') {
-      window.location.hash = 'admin';
+      try {
+        window.location.hash = 'admin';
+        if (!window.location.pathname.startsWith('/admin')) {
+          history.pushState(null, '', '/admin');
+        }
+      } catch {}
     } else {
-      if (window.location.hash === '#admin') {
-        history.replaceState(null, '', window.location.pathname);
-      }
+      try {
+        if (window.location.pathname.startsWith('/admin')) {
+          history.pushState(null, '', '/');
+        }
+        if (window.location.hash === '#admin') {
+          history.replaceState(null, '', '/');
+        }
+      } catch {}
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

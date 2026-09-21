@@ -101,7 +101,7 @@ export function OperationsDashboard({ user }) {
         <strong className="text-sm text-[#143628]">{b.guest?.name}</strong>
         {showParty && (
           <div className="text-xs text-gray-500 mt-0.5">
-            {b.adults} Adults{childCount > 0 ?  + +childCount+ Child : ''}
+            {b.adults} Adults{childCount > 0 ? `, ${childCount} Child` : ''}
           </div>
         )}
       </div>

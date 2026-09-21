@@ -1,182 +1,348 @@
-import React from 'react';
-import { MapPin, Train, Bus, Plane, Car, Phone, Navigation, MessageSquare } from 'lucide-react';
-import { Section, Container, Button, Card, Badge } from '../components/ui/Primitives';
+import React, { useState } from 'react';
+import { 
+  MapPin, 
+  Train, 
+  Bus, 
+  Car, 
+  Plane, 
+  Navigation, 
+  Phone, 
+  MessageSquare, 
+  ExternalLink,
+  ChevronDown,
+  ChevronUp,
+  ArrowRight
+} from 'lucide-react';
+import { Container, Button } from '../components/ui/Primitives';
+import { resortInfo } from '../content/resortInfo';
 
 export function GettingHerePage({ onOpenPickup }) {
+  const [showMoreRoad, setShowMoreRoad] = useState(false);
+
+  const resortAddress = {
+    name: 'Saranda Safari Resort',
+    line1: 'Village Nimture, P.O. Bolani',
+    district: 'District Keonjhar',
+    stateZip: 'Odisha 758037',
+    fullDisplay: 'Saranda Safari Resort, Village Nimture, P.O. Bolani, Keonjhar, Odisha.'
+  };
+
+  const trainStations = [
+    { station: 'Barbil', distance: '15 km' },
+    { station: 'Banspani', distance: '22 km' },
+    { station: 'Rourkela', distance: '102 km' },
+    { station: 'Tatanagar', distance: '150 km' }
+  ];
+
+  const airports = [
+    { name: 'Ranchi', code: 'IXR' },
+    { name: 'Jharsuguda', code: 'JRG' },
+    { name: 'Bhubaneswar', code: 'BBI' }
+  ];
+
+  const roadApproaches = [
+    {
+      from: 'From Kolkata (~320 km)',
+      route: 'Kolkata → Kharagpur → Baharagora → Baripada or Jamshedpur / Chaibasa → Noamundi → Barbil → Bolani / Nimture.'
+    },
+    {
+      from: 'From Bhubaneswar (~290 km)',
+      route: 'Bhubaneswar → Cuttack → Panikoili → Keonjhar (NH 20) → Champua → Barbil → Bolani / Nimture.'
+    },
+    {
+      from: 'From Rourkela (~102 km)',
+      route: 'Rourkela → Rajgangpur / Koida or via Barbil highway corridor to Bolani.'
+    },
+    {
+      from: 'From Jamshedpur (~150 km)',
+      route: 'Jamshedpur → Chaibasa → Noamundi → Barbil → Bolani / Nimture.'
+    }
+  ];
+
   const handleOpenMap = () => {
     window.open(
-      'https://www.google.com/maps/search/?api=1&query=Village+Nimture+Bolani+Keonjhar+Odisha',
+      'https://maps.google.com/?q=Village+Nimture,+Bolani,+Keonjhar,+Odisha',
       '_blank'
     );
   };
 
+  const handleWhatsApp = () => {
+    const text = 'Hello Saranda Safari Resort, I need assistance with directions and travel to the resort.';
+    window.open(`https://wa.me/${resortInfo.contact.whatsappNumberRaw}?text=${encodeURIComponent(text)}`, '_blank');
+  };
+
   return (
-    <div className="w-full">
-      {/* Page Header */}
-      <section className="bg-[#0E261C] text-[#F9F6F0] py-14 md:py-20 border-b border-[#C5A059]/30">
-        <Container className="text-center max-w-4xl">
-          <Badge variant="gold" className="mb-3">Travel Directions & Connectivity</Badge>
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white tracking-tight">
-            Getting Here
+    <div className="w-full bg-[#FDFBF7] min-h-screen">
+      {/* 1. Compact Hero */}
+      <section className="relative bg-[#0E261C] text-[#F9F6F0] py-8 sm:py-10 border-b border-[#C5A059]/30 overflow-hidden">
+        <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:24px_24px]" />
+
+        <Container className="relative z-10 max-w-3xl px-4 sm:px-6 text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C5A059]/15 border border-[#C5A059]/35 text-[#E5C378] text-[11px] uppercase tracking-widest font-cinzel font-semibold mb-2.5">
+            <Navigation className="w-3 h-3" />
+            <span>Getting Here</span>
+          </div>
+
+          <h1 className="font-serif text-2xl sm:text-4xl font-bold text-white tracking-tight leading-tight">
+            Your Journey to Saranda
           </h1>
-          <p className="mt-3 text-sm sm:text-base text-[#DFCA95]">
-            How to reach Saranda Safari Resort
+
+          <p className="mt-2.5 text-xs sm:text-sm text-[#DFCA95] font-light leading-relaxed max-w-xl mx-auto italic">
+            "{resortAddress.fullDisplay}"
           </p>
+
+          <div className="mt-4 flex items-center justify-center">
+            <Button
+              variant="terracotta"
+              size="sm"
+              onClick={handleOpenMap}
+              icon={Navigation}
+              className="text-xs py-2 px-5 font-semibold cursor-pointer"
+            >
+              Get Directions
+            </Button>
+          </div>
         </Container>
       </section>
 
-      {/* Main Numbered Layout with Map */}
-      <Section background="cream">
-        <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-            {/* Left Column: Numbered Sections 1 to 5 */}
-            <div className="lg:col-span-7 space-y-8">
-              {/* 1. Your Destination */}
-              <div className="flex gap-4 items-start">
-                <span className="w-8 h-8 rounded-full bg-[#143628] text-[#DFCA95] font-serif font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">
-                  1
+      {/* 2. Main Travel Guide — 5-Step Structure + Sticky Desktop Map */}
+      <section className="py-8 sm:py-12">
+        <Container className="max-w-6xl px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+            
+            {/* Left Column: 5-Step Numbered Guide (~58% width on desktop) */}
+            <div className="lg:col-span-7 space-y-5 sm:space-y-6">
+
+              {/* Step 01: Your Destination */}
+              <div className="bg-white rounded-2xl p-5 sm:p-6 border border-[#EADFC9] shadow-xs flex gap-4 sm:gap-5 items-start transition-all hover:border-[#C5A059]/50">
+                <span className="font-cinzel font-bold text-2xl sm:text-3xl text-[#C5A059] shrink-0 leading-none mt-0.5">
+                  01
                 </span>
-                <div className="space-y-1.5 text-sm text-[#143628]/85">
-                  <h3 className="font-serif text-xl font-bold text-[#143628]">Your Destination</h3>
-                  <p className="leading-relaxed">
-                    Find Saranda Safari Resort at <strong>Village Nimture, near Bolani, in Keonjhar district, Odisha</strong>. 
-                    Bolani is approximately 5 km from the resort. Arrive in your own vehicle or request a pickup in advance.
+                <div className="space-y-2 flex-1">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-[#8F6C27]" />
+                    <h2 className="font-cinzel text-xs uppercase tracking-widest font-bold text-[#8F6C27]">
+                      Your Destination
+                    </h2>
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-lg sm:text-xl font-bold text-[#143628]">
+                      {resortAddress.name}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-[#143628]/80 leading-relaxed mt-0.5">
+                      {resortAddress.line1}, {resortAddress.district}, {resortAddress.stateZip}
+                    </p>
+                  </div>
+                  <div className="pt-1">
+                    <button
+                      type="button"
+                      onClick={handleOpenMap}
+                      className="text-xs font-cinzel font-semibold text-[#8F6C27] hover:text-[#143628] inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <span>Open Google Maps</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 02: By Train */}
+              <div className="bg-white rounded-2xl p-5 sm:p-6 border border-[#EADFC9] shadow-xs flex gap-4 sm:gap-5 items-start transition-all hover:border-[#C5A059]/50">
+                <span className="font-cinzel font-bold text-2xl sm:text-3xl text-[#C5A059] shrink-0 leading-none mt-0.5">
+                  02
+                </span>
+                <div className="space-y-3 flex-1">
+                  <div className="flex items-center gap-2">
+                    <Train className="w-4 h-4 text-[#8F6C27]" />
+                    <h2 className="font-cinzel text-xs uppercase tracking-widest font-bold text-[#8F6C27]">
+                      By Train
+                    </h2>
+                  </div>
+
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#143628]">
+                    Nearest Railway Stations
+                  </h3>
+
+                  {/* Clean Destination Table Rows */}
+                  <div className="border border-[#EADFC9] rounded-xl overflow-hidden divide-y divide-[#EADFC9] bg-[#FDFBF7]">
+                    {trainStations.map((item, idx) => (
+                      <div key={idx} className="flex justify-between items-center px-4 py-2.5 text-xs sm:text-sm hover:bg-[#F4ECE1]/40 transition-colors">
+                        <span className="font-bold text-[#143628]">{item.station}</span>
+                        <span className="font-serif font-bold text-[#C85A32]">{item.distance}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <p className="text-[11px] text-[#8F6C27] italic leading-relaxed pt-0.5">
+                    Note: Train services and timings should be checked before travel.
                   </p>
                 </div>
               </div>
 
-              {/* 2. By Train */}
-              <div className="flex gap-4 items-start">
-                <span className="w-8 h-8 rounded-full bg-[#143628] text-[#DFCA95] font-serif font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">
-                  2
+              {/* Step 03: By Bus or Road */}
+              <div className="bg-white rounded-2xl p-5 sm:p-6 border border-[#EADFC9] shadow-xs flex gap-4 sm:gap-5 items-start transition-all hover:border-[#C5A059]/50">
+                <span className="font-cinzel font-bold text-2xl sm:text-3xl text-[#C5A059] shrink-0 leading-none mt-0.5">
+                  03
                 </span>
-                <div className="space-y-3 w-full">
+                <div className="space-y-3.5 flex-1">
                   <div className="flex items-center gap-2">
-                    <Train className="w-5 h-5 text-[#C5A059]" />
-                    <h3 className="font-serif text-xl font-bold text-[#143628]">By Train</h3>
+                    <Bus className="w-4 h-4 text-[#8F6C27]" />
+                    <h2 className="font-cinzel text-xs uppercase tracking-widest font-bold text-[#8F6C27]">
+                      By Bus or Road
+                    </h2>
                   </div>
-                  
-                  {/* Clean Train Table */}
-                  <div className="overflow-x-auto border border-[#E8DFCE] rounded-lg bg-white">
-                    <table className="w-full text-xs text-left">
-                      <thead className="bg-[#F4EFE6] text-[#143628] font-serif border-b border-[#E8DFCE]">
-                        <tr>
-                          <th className="p-2.5">Station</th>
-                          <th className="p-2.5">Distance</th>
-                          <th className="p-2.5">Travel Planning</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#E8DFCE] text-[#143628]/80">
-                        <tr>
-                          <td className="p-2.5 font-semibold text-[#143628]">Barbil</td>
-                          <td className="p-2.5 font-medium text-[#C25E3E]">15 km</td>
-                          <td className="p-2.5">An arrival option from Howrah/Kolkata and Tata/Jamshedpur, depending on available trains.</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2.5 font-semibold text-[#143628]">Banspani near Joda</td>
-                          <td className="p-2.5 font-medium text-[#C25E3E]">22 km</td>
-                          <td className="p-2.5">An arrival option from Bhubaneswar and other parts of Odisha.</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2.5 font-semibold text-[#143628]">Rourkela</td>
-                          <td className="p-2.5 font-medium text-[#C25E3E]">102 km</td>
-                          <td className="p-2.5">Alternative connection followed by a road transfer.</td>
-                        </tr>
-                      </tbody>
-                    </table>
+
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#143628]">
+                    Bus Connections & Highway Access
+                  </h3>
+
+                  {/* Two Visual Sub-Blocks: Bus & Road Proximity */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="p-3.5 rounded-xl bg-[#FDFBF7] border border-[#EADFC9] space-y-1.5">
+                      <span className="text-[10px] font-cinzel font-bold text-[#8F6C27] uppercase tracking-wider block">
+                        Bus
+                      </span>
+                      <div className="text-xs text-[#143628] space-y-1">
+                        <p><strong className="text-[#143628]">From Kolkata:</strong> Babughat → Barbil</p>
+                        <p><strong className="text-[#143628]">From Bhubaneswar:</strong> Bus services towards Bolani</p>
+                      </div>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-[#FDFBF7] border border-[#EADFC9] space-y-1.5">
+                      <span className="text-[10px] font-cinzel font-bold text-[#8F6C27] uppercase tracking-wider block">
+                        Road
+                      </span>
+                      <p className="text-xs text-[#143628]/85 leading-relaxed">
+                        Bolani is approximately <strong>5 km from the resort</strong>. Confirm bus services and timings with operators in advance.
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-xs text-[#8F6C27] italic">
-                    Check current train services and operating days before booking tickets.
+
+                  {/* Expandable Road Approaches */}
+                  <div className="border border-[#EADFC9] rounded-xl p-3.5 bg-[#FDFBF7]">
+                    <button
+                      type="button"
+                      onClick={() => setShowMoreRoad(!showMoreRoad)}
+                      className="w-full flex items-center justify-between text-xs font-bold text-[#143628] hover:text-[#8F6C27] transition-colors cursor-pointer"
+                    >
+                      <span className="flex items-center gap-2 font-cinzel">
+                        <Car className="w-3.5 h-3.5 text-[#8F6C27]" />
+                        <span>More Road Details & Self-Drive Routes</span>
+                      </span>
+                      {showMoreRoad ? <ChevronUp className="w-4 h-4 text-[#8F6C27]" /> : <ChevronDown className="w-4 h-4 text-[#8F6C27]" />}
+                    </button>
+
+                    {showMoreRoad && (
+                      <div className="mt-3 pt-3 border-t border-[#EADFC9] space-y-2.5 text-xs text-[#143628]/80">
+                        {roadApproaches.map((dir, i) => (
+                          <div key={i} className="space-y-0.5">
+                            <strong className="text-[#143628] block font-medium">{dir.from}</strong>
+                            <p className="text-[11px] leading-relaxed text-[#143628]/75">{dir.route}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 04: By Air */}
+              <div className="bg-white rounded-2xl p-5 sm:p-6 border border-[#EADFC9] shadow-xs flex gap-4 sm:gap-5 items-start transition-all hover:border-[#C5A059]/50">
+                <span className="font-cinzel font-bold text-2xl sm:text-3xl text-[#C5A059] shrink-0 leading-none mt-0.5">
+                  04
+                </span>
+                <div className="space-y-3 flex-1">
+                  <div className="flex items-center gap-2">
+                    <Plane className="w-4 h-4 text-[#8F6C27]" />
+                    <h2 className="font-cinzel text-xs uppercase tracking-widest font-bold text-[#8F6C27]">
+                      By Air
+                    </h2>
+                  </div>
+
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-[#143628]">
+                    Nearby Commercial Airports
+                  </h3>
+
+                  {/* 3 Simple Airport Rows / Pills */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    {airports.map((ap, i) => (
+                      <div key={i} className="p-3 rounded-xl bg-[#FDFBF7] border border-[#EADFC9] text-center hover:border-[#C5A059] transition-colors">
+                        <span className="font-serif font-bold text-sm text-[#143628] block">
+                          {ap.name}
+                        </span>
+                        <span className="text-[10px] font-cinzel text-[#8F6C27] block mt-0.5 font-semibold tracking-wider">
+                          {ap.code} Airport
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <p className="text-xs text-[#143628]/80 leading-relaxed pt-0.5">
+                    From the airport, continue by road to Saranda Safari Resort.
                   </p>
                 </div>
               </div>
 
-              {/* 3. By Bus or Road */}
-              <div className="flex gap-4 items-start">
-                <span className="w-8 h-8 rounded-full bg-[#143628] text-[#DFCA95] font-serif font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">
-                  3
-                </span>
-                <div className="space-y-2 text-sm text-[#143628]/85">
-                  <div className="flex items-center gap-2">
-                    <Bus className="w-5 h-5 text-[#C5A059]" />
-                    <h3 className="font-serif text-xl font-bold text-[#143628]">By Bus or Road</h3>
-                  </div>
-                  <p className="leading-relaxed">
-                    From Bhubaneswar, take an evening bus to Bolani and arrange pickup for the remaining journey. From Kolkata, check evening buses from Babughat to Barbil, with an onward transfer arranged in advance. Confirm the bus schedule and exact arrival point with the operator.
-                  </p>
-                  <p className="leading-relaxed">
-                    Guests from Ranchi, Rourkela, Jamshedpur, Keonjhar and other districts of Odisha can travel by road. Parking is available at the resort.
-                  </p>
-                </div>
-              </div>
+              {/* Step 05: Arrival Assistance (Visually Stronger Section) */}
+              <div className="bg-[#0E261C] text-[#F9F6F0] rounded-2xl p-6 sm:p-7 border border-[#C5A059]/40 shadow-xl flex gap-4 sm:gap-5 items-start relative overflow-hidden">
+                <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#C5A059_1px,transparent_1px)] [background-size:20px_20px]" />
 
-              {/* 4. By Air */}
-              <div className="flex gap-4 items-start">
-                <span className="w-8 h-8 rounded-full bg-[#143628] text-[#DFCA95] font-serif font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">
-                  4
+                <span className="font-cinzel font-bold text-2xl sm:text-3xl text-[#E5C378] shrink-0 leading-none mt-0.5 relative z-10">
+                  05
                 </span>
-                <div className="space-y-2 text-sm text-[#143628]/85">
-                  <div className="flex items-center gap-2">
-                    <Plane className="w-5 h-5 text-[#C5A059]" />
-                    <h3 className="font-serif text-xl font-bold text-[#143628]">By Air</h3>
-                  </div>
-                  <p className="leading-relaxed">
-                    Consider Birsa Munda Airport in Ranchi, Veer Surendra Sai Airport in Jharsuguda, or Biju Patnaik International Airport in Bhubaneswar according to your available flights and onward travel plan. Airport transfers require advance arrangements and a separate quotation.
-                  </p>
-                </div>
-              </div>
 
-              {/* 5. Let Us Arrange Your Arrival */}
-              <div className="flex gap-4 items-start">
-                <span className="w-8 h-8 rounded-full bg-[#143628] text-[#DFCA95] font-serif font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">
-                  5
-                </span>
-                <div className="space-y-3 text-sm text-[#143628]/85">
-                  <div className="flex items-center gap-2">
-                    <Car className="w-5 h-5 text-[#C5A059]" />
-                    <h3 className="font-serif text-xl font-bold text-[#143628]">Let Us Arrange Your Arrival</h3>
+                <div className="space-y-3 flex-1 relative z-10">
+                  <div>
+                    <span className="text-[10px] font-cinzel text-[#E5C378] uppercase tracking-widest block mb-1 font-semibold">
+                      Arrival Assistance
+                    </span>
+                    <h2 className="font-serif text-xl sm:text-2xl font-bold text-white tracking-tight">
+                      Let Us Arrange Your Arrival
+                    </h2>
                   </div>
-                  <p className="leading-relaxed">
-                    Request pickup and drop when booking your stay. Share your arrival point, date, expected time, passenger count, luggage requirements and train, bus or flight details.
-                  </p>
-                  <p className="leading-relaxed">
-                    Transfers are charged separately. Vehicle availability and the total fare will be confirmed before payment, based on the vehicle required and prevailing operator rates.
+
+                  <p className="text-xs sm:text-sm text-[#DFCA95] leading-relaxed font-light">
+                    Arriving by train, bus or flight? Pickup and drop can be arranged in advance, subject to vehicle availability and prevailing fares.
                   </p>
 
-                  {/* Dual Action Buttons & Phone */}
                   <div className="pt-2 flex flex-wrap items-center gap-3">
-                    <Button variant="forest" size="md" onClick={handleOpenMap} icon={Navigation}>
-                      Get Directions
-                    </Button>
-                    <Button variant="terracotta" size="md" onClick={onOpenPickup} icon={Car}>
+                    <Button
+                      variant="terracotta"
+                      size="md"
+                      onClick={onOpenPickup}
+                      icon={Car}
+                      className="text-xs py-2.5 px-5 font-semibold cursor-pointer"
+                    >
                       Request Pickup & Drop
                     </Button>
-                  </div>
-                  <div className="pt-2 text-xs text-[#143628] flex flex-wrap items-center gap-2">
-                    <Phone className="w-3.5 h-3.5 text-emerald-700" />
-                    <span>Direct Assistance:</span>
-                    <a href="tel:+917008307064" className="font-semibold text-emerald-800 hover:underline">
-                      +91 70083 07064
-                    </a>
-                    <span className="text-gray-300">?</span>
-                    <a
-                      href="https://wa.me/917008307064?text=Hello%20Saranda%20Safari%20Resort,%20I%20need%20assistance%20with%20directions%20and%20travel."
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-semibold text-emerald-700 hover:underline inline-flex items-center gap-1"
+                    <Button
+                      variant="outline"
+                      size="md"
+                      onClick={handleWhatsApp}
+                      icon={MessageSquare}
+                      className="text-xs py-2.5 px-4 !border-[#C5A059] !text-[#DFCA95] hover:!bg-[#C5A059]/20 font-semibold cursor-pointer"
                     >
-                      <MessageSquare className="w-3 h-3" /> WhatsApp
+                      WhatsApp Us
+                    </Button>
+                  </div>
+
+                  <div className="pt-2 text-[11px] text-[#DFCA95]/70 flex items-center gap-2">
+                    <Phone className="w-3 h-3 text-[#E5C378]" />
+                    <span>Direct Resort Helpline:</span>
+                    <a href={`tel:${resortInfo.contact.phoneRaw}`} className="text-white hover:underline font-semibold">
+                      {resortInfo.contact.phone}
                     </a>
                   </div>
                 </div>
               </div>
+
             </div>
 
-            {/* Right Column: Working Map (Sticky on Desktop, Stacked Below on Mobile) */}
+            {/* Right Column: Sticky Google Map (~42% width on desktop) */}
             <div className="lg:col-span-5">
-              <div className="sticky top-28 space-y-3">
-                <Card className="p-2 border-[#C5A059]/40 overflow-hidden shadow-md">
-                  <div className="w-full h-80 lg:h-[500px] rounded overflow-hidden">
+              <div className="lg:sticky lg:top-24 space-y-3">
+                <div className="rounded-2xl overflow-hidden border border-[#C5A059]/40 shadow-lg bg-white p-2">
+                  <div className="w-full h-80 sm:h-[450px] lg:h-[540px] rounded-xl overflow-hidden">
                     <iframe
                       title="Saranda Safari Resort Location Map"
                       src="https://maps.google.com/maps?q=Bolani,Keonjhar,Odisha&t=&z=12&ie=UTF8&iwloc=&output=embed"
@@ -187,21 +353,24 @@ export function GettingHerePage({ onOpenPickup }) {
                       loading="lazy"
                     />
                   </div>
-                </Card>
-                <div className="text-center">
+                </div>
+
+                <div className="text-center pt-1">
                   <button
                     type="button"
                     onClick={handleOpenMap}
-                    className="text-xs text-[#8F6C27] hover:underline cursor-pointer font-medium"
+                    className="text-xs font-cinzel font-semibold text-[#8F6C27] hover:underline inline-flex items-center gap-1.5 cursor-pointer"
                   >
-                    Open direct coordinates in Google Maps ?
+                    <span>Open in Google Maps</span>
+                    <ExternalLink className="w-3 h-3" />
                   </button>
                 </div>
               </div>
             </div>
+
           </div>
         </Container>
-      </Section>
+      </section>
     </div>
   );
 }

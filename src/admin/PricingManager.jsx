@@ -418,7 +418,7 @@ export function PricingManager() {
                         </div>
                       )}
                       <span className="text-[10px] text-gray-400 mt-1 block">
-                        {isRwCottage ? 'Restricted by floor size' : 'Allowed on Log / Other'}
+                        {isRwCottage ? 'Restricted (Max 3 guests)' : 'Allowed (Max 4 guests)'}
                       </span>
                     </div>
                   </div>
@@ -693,9 +693,12 @@ export function PricingManager() {
                   }}
                   className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-[#143628]"
                 >
-                  <option value="red_white_cottage">Red-and-White Cottage (Max 3 adults)</option>
-                  <option value="wooden_log_house">Wooden Log House (Max 4 adults)</option>
-                  <option value="other_cottage">Other Cottage (Max 4 adults)</option>
+                  <option value="riverwood">Riverwood (Max 4 adults)</option>
+                  <option value="cherry_blossom">Cherry Blossom (Max 3 adults)</option>
+                  <option value="autumn_abode">Autumn Abode (Max 4 adults)</option>
+                  <option value="spring_abode">Spring Abode (Max 4 adults)</option>
+                  <option value="gulmohar">Gulmohar (Max 3 adults)</option>
+                  <option value="amberwood">Amberwood (Max 4 adults)</option>
                   <option value="camping_tent">Wilderness Camping Tent</option>
                 </select>
               </div>
