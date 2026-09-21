@@ -2,15 +2,17 @@ import React, { useState, useMemo } from 'react';
 import { X, Calendar, Users, AlertCircle, CheckCircle2, MessageSquare, Info, ShieldAlert } from 'lucide-react';
 import { Button, Card, Badge } from './ui/Primitives';
 import { stayInventory } from '../content/stayInventory';
-import { tariffsAndPackages } from '../content/tariffsAndPackages';
 import { resortInfo } from '../content/resortInfo';
 
 export function AvailabilityModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
+  const unitsList = stayInventory?.units || [];
+  const defaultUnitId = unitsList[0]?.id || 'riverwood';
+
   // Form State
-  const [selectedUnitType, setSelectedUnitType] = useState('cottage-rw'); // 'cottage-rw', 'wooden-log-house', 'other-cottage', 'camping-tents'
-  const [checkInDate, setCheckInDate] = useState('2026-10-15'); // Defaults to October 2026 pre-booking season
+  const [selectedUnitType, setSelectedUnitType] = useState(defaultUnitId);
+  const [checkInDate, setCheckInDate] = useState('2026-10-15');
   const [nights, setNights] = useState(1);
   const [adults, setAdults] = useState(2);
   const [children5to10, setChildren5to10] = useState(0);
@@ -20,12 +22,22 @@ export function AvailabilityModal({ isOpen, onClose }) {
   const [guestName, setGuestName] = useState('');
   const [guestPhone, setGuestPhone] = useState('');
 
-  const currentUnit = stayInventory.units.find(u => u.id === selectedUnitType) || stayInventory.units[0];
-  const isCamping = currentUnit.type === 'camping';
+  const currentUnit = unitsList.find(u => u.id === selectedUnitType) || unitsList[0] || {
+    id: 'riverwood',
+    name: 'Riverwood',
+    type: 'log_house',
+    maxAdultsPerUnit: 4,
+    unitCount: 1,
+    pricingTiers: { 1: 3000, 2: 4000, 3: 5400, 4: 6600 }
+  };
+
+  const isCamping = currentUnit.type === 'camping' || selectedUnitType === 'camping-tents';
 
   // Capacity validation guard
-  const isOverCapacity = !isCamping && adults > currentUnit.maxAdultsPerUnit;
-  const isRwCottageWith4Adults = selectedUnitType === 'cottage-rw' && adults === 4;
+  const maxAllowedAdults = isCamping ? 5 : (currentUnit.maxAdultsPerUnit || 4);
+  const isOverCapacity = adults > maxAllowedAdults;
+  const is3GuestMaxUnit = maxAllowedAdults === 3;
+  const is3GuestUnitWith4Adults = is3GuestMaxUnit && adults > 3;
 
   // Price Calculation Engine
   const calculation = useMemo(() => {
@@ -35,21 +47,20 @@ export function AvailabilityModal({ isOpen, onClose }) {
       if (adults === 1) {
         baseRatePerNight = 1499;
       } else if (adults === 2) {
-        baseRatePerNight = 2999; // strictly 2999, never 2998!
+        baseRatePerNight = 2999;
       } else {
-        // 3+ adults in camping (e.g. tent A + tent B)
         baseRatePerNight = adults * 1499;
       }
     } else {
       // Cottage rates
-      if (adults === 1) baseRatePerNight = 3000;
-      else if (adults === 2) baseRatePerNight = 4000;
-      else if (adults === 3) baseRatePerNight = 5400;
-      else if (adults === 4) {
-        if (selectedUnitType === 'cottage-rw') {
-          baseRatePerNight = 0; // blocked
-        } else {
-          baseRatePerNight = 6600;
+      if (currentUnit.pricingTiers && currentUnit.pricingTiers[adults]) {
+        baseRatePerNight = currentUnit.pricingTiers[adults];
+      } else {
+        if (adults === 1) baseRatePerNight = 3000;
+        else if (adults === 2) baseRatePerNight = 4000;
+        else if (adults === 3) baseRatePerNight = 5400;
+        else if (adults >= 4) {
+          baseRatePerNight = is3GuestMaxUnit ? 0 : 6600;
         }
       }
     }
@@ -57,23 +68,22 @@ export function AvailabilityModal({ isOpen, onClose }) {
     const baseStayTotal = baseRatePerNight * nights;
 
     // Children 5–10 calculations
-    const childRatePerNight = isCamping ? (r.camping.child || 750) : (r.addons.childCottage || 700);
+    const childRatePerNight = isCamping ? 750 : 700;
     const childrenTotal = children5to10 * childRatePerNight * nights;
 
     // Non-veg meal supplements
     let nonVegTotal = 0;
     if (includeNonVegPlan) {
-      const adultSupplementRate = isCamping ? 150 : 300; // 300 covers lunch+dinner for cottage
-      const childSupplementRate = 75 * 2; // ₹150/day
+      const adultSupplementRate = isCamping ? 150 : 300;
+      const childSupplementRate = 150;
       nonVegTotal = (adults * adultSupplementRate + children5to10 * childSupplementRate) * nights;
     }
 
     // Bonfire add-on (for cottages; camping already includes bonfire)
     let bonfireTotal = 0;
     if (includeBonfire && !isCamping) {
-      // Min 2 paying guests
       const billableBonfireGuests = Math.max(2, adults);
-      bonfireTotal = billableBonfireGuests * (r.addons.bonfire || 250) * nights;
+      bonfireTotal = billableBonfireGuests * 250 * nights;
     }
 
     const grandTotal = baseStayTotal + childrenTotal + nonVegTotal + bonfireTotal;
@@ -90,7 +100,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
       advance50,
       balanceAtCheckIn
     };
-  }, [selectedUnitType, isCamping, adults, nights, children5to10, includeNonVegPlan, includeBonfire]);
+  }, [selectedUnitType, currentUnit, isCamping, adults, nights, children5to10, includeNonVegPlan, includeBonfire, is3GuestMaxUnit]);
 
   const generateWhatsAppUrl = () => {
     const message = `*Pre-Booking Enquiry: Saranda Safari Resort (October 2026 Season)*
@@ -138,7 +148,7 @@ Please confirm availability for these dates.`;
           <button
             type="button"
             onClick={onClose}
-            className="text-[#DFCA95] hover:text-white p-1.5 rounded-full hover:bg-white/10 transition-colors"
+            className="text-[#DFCA95] hover:text-white p-1.5 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
             aria-label="Close modal"
           >
             <X className="w-6 h-6" />
@@ -152,7 +162,7 @@ Please confirm availability for these dates.`;
             <Info className="w-5 h-5 text-[#C5A059] shrink-0 mt-0.5" />
             <div>
               <span className="font-semibold">{resortInfo.preBookingNotice}</span>
-              <p className="mt-0.5 text-[#143628]/80">
+              <p className="mt-0.5 text-[#143628]/80 text-xs">
                 50% advance secures your pre-booking. Advance is non-refundable upon cancellation, with a 7-day reschedule window within 3 months. In the rare event of resort cancellation, 100% full refund is guaranteed.
               </p>
             </div>
@@ -167,7 +177,7 @@ Please confirm availability for these dates.`;
                 Select Accommodation Unit
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {stayInventory.units.map(unit => {
+                {unitsList.map(unit => {
                   const isSelected = selectedUnitType === unit.id;
                   return (
                     <button
@@ -175,8 +185,8 @@ Please confirm availability for these dates.`;
                       type="button"
                       onClick={() => {
                         setSelectedUnitType(unit.id);
-                        if (unit.id === 'cottage-rw' && adults > 3) {
-                          setAdults(3); // Reset to max permissible capacity
+                        if (unit.maxAdultsPerUnit === 3 && adults > 3) {
+                          setAdults(3);
                         }
                       }}
                       className={`text-left p-3 rounded-lg border text-sm transition-all cursor-pointer ${
@@ -231,14 +241,14 @@ Please confirm availability for these dates.`;
               </select>
             </div>
 
-            {/* Adults Count with Strict Capacity Guard */}
+            {/* Adults Count with Capacity Guard */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-xs uppercase tracking-wider font-semibold text-[#143628]">
                   Adults
                 </label>
                 <span className="text-[11px] text-[#8F6C27] font-medium">
-                  {isCamping ? 'Max 5 across tents' : `Max ${currentUnit.maxAdultsPerUnit} in this unit`}
+                  {isCamping ? 'Max 5 across tents' : `Max ${maxAllowedAdults} in this unit`}
                 </span>
               </div>
               <select
@@ -247,7 +257,7 @@ Please confirm availability for these dates.`;
                 className="w-full bg-white border border-[#E8DFCE] rounded-md px-3 py-2 text-sm text-[#143628] focus:outline-none focus:ring-1 focus:ring-[#C5A059]"
               >
                 {[1, 2, 3, 4, 5].map(count => {
-                  const disabled = !isCamping && count > currentUnit.maxAdultsPerUnit;
+                  const disabled = !isCamping && count > maxAllowedAdults;
                   return (
                     <option key={count} value={count} disabled={disabled}>
                       {count} Adult{count > 1 ? 's' : ''} {disabled ? '(Exceeds unit limit)' : ''}
@@ -299,7 +309,7 @@ Please confirm availability for these dates.`;
               </select>
             </div>
 
-            {/* Guest Name */}
+            {/* Guest Name & Phone */}
             <div>
               <label className="block text-xs uppercase tracking-wider font-semibold text-[#143628] mb-1.5">
                 Your Name
@@ -312,18 +322,30 @@ Please confirm availability for these dates.`;
                 className="w-full bg-white border border-[#E8DFCE] rounded-md px-3 py-2 text-sm text-[#143628] focus:outline-none focus:ring-1 focus:ring-[#C5A059]"
               />
             </div>
+
+            <div>
+              <label className="block text-xs uppercase tracking-wider font-semibold text-[#143628] mb-1.5">
+                Phone Number (WhatsApp)
+              </label>
+              <input
+                type="tel"
+                placeholder="e.g. 9876543210"
+                value={guestPhone}
+                onChange={(e) => setGuestPhone(e.target.value)}
+                className="w-full bg-white border border-[#E8DFCE] rounded-md px-3 py-2 text-sm text-[#143628] focus:outline-none focus:ring-1 focus:ring-[#C5A059]"
+              />
+            </div>
           </div>
 
-          {/* Red-and-White Cottage 4-Guest Capacity Guard Warning */}
-          {isRwCottageWith4Adults && (
+          {/* 3-Guest Unit Limitation Alert */}
+          {is3GuestUnitWith4Adults && (
             <div className="bg-red-50 border border-red-200 text-red-900 rounded-lg p-3.5 flex items-start gap-2.5 text-xs sm:text-sm">
               <ShieldAlert className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
               <div>
                 <span className="font-bold">Capacity Limitation Rule:</span>
-                <p className="mt-0.5">
-                  Cherry Blossom and Gulmohar are limited to 3 guests maximum. For parties of 4 adults, please select <strong>Riverwood</strong>, <strong>Autumn Abode</strong>, <strong>Spring Abode</strong>, or <strong>Amberwood</strong>.
+                <p className="mt-0.5 text-xs">
+                  {currentUnit.name} is limited to 3 guests maximum. For parties of 4 adults, please select <strong>Riverwood</strong>, <strong>Autumn Abode</strong>, <strong>Spring Abode</strong>, or <strong>Amberwood</strong>.
                 </p>
-
               </div>
             </div>
           )}
@@ -349,7 +371,7 @@ Please confirm availability for these dates.`;
                 <p className="text-[#143628]/70 text-xs mt-0.5">
                   {isCamping 
                     ? '₹150 per person for camping dinner' 
-                    : '₹300 per person per stay (covers Lunch + Dinner)'} • Children 5–10: ₹75/meal.
+                    : '₹300 per person per stay (covers Lunch + Dinner)'} • Children 5–10: ₹150/day.
                 </p>
               </div>
             </label>
@@ -452,7 +474,7 @@ Please confirm availability for these dates.`;
               variant="outline"
               size="md"
               onClick={onClose}
-              className="w-1/2 sm:w-auto"
+              className="w-1/2 sm:w-auto cursor-pointer"
             >
               Cancel
             </Button>
@@ -461,9 +483,9 @@ Please confirm availability for these dates.`;
               target="_blank"
               rel="noopener noreferrer"
               className={`w-1/2 sm:w-auto inline-flex items-center justify-center font-semibold rounded-md px-5 py-2.5 text-sm transition-colors text-white ${
-                isRwCottageWith4Adults 
+                is3GuestUnitWith4Adults 
                   ? 'bg-gray-400 cursor-not-allowed pointer-events-none' 
-                  : 'bg-[#C25E3E] hover:bg-[#AA4E31] shadow-sm'
+                  : 'bg-[#C25E3E] hover:bg-[#AA4E31] shadow-sm cursor-pointer'
               }`}
             >
               <MessageSquare className="w-4 h-4 mr-2 text-white" />
