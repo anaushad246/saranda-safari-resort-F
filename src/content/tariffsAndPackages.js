@@ -33,13 +33,12 @@ export const tariffsAndPackages = {
           { guests: "4 guests", rate: 6600, note: "Valid on log house & other 4-person cottage" }
         ],
         inclusions: [
-          "Vegetarian breakfast, lunch and dinner included",
+          "Complimentary vegetarian breakfast",
           "Private cottage with attached western bath & verandah",
           "Electricity with generator backup & ceiling fans"
         ],
         exclusions: [
           "Evening snacks & bonfire (available as add-ons)",
-          "Non-vegetarian supplements",
           "Sightseeing, guides & station transfers"
         ],
         notes: "Same rates apply to the wooden log house. 4-person rate applies only to the log house and other 4-person cottage."
@@ -58,17 +57,16 @@ export const tariffsAndPackages = {
           { label: "Couple", rate: 2999, note: "2 guests in double tent" }
         ],
         inclusions: [
-          "Vegetarian dinner & breakfast included",
+          "Complimentary vegetarian breakfast",
           "Starlight evening bonfire included",
           "Weatherproof canvas tents with bedding & pillows",
           "Dedicated shared clean toilet & bath facilities"
         ],
         exclusions: [
           "Lunch & mid-day stay (check-in is 4:00 PM)",
-          "Non-vegetarian food supplements",
           "Personal toiletries"
         ],
-        notes: "Hot water available on request. 2 tents total: Tent 1 (2 guests), Tent 2 (3 guests) = 5 camping capacity."
+        notes: "Hot water available on request. 2 tents total: Tent A (2 guests), Tent B (3 guests)."
       }
     ],
 
@@ -99,7 +97,7 @@ export const tariffsAndPackages = {
           "Bonfire on request"
         ],
         exclusions: [
-          "Meals (can be arranged separately on request)",
+          "Meals (not included in this tariff)",
           "Sightseeing & transport"
         ],
         notes: "Accommodation tariff only. Prior booking required. Verified contact: 7008307064."
@@ -196,25 +194,11 @@ export const tariffsAndPackages = {
         startingPrice: 399,
         startingUnit: "per person",
         description: "Gather with friends or family on the riverfront lawn around a warm wood-log fire beneath unpolluted starlit skies.",
-        dinnerPricing: {
-          veg: 250,
-          nonVeg: 350,
-          unit: "per person"
-        },
         tariffs: [
           { tier: 1, name: "Bonfire", rate: "₹399/person", includes: "Wood-log hearth, seating & ambient lawn setting" },
           { tier: 2, name: "Bonfire + Snacks", rate: "₹549/person", includes: "Bonfire plus hot tea & evening snacks" },
           { tier: 3, name: "Bonfire + Barbecue", rate: "₹699/person", includes: "Bonfire plus freshly grilled barbecue portions" },
-          { tier: 4, name: "Bonfire + Snacks + Barbecue", rate: "₹849/person", includes: "Complete evening spread before dinner" },
-          { tier: 5, name: "Bonfire + Snacks + BBQ + Dinner", rate: "₹1,099 – ₹1,199/person", includes: "Full five-course evening hearth experience (Veg ₹1,099 / Non-Veg ₹1,199)" }
-        ],
-        optionalAddons: [
-          { item: "Vegetarian Dinner", rate: 250, unit: "per person" },
-          { item: "Non-Vegetarian Dinner", rate: 350, unit: "per person" }
-        ],
-        extras: [
-          { item: "Vegetarian Dinner", rate: 250, unit: "per person" },
-          { item: "Non-Vegetarian Dinner", rate: 350, unit: "per person" }
+          { tier: 4, name: "Bonfire + Snacks + Barbecue", rate: "₹849/person", includes: "Complete evening spread on the riverside lawn" }
         ],
         inclusions: [
           "Dedicated outdoor fire pit with seasoned sal wood",
@@ -226,7 +210,7 @@ export const tariffsAndPackages = {
           "Hard beverages (strictly regulated)",
           "Transport/transfers"
         ],
-        notes: "Minimum 2 paying guests. Pre-booking required by 3:00 PM on the day of the visit. Optional dinner available at ₹250 (Veg) or ₹350 (Non-Veg) per person."
+        notes: "Minimum 2 paying guests. Pre-booking required by 3:00 PM on the day of the visit."
       },
       {
         id: "evening-pause",
@@ -295,7 +279,6 @@ export const tariffsAndPackages = {
         "Principal / Head Teacher Complimentary",
         "Minimum group size: 20 students",
         "For 50+ students: special discounted rates (₹375 onwards)",
-        "Non-veg (chicken) lunch option: ₹50 extra per student",
         "Special sessions with Invited Nature Educators for Classes IX – XII"
       ],
       itinerary: [
@@ -400,12 +383,12 @@ export const tariffsAndPackages = {
     title: "Private Gatherings & Lawn Events",
     indicativeRange: "Indicative venue pricing on quotation",
     preBookingRequirement: "Advance notice required; 6-month window for weddings & large groups",
-    criticalCapacityWarning: "Overnight room capacity is strictly 25 guests. Event groups can celebrate on the grounds with day/evening arrangements."
+    criticalCapacityWarning: "Overnight accommodation is limited to the capacity of the units currently in service. Event groups can celebrate on the grounds with day/evening arrangements."
   },
 
   diningPolicy: {
     title: "Dining Policy & Add-ons",
-    notice: "Vegetarian meals included in standard overnight stays.",
-    subtext: "Breakfast, lunch, and dinner included in overnight cottage and camping stays are vegetarian homestyle meals prepared fresh. Fresh local non-vegetarian dishes (Desi Chicken, River Fish, Egg Curry) are available as separate paid supplements on prior notice."
+    notice: "Complimentary vegetarian breakfast is included with every overnight cottage and camping stay.",
+    subtext: "Breakfast is served hot and fresh on your departure morning before check-out. It is the only meal bundled into a package tariff."
   }
 };

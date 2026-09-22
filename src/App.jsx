@@ -37,6 +37,10 @@ export function App() {
     return null;
   });
 
+  // Set when an API call reports an expired token, so the login screen can say why the
+  // operator was bounced out rather than presenting a bare form with no explanation.
+  const [sessionNotice, setSessionNotice] = useState('');
+
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isPickupOpen, setIsPickupOpen] = useState(false);
   const [isSightseeingOpen, setIsSightseeingOpen] = useState(false);
@@ -68,6 +72,20 @@ export function App() {
     };
   }, []);
 
+  // The API layer fires this whenever a request comes back 401. Dropping the session here
+  // keeps the admin route mounted, so re-authenticating drops the operator straight back
+  // into the dashboard instead of the guest site.
+  useEffect(() => {
+    const handleUnauthorized = (event) => {
+      setAdminUser(null);
+      setSessionNotice(
+        event?.detail?.message || 'Your session has expired. Please sign in again.'
+      );
+    };
+    window.addEventListener('ssr:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('ssr:unauthorized', handleUnauthorized);
+  }, []);
+
   const navigateTo = (pageId) => {
     setCurrentPage(pageId);
     if (pageId === 'admin') {
@@ -94,6 +112,7 @@ export function App() {
     localStorage.removeItem('ssr_admin_token');
     localStorage.removeItem('ssr_admin_user');
     setAdminUser(null);
+    setSessionNotice('');
     navigateTo('home');
   };
 
@@ -114,7 +133,11 @@ export function App() {
     }
     return (
       <AdminLogin
-        onLoginSuccess={(user) => setAdminUser(user)}
+        initialError={sessionNotice}
+        onLoginSuccess={(user) => {
+          setSessionNotice('');
+          setAdminUser(user);
+        }}
         onBackToSite={() => navigateTo('home')}
       />
     );

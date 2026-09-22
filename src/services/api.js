@@ -1,11 +1,30 @@
 ﻿const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
 
+const ADMIN_TOKEN_KEY = 'ssr_admin_token';
+const ADMIN_USER_KEY = 'ssr_admin_user';
+
+// A dead token used to be invisible: every write 401'd, each caller swallowed it, and the
+// portal kept looking signed in. Dropping the session here lets the shell send the
+// operator back to the login screen instead.
+export function clearAdminSession() {
+  try {
+    localStorage.removeItem(ADMIN_TOKEN_KEY);
+    localStorage.removeItem(ADMIN_USER_KEY);
+  } catch {
+    // localStorage can throw in a private window; a failed cleanup must not mask the
+    // original error the caller is about to receive.
+  }
+}
+
 async function fetchApi(endpoint, options = {}) {
-  const token = localStorage.getItem('ssr_admin_token');
+  // `skipAuthRedirect` is for the login call itself, where a 401 means "wrong password"
+  // rather than "your session died" and must not fire the session-expired signal.
+  const { skipAuthRedirect = false, ...fetchOptions } = options;
+  const token = localStorage.getItem(ADMIN_TOKEN_KEY);
   const headers = {
     'Content-Type': 'application/json',
     ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-    ...options.headers
+    ...fetchOptions.headers
   };
 
   try {
@@ -13,7 +32,7 @@ async function fetchApi(endpoint, options = {}) {
     const timeoutId = setTimeout(() => controller.abort(), 8000);
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      ...options,
+      ...fetchOptions,
       headers,
       signal: controller.signal
     });
@@ -22,6 +41,12 @@ async function fetchApi(endpoint, options = {}) {
     const result = await response.json();
 
     if (!response.ok) {
+      if (response.status === 401 && !skipAuthRedirect) {
+        clearAdminSession();
+        window.dispatchEvent(
+          new CustomEvent('ssr:unauthorized', { detail: { message: result.message } })
+        );
+      }
       throw new Error(result.message || 'API request failed');
     }
 
@@ -42,6 +67,12 @@ export const apiGetQuote = async (quoteParams) => {
     method: 'POST',
     body: JSON.stringify(quoteParams)
   });
+};
+
+// Property capacity derived at runtime from the units marked `active`.
+// Returns { activeUnits, activeCottages, activeTents, cottageAdults, tentAdults, totalAdults }.
+export const apiGetCapacity = async () => {
+  return await fetchApi('/availability/capacity');
 };
 
 // 2. Bookings API
@@ -97,6 +128,38 @@ export const apiGetUnits = async () => {
   return await fetchApi('/units');
 };
 
+// Owner-only. `status` must be one of the Unit model's enum values:
+// 'active' | 'maintenance' | 'renovation' | 'private_block'.
+export const apiUpdateUnitStatus = async (unitId, status) => {
+  return await fetchApi(`/units/${unitId}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status })
+  });
+};
+
+// Owner-only. Full inventory CRUD — the whole inventory is owner-controlled and there
+// is deliberately no staff-level access to it.
+export const apiCreateUnit = async (unitData) => {
+  return await fetchApi('/units', {
+    method: 'POST',
+    body: JSON.stringify(unitData)
+  });
+};
+
+// Partial update. Sends only the fields present in `unitData`; pricing is NOT handled
+// here — it lives behind /units/:id/pricing so there is a single writer for paise.
+export const apiUpdateUnit = async (unitId, unitData) => {
+  return await fetchApi(`/units/${unitId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(unitData)
+  });
+};
+
+// Owner-only. Refused server-side with a 409 if the unit has bookings or blocked dates.
+export const apiDeleteUnit = async (unitId) => {
+  return await fetchApi(`/units/${unitId}`, { method: 'DELETE' });
+};
+
 export const apiGetBlocks = async () => {
   return await fetchApi('/blocks');
 };
@@ -118,6 +181,7 @@ export const apiDeleteBlock = async (id) => {
 export const apiLogin = async (email, password) => {
   return await fetchApi('/auth/login', {
     method: 'POST',
+    skipAuthRedirect: true,
     body: JSON.stringify({ email, password })
   });
 };

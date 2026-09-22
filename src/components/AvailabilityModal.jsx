@@ -3,6 +3,7 @@ import { X, Calendar, Users, AlertCircle, CheckCircle2, MessageSquare, Info, Shi
 import { Button, Card, Badge } from './ui/Primitives';
 import { stayInventory } from '../content/stayInventory';
 import { resortInfo } from '../content/resortInfo';
+import { FEATURES } from '../content/features';
 
 export function AvailabilityModal({ isOpen, onClose }) {
   if (!isOpen) return null;
@@ -73,7 +74,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
 
     // Non-veg meal supplements
     let nonVegTotal = 0;
-    if (includeNonVegPlan) {
+    if (FEATURES.nonVegSupplements && includeNonVegPlan) {
       const adultSupplementRate = isCamping ? 150 : 300;
       const childSupplementRate = 150;
       nonVegTotal = (adults * adultSupplementRate + children5to10 * childSupplementRate) * nights;
@@ -113,8 +114,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
 • Adults: ${adults}
 • Children (5–10 yrs): ${children5to10}
 • Infants (<5 yrs, free): ${infantsUnder5}
-• Non-Veg Supplement: ${includeNonVegPlan ? 'Yes' : 'No (Default Vegetarian)'}
-• Bonfire Add-on: ${includeBonfire && !isCamping ? 'Yes' : (isCamping ? 'Included in Camping' : 'No')}
+${FEATURES.nonVegSupplements ? `• Non-Veg Supplement: ${includeNonVegPlan ? 'Yes' : 'No (Default Vegetarian)'}\n` : ''}• Bonfire Add-on: ${includeBonfire && !isCamping ? 'Yes' : (isCamping ? 'Included in Camping' : 'No')}
 --------------------------------------------
 • Estimated Stay Total: ₹${calculation.grandTotal.toLocaleString('en-IN')}
 • 50% Advance to Confirm: ₹${calculation.advance50.toLocaleString('en-IN')}
@@ -295,7 +295,7 @@ Please confirm availability for these dates.`;
                   Infants (Under 5 Years)
                 </label>
                 <span className="text-[11px] text-emerald-800 font-semibold">
-                  Free Stay & Meals
+                  Free Stay • No Bed Charge
                 </span>
               </div>
               <select
@@ -353,10 +353,11 @@ Please confirm availability for these dates.`;
           {/* Add-ons & Supplements */}
           <div className="border-t border-[#E8DFCE] pt-4 space-y-3">
             <h4 className="text-xs uppercase tracking-wider font-semibold text-[#143628]">
-              Optional Dining & Hearth Supplements
+              Optional Add-ons
             </h4>
             
             {/* Non-veg meal supplement */}
+            {FEATURES.nonVegSupplements && (
             <label className="flex items-start gap-3 p-3 rounded-lg border border-[#E8DFCE] bg-white cursor-pointer hover:border-[#C5A059]">
               <input
                 type="checkbox"
@@ -375,6 +376,7 @@ Please confirm availability for these dates.`;
                 </p>
               </div>
             </label>
+            )}
 
             {/* Bonfire add-on for cottages */}
             {!isCamping && (
@@ -421,7 +423,7 @@ Please confirm availability for these dates.`;
                 </div>
               )}
 
-              {includeNonVegPlan && (
+              {FEATURES.nonVegSupplements && includeNonVegPlan && (
                 <div className="flex justify-between">
                   <span>Non-Veg Supplements</span>
                   <span className="font-medium">+₹{calculation.nonVegTotal.toLocaleString('en-IN')}</span>
@@ -466,7 +468,7 @@ Please confirm availability for these dates.`;
         {/* Modal Footer */}
         <div className="bg-[#F4EFE6] px-6 py-4 border-t border-[#E8DFCE] flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="text-xs text-[#143628]/75 text-center sm:text-left">
-            <span>Includes vegetarian meals by default • Attached baths • Parking on-site</span>
+            <span>Includes vegetarian breakfast • Attached baths • Parking on-site</span>
           </div>
 
           <div className="flex items-center gap-3 w-full sm:w-auto">

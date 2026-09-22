@@ -1,12 +1,12 @@
 ﻿import React, { useState } from 'react';
-import { Trees, Lock, Mail, AlertCircle, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Trees, Lock, Mail, AlertCircle, ArrowLeft } from 'lucide-react';
 import { apiLogin } from '../services/api';
 
-export function AdminLogin({ onLoginSuccess, onBackToSite }) {
+export function AdminLogin({ onLoginSuccess, onBackToSite, initialError }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState(initialError || '');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,35 +15,24 @@ export function AdminLogin({ onLoginSuccess, onBackToSite }) {
 
     try {
       const res = await apiLogin(email, password);
-      if (res?.data?.token) {
-        localStorage.setItem('ssr_admin_token', res.data.token);
-        localStorage.setItem('ssr_admin_user', JSON.stringify(res.data.user || { name: 'Resort Staff', email }));
-        onLoginSuccess(res.data.user);
-      } else {
+      if (!res?.data?.token) {
         throw new Error(res?.message || 'Login failed');
       }
+      localStorage.setItem('ssr_admin_token', res.data.token);
+      localStorage.setItem('ssr_admin_user', JSON.stringify(res.data.user || { name: 'Resort Staff', email }));
+      onLoginSuccess(res.data.user);
     } catch (err) {
-      if (err.message && !err.message.includes('Failed to fetch')) {
-        setErrorMessage(err.message || 'Invalid email or password');
-      } else {
-        // Local preview fallback
-        if (email.toLowerCase().includes('sarandasafariresort.com')) {
-          const fallbackUser = { name: 'Resort Manager', email, role: 'admin' };
-          localStorage.setItem('ssr_admin_token', 'demo_local_jwt_token_1998');
-          localStorage.setItem('ssr_admin_user', JSON.stringify(fallbackUser));
-          onLoginSuccess(fallbackUser);
-        } else {
-          setErrorMessage('Could not connect to backend server. For preview, use: owner@sarandasafariresort.com');
-        }
-      }
+      // No local fallback. Fabricating a token here is what produced a portal that looked
+      // signed in while every request behind it 401'd — the failure has to surface instead.
+      const isNetworkFailure = !err.message || err.message === 'Failed to fetch' || err.name === 'AbortError';
+      setErrorMessage(
+        isNetworkFailure
+          ? 'Could not reach the server. Check your connection and try again.'
+          : err.message
+      );
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const fillDemo = () => {
-    setEmail('owner@sarandasafariresort.com');
-    setPassword('Admin@Saranda1998');
   };
 
   return (
@@ -116,16 +105,6 @@ export function AdminLogin({ onLoginSuccess, onBackToSite }) {
           </form>
 
           <div className="mt-6 pt-4 border-t border-white/10 text-center">
-            <button
-              type="button"
-              onClick={fillDemo}
-              className="text-xs text-[#DFCA95]/80 hover:text-[#DFCA95] underline inline-flex items-center gap-1 cursor-pointer"
-            >
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#C5A059]" /> Auto-fill default staff credentials
-            </button>
-          </div>
-
-          <div className="mt-4 text-center">
             <button
               type="button"
               onClick={onBackToSite}

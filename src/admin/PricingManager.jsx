@@ -15,6 +15,7 @@ import {
   Copy
 } from 'lucide-react';
 import { apiGetUnits, apiUpdateUnitPricing, apiUpdatePricingByType, apiGetQuote } from '../services/api';
+import { FEATURES } from '../content/features';
 
 export function PricingManager() {
   const [units, setUnits] = useState([]);
@@ -306,9 +307,9 @@ export function PricingManager() {
             <div>
               <p className="font-semibold">Resort Capacity Policy & Tier Structure:</p>
               <ul className="list-disc pl-5 mt-1 space-y-0.5 text-xs text-gray-700">
-                <li><strong>Red-and-White Cottages (RW-01 to RW-04):</strong> Strict max capacity is 3 adults. 4-adult occupancy is legally blocked.</li>
-                <li><strong>Wooden Log House (LOG-01) & Other Cottage (OTHER-01):</strong> Allow up to 4 adults with quad tariff tier.</li>
-                <li>All tariffs include morning bed-tea, buffet breakfast, jungle evening tea, and hearty tribal dinner.</li>
+                <li><strong>Cherry Blossom (CB-01 to CB-04) &amp; Gulmohar (GM-01):</strong> Strict max capacity is 3 adults. 4-adult occupancy is blocked.</li>
+                <li><strong>Riverwood (RW-01), Autumn Abode (AA-01 to AA-03), Spring Abode (SA-01 to SA-04) &amp; Amberwood (AW-01):</strong> Allow up to 4 adults with quad tariff tier.</li>
+                <li>All tariffs include morning bed-tea and buffet breakfast.</li>
               </ul>
             </div>
           </div>
@@ -360,7 +361,7 @@ export function PricingManager() {
                           className="w-full pl-6 pr-2 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-semibold text-[#143628] focus:ring-1 focus:ring-[#C5A059]"
                         />
                       </div>
-                      <span className="text-[10px] text-gray-400 mt-1 block">Full Board with meals</span>
+                      <span className="text-[10px] text-gray-400 mt-1 block">Rate includes breakfast</span>
                     </div>
 
                     {/* Tier 2 */}
@@ -472,7 +473,7 @@ export function PricingManager() {
             <div>
               <p className="font-semibold">Wilderness Tent Pricing Rules:</p>
               <ul className="list-disc pl-5 mt-1 space-y-0.5 text-xs text-gray-700">
-                <li>Solo Camper: ₹1,499 per night with buffet meals and community campfire included.</li>
+                <li>Solo Camper: ₹1,499 per night with buffet breakfast and community campfire included.</li>
                 <li><strong>Couple Rate:</strong> Strictly <strong>₹2,999</strong> (never ₹2,998) to reflect special couple safari package.</li>
                 <li>3 or more camping guests: Multiplied by the per-person rate.</li>
               </ul>
@@ -573,7 +574,7 @@ export function PricingManager() {
               Meals, Children Tariffs & Experience Add-ons
             </h3>
             <p className="text-gray-500 text-xs mt-1">
-              Standard booking rates include vegetarian breakfast and dinner. These global add-ons apply across all cottages and tents.
+              Standard booking rates include a vegetarian breakfast. These global add-ons apply across all cottages and tents.
             </p>
           </div>
 
@@ -584,7 +585,7 @@ export function PricingManager() {
                 <Baby className="w-4 h-4 text-[#C5A059]" />
                 Child Tariff (5–10 years)
               </div>
-              <p className="text-xs text-gray-500">Per child per night with mattress & all meals</p>
+              <p className="text-xs text-gray-500">Per child per night with mattress &amp; breakfast</p>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-gray-400 text-sm">₹</span>
                 <input
@@ -598,6 +599,7 @@ export function PricingManager() {
             </div>
 
             {/* Non-Veg Meal Plan (Adult) */}
+            {FEATURES.nonVegSupplements && (<>
             <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 space-y-2">
               <div className="flex items-center gap-2 text-[#143628] font-semibold text-sm">
                 <Utensils className="w-4 h-4 text-[#C5A059]" />
@@ -634,6 +636,7 @@ export function PricingManager() {
               </div>
               <span className="text-[11px] text-gray-400 block">Per child (5-10 yrs) per night</span>
             </div>
+            </>)}
 
             {/* Bonfire Hearth Add-on */}
             <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 space-y-2">
@@ -744,6 +747,7 @@ export function PricingManager() {
               </div>
 
               <div className="pt-2 border-t border-gray-100 space-y-2">
+                {FEATURES.nonVegSupplements && (
                 <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
                   <input
                     type="checkbox"
@@ -753,6 +757,7 @@ export function PricingManager() {
                   />
                   <span>Include Non-Veg Meal Plan</span>
                 </label>
+                )}
 
                 <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
                   <input

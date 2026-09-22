@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { Container, Button, Badge } from '../components/ui/Primitives';
 import { tariffsAndPackages } from '../content/tariffsAndPackages';
+import { FEATURES } from '../content/features';
 import { resortInfo } from '../content/resortInfo';
 
 export function PackagesPage({ onOpenBooking, onOpenEvent }) {
@@ -476,7 +477,8 @@ Please provide availability, date confirmation and arrangement details.`;
                       <div className="mt-3 p-2 rounded-lg bg-[#F4ECE1]/80 border border-[#EADFC9] flex items-center justify-between text-[11px]">
                         <span className="font-cinzel font-bold text-[#8F6C27]">Optional Dinner:</span>
                         <span className="text-[#143628] font-medium">
-                          Veg <strong>₹{pkg.dinnerPricing.veg}</strong> • Non-Veg <strong>₹{pkg.dinnerPricing.nonVeg}</strong>
+                          Veg <strong>₹{pkg.dinnerPricing.veg}</strong>
+                          {FEATURES.nonVegSupplements && <> • Non-Veg <strong>₹{pkg.dinnerPricing.nonVeg}</strong></>}
                         </span>
                       </div>
                     )}

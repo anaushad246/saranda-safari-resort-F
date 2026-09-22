@@ -123,7 +123,7 @@ export const stayInventory = {
       ],
       pricingTiers: { 1: 3000, 2: 4000, 3: 5400, 4: 6600 },
       childPricing: { under5: 0, age5to10: 700, age11Plus: "regular_rate" },
-      mealInclusion: "Includes vegetarian breakfast, lunch, and dinner.",
+      mealInclusion: "Complimentary vegetarian breakfast included.",
       timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day"
     },
     {
@@ -147,7 +147,7 @@ export const stayInventory = {
       ],
       pricingTiers: { 1: 3000, 2: 4000, 3: 5400 },
       childPricing: { under5: 0, age5to10: 700, age11Plus: "regular_rate" },
-      mealInclusion: "Includes vegetarian breakfast, lunch, and dinner.",
+      mealInclusion: "Complimentary vegetarian breakfast included.",
       timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day"
     },
     {
@@ -171,7 +171,7 @@ export const stayInventory = {
       ],
       pricingTiers: { 1: 3000, 2: 4000, 3: 5400, 4: 6600 },
       childPricing: { under5: 0, age5to10: 700, age11Plus: "regular_rate" },
-      mealInclusion: "Includes vegetarian breakfast, lunch, and dinner.",
+      mealInclusion: "Complimentary vegetarian breakfast included.",
       timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day"
     },
     {
@@ -195,7 +195,7 @@ export const stayInventory = {
       ],
       pricingTiers: { 1: 3000, 2: 4000, 3: 5400, 4: 6600 },
       childPricing: { under5: 0, age5to10: 700, age11Plus: "regular_rate" },
-      mealInclusion: "Includes vegetarian breakfast, lunch, and dinner.",
+      mealInclusion: "Complimentary vegetarian breakfast included.",
       timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day"
     },
     {
@@ -219,7 +219,7 @@ export const stayInventory = {
       ],
       pricingTiers: { 1: 3000, 2: 4000, 3: 5400 },
       childPricing: { under5: 0, age5to10: 700, age11Plus: "regular_rate" },
-      mealInclusion: "Includes vegetarian breakfast, lunch, and dinner.",
+      mealInclusion: "Complimentary vegetarian breakfast included.",
       timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day"
     },
     {
@@ -243,7 +243,7 @@ export const stayInventory = {
       ],
       pricingTiers: { 1: 3000, 2: 4000, 3: 5400, 4: 6600 },
       childPricing: { under5: 0, age5to10: 700, age11Plus: "regular_rate" },
-      mealInclusion: "Includes vegetarian breakfast, lunch, and dinner.",
+      mealInclusion: "Complimentary vegetarian breakfast included.",
       timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day"
     },
     {
@@ -278,7 +278,7 @@ export const stayInventory = {
         age5to10: 750,
         age11Plus: 1499
       },
-      mealInclusion: "Includes vegetarian dinner, breakfast, bonfire, and shared bath facilities.",
+      mealInclusion: "Complimentary vegetarian breakfast & bonfire included; shared bath facilities.",
       timings: "Check-in: 4:00 PM | Check-out: 9:00 AM next day"
     }
   ],

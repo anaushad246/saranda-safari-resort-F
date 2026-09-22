@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { Section, Container, Heading, Button, Card, Badge } from '../components/ui/Primitives';
 import { resortInfo } from '../content/resortInfo';
+import { FEATURES } from '../content/features';
 import { thePlaceContent } from '../content/thePlace';
 import { stayInventory } from '../content/stayInventory';
 import { experiencesContent } from '../content/experiences';
@@ -483,7 +484,7 @@ export function HomePage({
               Packages &amp; Official Tariffs
             </h2>
             <p className="mt-1.5 font-serif text-sm sm:text-base italic text-[#143628]/75 max-w-xl mx-auto">
-              Standard tariffs with vegetarian meals included • 9:00 AM check-in
+              Breakfast included in every stay • 9:00 AM check-in
             </p>
           </div>
 
@@ -524,7 +525,7 @@ export function HomePage({
 
               <div className="mt-3 pt-2.5 border-t border-[#E8DFCE] text-[11px] sm:text-xs text-[#8F6C27] flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-                <span>Includes Veg Breakfast, Lunch &amp; Dinner</span>
+                <span>Includes Veg Breakfast</span>
               </div>
             </Card>
 
@@ -561,7 +562,7 @@ export function HomePage({
 
               <div className="mt-3 pt-2.5 border-t border-[#E8DFCE] text-[11px] sm:text-xs text-[#8F6C27] flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-                <span>Includes Dinner, Breakfast, Bonfire &amp; Bath</span>
+                <span>Includes Breakfast, Bonfire &amp; Bath</span>
               </div>
             </Card>
 
@@ -583,14 +584,18 @@ export function HomePage({
                 <p className="text-[11px] sm:text-xs text-[#143628]/70 mt-0.5">Enhance your stay or visit for the evening</p>
 
                 <div className="mt-3 divide-y divide-[#E8DFCE]/80 text-xs">
+                  {FEATURES.nonVegSupplements && (
                   <div className="py-1.5 flex justify-between items-center">
                     <span>Non-Veg Chicken/Fish</span>
                     <span className="font-serif font-bold text-[#143628]">₹150 / meal</span>
                   </div>
+                  )}
+                  {FEATURES.nonVegSupplements && (
                   <div className="py-1.5 flex justify-between items-center">
                     <span>Cottage Lunch+Dinner Non-Veg</span>
                     <span className="font-serif font-bold text-[#143628]">₹300 / stay</span>
                   </div>
+                  )}
                   <div className="py-1.5 flex justify-between items-center">
                     <span>Cottage Bonfire Hearth</span>
                     <span className="font-serif font-bold text-[#143628]">₹250 / person</span>
@@ -631,7 +636,7 @@ export function HomePage({
               onClick={() => onNavigate('packages')}
               icon={ArrowRight}
             >
-              View All Tariffs &amp; Supplements
+              View All Tariffs &amp; Packages
             </Button>
 
             <Button
