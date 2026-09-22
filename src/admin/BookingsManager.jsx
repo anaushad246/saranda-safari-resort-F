@@ -1,97 +1,67 @@
-﻿import React, { useState, useEffect } from 'react';
-import { BookOpen, Search, Phone, MessageSquare, CheckCircle, Clock, XCircle, Users, ArrowRight, IndianRupee, AlertCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  BookOpen, Search, Phone, MessageSquare, CheckCircle, Clock, XCircle,
+  Users, ArrowRight, IndianRupee, AlertCircle, RefreshCw, LogIn, LogOut, ShieldAlert
+} from 'lucide-react';
 import { apiGetBookings, apiUpdateBookingStatus } from '../services/api';
 
-const DEMO_BOOKINGS = [
-  {
-    _id: 'b-101',
-    bookingReference: 'SSR-2026-A9F2',
-    guest: { name: 'Aarav Sengupta', email: 'aarav.s@example.com', phone: '9830123456', city: 'Kolkata' },
-    unitSnapshot: { name: 'Riverwood', code: 'WL-1' },
-    checkInDate: '2026-10-15',
-    checkOutDate: '2026-10-17',
-    nights: 2,
-    adults: 2,
-    children5to10: 1,
-    infantsUnder5: 0,
-    nonVegPlan: true,
-    bonfireAddon: true,
-    pricingSnapshot: {
-      totalPaise: 1980000,
-      advancePayablePaise: 990000,
-      balanceDueAtCheckInPaise: 990000
-    },
-    status: 'confirmed',
-    createdAt: '2026-09-10T14:30:00.000Z'
-  },
-  {
-    _id: 'b-102',
-    bookingReference: 'SSR-2026-K3M8',
-    guest: { name: 'Dr. Priya Mohanty', email: 'drpriya@example.com', phone: '9437198765', city: 'Bhubaneswar' },
-    unitSnapshot: { name: 'Cherry Blossom 2', code: 'RW-2' },
-    checkInDate: '2026-10-24',
-    checkOutDate: '2026-10-25',
-    nights: 1,
-    adults: 3,
-    children5to10: 0,
-    infantsUnder5: 0,
-    nonVegPlan: false,
-    bonfireAddon: false,
-    pricingSnapshot: {
-      totalPaise: 650000,
-      advancePayablePaise: 325000,
-      balanceDueAtCheckInPaise: 325000
-    },
-    status: 'enquiry',
-    createdAt: '2026-09-11T10:15:00.000Z'
-  },
-  {
-    _id: 'b-103',
-    bookingReference: 'SSR-2026-T8X1',
-    guest: { name: 'Rohit & Sneha Verma', email: 'rohit.v@example.com', phone: '9821098765', city: 'Ranchi' },
-    unitSnapshot: { name: 'Camping Tent A', code: 'TENT-A' },
-    checkInDate: '2026-11-05',
-    checkOutDate: '2026-11-06',
-    nights: 1,
-    adults: 2,
-    children5to10: 0,
-    infantsUnder5: 0,
-    nonVegPlan: false,
-    bonfireAddon: true,
-    pricingSnapshot: {
-      totalPaise: 349900,
-      advancePayablePaise: 174950,
-      balanceDueAtCheckInPaise: 174950
-    },
-    status: 'confirmed',
-    createdAt: '2026-09-11T16:45:00.000Z'
-  }
-];
-
 export function BookingsManager() {
-  const [bookings, setBookings] = useState(DEMO_BOOKINGS);
-  const [loading, setLoading] = useState(false);
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeModal, setActiveModal] = useState(null);
+  const [actionLoadingId, setActionLoadingId] = useState(null);
+  const [actionMessage, setActionMessage] = useState(null);
 
   useEffect(() => {
     loadBookings();
   }, []);
 
+  const loadBookings = async () => {
+    setLoading(true);
+    setFetchError(null);
+    try {
+      const res = await apiGetBookings();
+      const list = res?.data?.bookings || (Array.isArray(res?.data) ? res.data : []);
+      setBookings(list);
+    } catch (err) {
+      setFetchError(err.message || 'Failed to connect to reservations database.');
+      setBookings([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getStatus = (b) => {
-    const s = b.bookingStatus || b.status || 'pending';
-    return s === 'pending' ? 'enquiry' : s;
+    return b.bookingStatus || 'pending';
+  };
+
+  const isHoldActive = (b) => {
+    if (getStatus(b) !== 'pending') return false;
+    if (!b.holdExpiresAt) return true;
+    return new Date(b.holdExpiresAt) > new Date();
+  };
+
+  const getRemainingHoldTime = (holdExpiresAt) => {
+    if (!holdExpiresAt) return null;
+    const diffMs = new Date(holdExpiresAt) - new Date();
+    if (diffMs <= 0) return 'Expired';
+    const totalMinutes = Math.floor(diffMs / (60 * 1000));
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
+    if (hours > 0) return `${hours}h ${mins}m remaining`;
+    return `${mins}m remaining`;
   };
 
   const getFinancials = (b) => {
-    const totalPaise = b.financials?.totalPaise ?? b.pricingSnapshot?.totalPaise ?? 0;
-    const advancePaise = b.financials?.advancePayablePaise ?? b.pricingSnapshot?.advancePayablePaise ?? Math.round(totalPaise / 2);
-    const balancePaise = b.financials?.balanceDuePaise ?? b.pricingSnapshot?.balanceDueAtCheckInPaise ?? (totalPaise - advancePaise);
+    const totalPaise = b.financials?.totalPaise ?? b.priceSnapshot?.baseRateApplied ?? 0;
+    const advancePaise = b.financials?.advancePayablePaise ?? Math.round(totalPaise / 2);
+    const balancePaise = b.financials?.balanceDuePaise ?? (totalPaise - advancePaise);
     return {
-      totalRs: totalPaise / 100,
-      advanceRs: advancePaise / 100,
-      balanceRs: balancePaise / 100
+      totalRs: Math.round(totalPaise / 100),
+      advanceRs: Math.round(advancePaise / 100),
+      balanceRs: Math.round(balancePaise / 100)
     };
   };
 
@@ -103,72 +73,132 @@ export function BookingsManager() {
       return String(d);
     };
     return {
-      checkIn: fmt(b.checkIn || b.checkInDate),
-      checkOut: fmt(b.checkOut || b.checkOutDate)
+      checkIn: fmt(b.checkIn),
+      checkOut: fmt(b.checkOut)
     };
   };
 
-  const loadBookings = async () => {
-    setLoading(true);
+  const handleStatusChange = async (booking, newStatus, paymentStatus = null) => {
+    setActionLoadingId(booking._id);
+    setActionMessage(null);
     try {
-      const res = await apiGetBookings();
-      const list = res?.data?.bookings || (Array.isArray(res?.data) ? res.data : null);
-      if (list && list.length) {
-        setBookings(list);
-      }
-    } catch {
-      // Fallback to demo bookings
+      const payload = { status: newStatus };
+      if (paymentStatus) payload.paymentStatus = paymentStatus;
+      const res = await apiUpdateBookingStatus(booking._id, payload);
+      const updated = res?.data || { ...booking, bookingStatus: newStatus, ...(paymentStatus ? { paymentStatus } : {}) };
+      
+      setBookings(prev => prev.map(b => (b._id === booking._id ? updated : b)));
+      setActionMessage({
+        type: 'success',
+        text: `Booking ${booking.bookingReference} status updated to ${newStatus.replace('_', ' ')}.`
+      });
+    } catch (err) {
+      setActionMessage({
+        type: 'error',
+        text: `Could not update ${booking.bookingReference}: ${err.message}`
+      });
     } finally {
-      setLoading(false);
+      setActionLoadingId(null);
     }
   };
 
-  const handleUpdateStatus = async (bookingId, newStatus) => {
-    try {
-      await apiUpdateBookingStatus(bookingId, { status: newStatus });
-    } catch {
-      // Fallback local update
-    }
-    setBookings(bookings.map(b => b._id === bookingId ? { ...b, bookingStatus: newStatus, status: newStatus } : b));
-    setActiveModal(null);
-  };
-
+  // Status Filter Logic
   const filteredBookings = bookings.filter(b => {
-    const currentStatus = getStatus(b);
-    const matchesStatus = statusFilter === 'all' || currentStatus === statusFilter;
+    const status = getStatus(b);
+    let matchesStatus = true;
+    if (statusFilter === 'pending') {
+      matchesStatus = status === 'pending';
+    } else if (statusFilter === 'confirmed') {
+      matchesStatus = status === 'confirmed';
+    } else if (statusFilter === 'checked_in') {
+      matchesStatus = status === 'checked_in';
+    } else if (statusFilter === 'checked_out') {
+      matchesStatus = status === 'checked_out';
+    } else if (statusFilter === 'cancelled_expired') {
+      matchesStatus = status === 'cancelled' || status === 'expired';
+    }
+
     const matchesSearch = 
       b.bookingReference?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       b.guest?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       b.guest?.phone?.includes(searchTerm);
+
     return matchesStatus && matchesSearch;
   });
 
   // Financial calculations in rupees
+  const activePendingHoldsCount = bookings.filter(b => isHoldActive(b)).length;
+
   const totalRevenue = bookings
-    .filter(b => ['confirmed', 'checked_in', 'completed'].includes(getStatus(b)))
+    .filter(b => ['confirmed', 'checked_in', 'checked_out'].includes(getStatus(b)))
     .reduce((sum, b) => sum + getFinancials(b).totalRs, 0);
 
   const totalAdvanceCollected = bookings
-    .filter(b => ['confirmed', 'checked_in', 'completed'].includes(getStatus(b)))
+    .filter(b => ['confirmed', 'checked_in', 'checked_out'].includes(getStatus(b)) || b.paymentStatus === 'advance_paid')
     .reduce((sum, b) => sum + getFinancials(b).advanceRs, 0);
 
   const totalBalanceDue = bookings
-    .filter(b => getStatus(b) === 'confirmed')
+    .filter(b => getStatus(b) === 'confirmed' || getStatus(b) === 'checked_in')
     .reduce((sum, b) => sum + getFinancials(b).balanceRs, 0);
 
-  const getStatusBadge = (status) => {
+  const getStatusBadge = (b) => {
+    const status = getStatus(b);
+    if (status === 'pending') {
+      const active = isHoldActive(b);
+      const remaining = getRemainingHoldTime(b.holdExpiresAt);
+      if (active) {
+        return (
+          <div className="flex flex-col gap-0.5">
+            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-900 border border-amber-300 inline-flex items-center gap-1 w-fit">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+              Pending Advance
+            </span>
+            {remaining && (
+              <span className="text-[10px] text-amber-700 font-mono font-medium pl-1">
+                ⏱ {remaining}
+              </span>
+            )}
+          </div>
+        );
+      }
+      return (
+        <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-gray-100 text-gray-700 border border-gray-300 inline-flex items-center gap-1">
+          <Clock className="w-3 h-3 text-gray-500" /> Hold Expired
+        </span>
+      );
+    }
+
     switch (status) {
       case 'confirmed':
-        return <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Confirmed (50% Paid)</span>;
-      case 'enquiry':
-      case 'pending':
-        return <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300 flex items-center gap-1"><Clock className="w-3 h-3" /> Enquiry Pending</span>;
+        return (
+          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 inline-flex items-center gap-1">
+            <CheckCircle className="w-3 h-3 text-emerald-600" /> Confirmed (50% Advance Paid)
+          </span>
+        );
       case 'checked_in':
-        return <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-100 text-blue-800 border border-blue-300 flex items-center gap-1">Checked In (On-site)</span>;
-      case 'completed':
-        return <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-purple-100 text-purple-800 border border-purple-300 flex items-center gap-1">Completed</span>;
+        return (
+          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-800 border border-blue-300 inline-flex items-center gap-1">
+            <LogIn className="w-3 h-3 text-blue-600" /> Checked In (On-site)
+          </span>
+        );
+      case 'checked_out':
+        return (
+          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-purple-800 border border-purple-300 inline-flex items-center gap-1">
+            <LogOut className="w-3 h-3 text-purple-600" /> Completed (Checked Out)
+          </span>
+        );
       case 'cancelled':
-        return <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-300 flex items-center gap-1"><XCircle className="w-3 h-3" /> Cancelled</span>;
+        return (
+          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-300 inline-flex items-center gap-1">
+            <XCircle className="w-3 h-3 text-rose-600" /> Cancelled
+          </span>
+        );
+      case 'expired':
+        return (
+          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-gray-100 text-gray-600 border border-gray-200 inline-flex items-center gap-1">
+            <Clock className="w-3 h-3 text-gray-400" /> Expired
+          </span>
+        );
       default:
         return <span className="px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-700">{status}</span>;
     }
@@ -176,19 +206,49 @@ export function BookingsManager() {
 
   return (
     <div className="space-y-6">
-      
+      {/* Alert Banners */}
+      {actionMessage && (
+        <div className={`p-3.5 rounded-lg border text-xs sm:text-sm font-medium flex items-center justify-between ${
+          actionMessage.type === 'error'
+            ? 'bg-rose-50 text-rose-800 border-rose-200'
+            : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+        }`}>
+          <span>{actionMessage.text}</span>
+          <button onClick={() => setActionMessage(null)} className="text-gray-400 hover:text-gray-600 text-base font-bold ml-2">×</button>
+        </div>
+      )}
+
+      {fetchError && (
+        <div className="bg-rose-50 p-4 rounded-xl border border-rose-200 text-rose-800 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+            <span className="text-xs sm:text-sm font-medium">{fetchError}</span>
+          </div>
+          <button
+            onClick={loadBookings}
+            className="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-md text-xs font-semibold"
+          >
+            <RefreshCw className="w-3.5 h-3.5" /> Retry
+          </button>
+        </div>
+      )}
+
       {/* Financial Overview Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-5 rounded-xl border border-[#143628]/10 shadow-sm">
-          <span className="text-[11px] font-semibold text-gray-500 uppercase block">Total Bookings</span>
+          <span className="text-[11px] font-semibold text-gray-500 uppercase block">Total Reservations</span>
           <div className="mt-1 flex items-baseline justify-between">
             <span className="text-2xl font-bold font-serif text-[#143628]">{bookings.length}</span>
-            <span className="text-xs text-emerald-700 font-semibold">{bookings.filter(b => getStatus(b) === 'confirmed').length} Confirmed</span>
+            {activePendingHoldsCount > 0 && (
+              <span className="text-xs text-amber-700 font-semibold bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                {activePendingHoldsCount} Active Hold{activePendingHoldsCount > 1 ? 's' : ''}
+              </span>
+            )}
           </div>
         </div>
 
         <div className="bg-white p-5 rounded-xl border border-[#143628]/10 shadow-sm">
-          <span className="text-[11px] font-semibold text-gray-500 uppercase block">Gross Bookings Value</span>
+          <span className="text-[11px] font-semibold text-gray-500 uppercase block">Confirmed Stays Value</span>
           <div className="mt-1 flex items-baseline justify-between">
             <span className="text-2xl font-bold font-serif text-[#143628]">₹{totalRevenue.toLocaleString('en-IN')}</span>
             <span className="text-xs text-gray-400 font-mono">INR</span>
@@ -199,7 +259,7 @@ export function BookingsManager() {
           <span className="text-[11px] font-semibold text-emerald-800 uppercase block">50% Advance Collected</span>
           <div className="mt-1 flex items-baseline justify-between">
             <span className="text-2xl font-bold font-serif text-emerald-800">₹{totalAdvanceCollected.toLocaleString('en-IN')}</span>
-            <span className="text-xs text-emerald-600 font-semibold">In Bank</span>
+            <span className="text-xs text-emerald-600 font-semibold">Verified</span>
           </div>
         </div>
 
@@ -207,7 +267,7 @@ export function BookingsManager() {
           <span className="text-[11px] font-semibold text-amber-800 uppercase block">Balance Due at Check-In</span>
           <div className="mt-1 flex items-baseline justify-between">
             <span className="text-2xl font-bold font-serif text-amber-800">₹{totalBalanceDue.toLocaleString('en-IN')}</span>
-            <span className="text-xs text-amber-600 font-semibold">50% Cash/UPI</span>
+            <span className="text-xs text-amber-600 font-semibold">Upon Arrival</span>
           </div>
         </div>
       </div>
@@ -215,185 +275,233 @@ export function BookingsManager() {
       {/* Filter and Search Bar */}
       <div className="bg-white p-4 rounded-xl border border-[#143628]/10 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
-          {['all', 'enquiry', 'confirmed', 'checked_in', 'completed', 'cancelled'].map((tab) => (
+          {[
+            { id: 'all', label: `All (${bookings.length})` },
+            { id: 'pending', label: `Pending Holds (${bookings.filter(b => getStatus(b) === 'pending').length})` },
+            { id: 'confirmed', label: `Confirmed (${bookings.filter(b => getStatus(b) === 'confirmed').length})` },
+            { id: 'checked_in', label: `Checked In (${bookings.filter(b => getStatus(b) === 'checked_in').length})` },
+            { id: 'checked_out', label: `Checked Out (${bookings.filter(b => getStatus(b) === 'checked_out').length})` },
+            { id: 'cancelled_expired', label: `Cancelled/Expired (${bookings.filter(b => ['cancelled', 'expired'].includes(getStatus(b))).length})` }
+          ].map((tab) => (
             <button
-              key={tab}
-              onClick={() => setStatusFilter(tab)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-colors cursor-pointer ${
-                statusFilter === tab
-                  ? 'bg-[#143628] text-[#DFCA95]'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              key={tab.id}
+              onClick={() => setStatusFilter(tab.id)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                statusFilter === tab.id
+                  ? 'bg-[#143628] text-white shadow-sm'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              {tab.replace('_', ' ')}
+              {tab.label}
             </button>
           ))}
         </div>
 
-        <div className="relative w-full md:w-72">
-          <Search className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search ref, guest name, phone..."
-            className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-gray-300 focus:outline-none focus:border-[#C5A059]"
-          />
+        <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+          <div className="relative w-full md:w-64">
+            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search Ref, Name, Phone..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-9 pr-3 py-1.5 border border-gray-200 rounded-lg text-xs text-gray-900 focus:outline-none focus:ring-1 focus:ring-[#C5A059]"
+            />
+          </div>
+          <button
+            onClick={loadBookings}
+            disabled={loading}
+            className="p-2 border border-gray-200 rounded-lg hover:border-[#C5A059] transition-colors cursor-pointer text-gray-600"
+            title="Refresh Ledger"
+          >
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+          </button>
         </div>
       </div>
 
-      {/* Bookings Ledger List */}
-      <div className="space-y-4">
-        {filteredBookings.length === 0 ? (
-          <div className="bg-white p-12 text-center rounded-xl border border-gray-200 text-gray-400 text-xs">
-            <BookOpen className="w-8 h-8 mx-auto mb-2 text-gray-300" />
-            No bookings found matching the current filter.
+      {/* Bookings Table */}
+      <div className="bg-white rounded-xl border border-[#143628]/10 shadow-sm overflow-hidden">
+        {loading && bookings.length === 0 ? (
+          <div className="p-12 text-center text-sm text-gray-500">
+            <RefreshCw className="w-6 h-6 animate-spin mx-auto text-[#143628] mb-2" />
+            Loading real-time reservations ledger from database...
+          </div>
+        ) : filteredBookings.length === 0 ? (
+          <div className="p-12 text-center text-sm text-gray-500">
+            <BookOpen className="w-8 h-8 mx-auto text-gray-300 mb-2" />
+            <p className="font-semibold text-gray-700">No reservations found in this category.</p>
+            <p className="text-xs text-gray-400 mt-1">Live bookings submitted by guests on the website appear here automatically.</p>
           </div>
         ) : (
-          filteredBookings.map((b) => {
-            const currentStatus = getStatus(b);
-            const { totalRs, advanceRs, balanceRs } = getFinancials(b);
-            const { checkIn, checkOut } = getDates(b);
-            const unitTitle = b.unit?.name || b.unitSnapshot?.name || b.unitName || 'Unit';
-            const cleanPhone = b.guest?.phone?.replace(/\D/g, '');
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-[#FAF8F5] border-b border-gray-200 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                  <th className="py-3 px-4">Ref & Unit</th>
+                  <th className="py-3 px-4">Guest Info</th>
+                  <th className="py-3 px-4">Stay Dates</th>
+                  <th className="py-3 px-4">Party</th>
+                  <th className="py-3 px-4">Financials (50%)</th>
+                  <th className="py-3 px-4">Status</th>
+                  <th className="py-3 px-4 text-right">Operational Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 text-xs">
+                {filteredBookings.map((b) => {
+                  const status = getStatus(b);
+                  const { totalRs, advanceRs, balanceRs } = getFinancials(b);
+                  const { checkIn, checkOut } = getDates(b);
+                  const unitTitle = b.unit?.name || b.priceSnapshot?.unitName || 'Unit';
+                  const unitCode = b.unit?.code || '';
+                  const cleanPhone = b.guest?.phone?.replace(/\D/g, '') || '';
+                  const isActionLoading = actionLoadingId === b._id;
 
-            return (
-              <div key={b._id} className="bg-white p-6 rounded-xl border border-[#143628]/10 shadow-sm hover:border-[#C5A059]/50 transition-all">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-gray-100 pb-4">
-                  <div>
-                    <div className="flex items-center gap-3">
-                      <span className="font-mono text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                        {b.bookingReference}
-                      </span>
-                      {getStatusBadge(currentStatus)}
-                      <span className="text-xs font-semibold text-[#143628] font-cinzel">
-                        {unitTitle}
-                      </span>
-                    </div>
-                    <h4 className="text-base font-bold text-[#143628] mt-1">
-                      {b.guest?.name} {b.guest?.city && <span className="text-xs font-normal text-gray-500">({b.guest.city})</span>}
-                    </h4>
-                  </div>
+                  const whatsAppText = encodeURIComponent(
+                    `*Saranda Safari Resort - Reservation Voucher*\n\n` +
+                    `Dear ${b.guest?.name},\n` +
+                    `Booking Reference: ${b.bookingReference}\n` +
+                    `Unit: ${unitTitle} (${unitCode})\n` +
+                    `Check-In: ${checkIn}\n` +
+                    `Check-Out: ${checkOut}\n` +
+                    `50% Advance: ₹${advanceRs.toLocaleString('en-IN')} (${b.paymentStatus === 'advance_paid' || status === 'confirmed' ? 'CONFIRMED' : 'AWAITED'})\n` +
+                    `Balance at Check-In: ₹${balanceRs.toLocaleString('en-IN')}\n\n` +
+                    `Thank you for choosing Saranda Safari Resort, Bolani, Keonjhar, Odisha.`
+                  );
 
-                  {/* Contact Links */}
-                  <div className="flex items-center gap-2">
-                    <a
-                      href={`tel:${cleanPhone}`}
-                      className="px-3 py-1.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 text-xs flex items-center gap-1 font-semibold"
-                    >
-                      <Phone className="w-3.5 h-3.5 text-gray-500" /> Call {b.guest?.phone}
-                    </a>
-                    <a
-                      href={`https://wa.me/91${cleanPhone}?text=${encodeURIComponent(`Hello ${b.guest?.name}, regarding your reservation ${b.bookingReference} at Saranda Safari Resort:`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-3 py-1.5 rounded-lg bg-emerald-800 text-white hover:bg-emerald-700 text-xs flex items-center gap-1 font-semibold"
-                    >
-                      <MessageSquare className="w-3.5 h-3.5" /> WhatsApp Guest
-                    </a>
-                  </div>
-                </div>
+                  return (
+                    <tr key={b._id} className="hover:bg-amber-50/20 transition-colors">
+                      {/* Ref & Unit */}
+                      <td className="py-3.5 px-4 font-medium">
+                        <div className="font-mono font-bold text-sm text-[#143628]">{b.bookingReference}</div>
+                        <div className="text-[11px] text-gray-600 font-semibold mt-0.5">{unitTitle} {unitCode && <span className="text-gray-400">({unitCode})</span>}</div>
+                        {b.source && <div className="text-[10px] text-gray-400 uppercase font-mono">{b.source.replace('_', ' ')}</div>}
+                      </td>
 
-                {/* Stay Details & Financials */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4 border-b border-gray-100 text-xs">
-                  <div>
-                    <span className="text-gray-400 block text-[10px] uppercase font-semibold">Dates & Duration</span>
-                    <span className="font-bold text-[#143628] mt-0.5 block">
-                      {b.checkInDate} → {b.checkOutDate} ({b.nights} {b.nights === 1 ? 'Night' : 'Nights'})
-                    </span>
-                    <span className="text-gray-500 mt-0.5 block">
-                      Check-in: 09:00 AM • Check-out: 04:00 PM
-                    </span>
-                  </div>
+                      {/* Guest Info */}
+                      <td className="py-3.5 px-4">
+                        <div className="font-semibold text-gray-900">{b.guest?.name}</div>
+                        <div className="text-gray-500 font-mono text-[11px] mt-0.5">{b.guest?.phone}</div>
+                        {b.guest?.email && <div className="text-gray-400 text-[10px]">{b.guest.email}</div>}
+                        {b.specialRequests && (
+                          <div className="text-[10px] text-amber-800 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5 mt-1 max-w-[200px] truncate" title={b.specialRequests}>
+                            Note: {b.specialRequests}
+                          </div>
+                        )}
+                      </td>
 
-                  <div>
-                    <span className="text-gray-400 block text-[10px] uppercase font-semibold">Guest Party & Meals</span>
-                    <span className="font-bold text-[#143628] mt-0.5 block">
-                      {b.adults} Adults {b.children5to10 > 0 && `• ${b.children5to10} Child (5-10)`} {b.infantsUnder5 > 0 && `• ${b.infantsUnder5} Infant (<5)`}
-                    </span>
-                    <span className="text-gray-500 mt-0.5 block">
-                      Plan: {b.nonVegPlan ? 'Non-Veg Meal Plan' : 'Default Vegetarian Meals'} {b.bonfireAddon && '• Bonfire Included'}
-                    </span>
-                  </div>
+                      {/* Stay Dates */}
+                      <td className="py-3.5 px-4">
+                        <div className="font-semibold text-gray-800">{checkIn}</div>
+                        <div className="text-gray-400 text-[11px] flex items-center gap-1">
+                          to {checkOut} <span className="text-[#C5A059] font-bold">({b.nights}n)</span>
+                        </div>
+                      </td>
 
-                  <div>
-                    <span className="text-gray-400 block text-[10px] uppercase font-semibold">Payment Breakdown (50 / 50 Rule)</span>
-                    <div className="mt-0.5 space-y-0.5">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Total Tariff:</span>
-                        <strong className="text-[#143628]">₹{totalRs.toLocaleString('en-IN')}</strong>
-                      </div>
-                      <div className="flex justify-between text-emerald-800">
-                        <span>50% Advance (to confirm):</span>
-                        <strong>₹{advanceRs.toLocaleString('en-IN')}</strong>
-                      </div>
-                      <div className="flex justify-between text-amber-800">
-                        <span>50% Balance at Check-in:</span>
-                        <strong>₹{balanceRs.toLocaleString('en-IN')}</strong>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                      {/* Party */}
+                      <td className="py-3.5 px-4 text-gray-700">
+                        <div>{b.adults} Adult{b.adults > 1 ? 's' : ''}</div>
+                        {b.children5to10 > 0 && <div className="text-gray-400 text-[11px]">{b.children5to10} Child(5-10)</div>}
+                        {b.infantsUnder5 > 0 && <div className="text-gray-400 text-[11px]">{b.infantsUnder5} Under-5</div>}
+                      </td>
 
-                {/* Management Action Buttons */}
-                <div className="pt-4 flex flex-wrap items-center justify-between gap-3 text-xs">
-                  <div className="text-[11px] text-gray-500">
-                    * Advance is non-refundable. 7-day reschedule window. <strong>100% refund if resort cancels</strong>.
-                  </div>
+                      {/* Financials */}
+                      <td className="py-3.5 px-4">
+                        <div className="font-bold text-gray-900 font-mono">₹{totalRs.toLocaleString('en-IN')}</div>
+                        <div className="text-emerald-700 text-[11px] font-medium">50% Adv: ₹{advanceRs.toLocaleString('en-IN')}</div>
+                        <div className="text-amber-800 text-[10px]">Bal Due: ₹{balanceRs.toLocaleString('en-IN')}</div>
+                      </td>
 
-                  <div className="flex items-center gap-2">
-                    {(currentStatus === 'enquiry' || currentStatus === 'pending') && (
-                      <button
-                        type="button"
-                        onClick={() => handleUpdateStatus(b._id, 'confirmed')}
-                        className="px-3 py-1.5 rounded-lg bg-emerald-800 text-white hover:bg-emerald-700 font-semibold cursor-pointer"
-                      >
-                        Confirm (50% Advance Received)
-                      </button>
-                    )}
+                      {/* Status */}
+                      <td className="py-3.5 px-4">
+                        {getStatusBadge(b)}
+                      </td>
 
-                    {currentStatus === 'confirmed' && (
-                      <button
-                        type="button"
-                        onClick={() => handleUpdateStatus(b._id, 'checked_in')}
-                        className="px-3 py-1.5 rounded-lg bg-blue-800 text-white hover:bg-blue-700 font-semibold cursor-pointer"
-                      >
-                        Mark Checked In (Balance Received)
-                      </button>
-                    )}
+                      {/* Operational Actions */}
+                      <td className="py-3.5 px-4 text-right">
+                        <div className="inline-flex items-center gap-1.5 justify-end">
+                          {/* WhatsApp Guest */}
+                          {cleanPhone && (
+                            <a
+                              href={`https://wa.me/91${cleanPhone}?text=${whatsAppText}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-md border border-emerald-200 transition-colors"
+                              title="Chat / Send Voucher on WhatsApp"
+                            >
+                              <MessageSquare className="w-3.5 h-3.5" />
+                            </a>
+                          )}
 
-                    {currentStatus === 'checked_in' && (
-                      <button
-                        type="button"
-                        onClick={() => handleUpdateStatus(b._id, 'completed')}
-                        className="px-3 py-1.5 rounded-lg bg-purple-800 text-white hover:bg-purple-700 font-semibold cursor-pointer"
-                      >
-                        Mark Stay Completed
-                      </button>
-                    )}
+                          {/* State Transition Actions */}
+                          {status === 'pending' && (
+                            <>
+                              <button
+                                onClick={() => handleStatusChange(b, 'confirmed', 'advance_paid')}
+                                disabled={isActionLoading}
+                                className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-md text-[11px] transition-colors cursor-pointer"
+                              >
+                                {isActionLoading ? 'Saving...' : 'Verify Advance'}
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (window.confirm(`Release hold on ${b.bookingReference}? This will make the cottage available again.`)) {
+                                    handleStatusChange(b, 'cancelled');
+                                  }
+                                }}
+                                disabled={isActionLoading}
+                                className="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold rounded-md text-[11px] border border-rose-200 transition-colors cursor-pointer"
+                              >
+                                Cancel Hold
+                              </button>
+                            </>
+                          )}
 
-                    {currentStatus !== 'cancelled' && currentStatus !== 'completed' && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (window.confirm('Cancel this reservation? Note: If cancelled by the resort, the 100% full refund guarantee applies.')) {
-                            handleUpdateStatus(b._id, 'cancelled');
-                          }
-                        }}
-                        className="px-3 py-1.5 rounded-lg border border-rose-300 text-rose-700 hover:bg-rose-50 font-semibold cursor-pointer"
-                      >
-                        Cancel Reservation
-                      </button>
-                    )}
-                  </div>
-                </div>
+                          {status === 'confirmed' && (
+                            <>
+                              <button
+                                onClick={() => handleStatusChange(b, 'checked_in')}
+                                disabled={isActionLoading}
+                                className="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md text-[11px] transition-colors cursor-pointer"
+                              >
+                                {isActionLoading ? 'Saving...' : 'Check-In'}
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (window.confirm(`Cancel confirmed reservation ${b.bookingReference}?`)) {
+                                    handleStatusChange(b, 'cancelled');
+                                  }
+                                }}
+                                disabled={isActionLoading}
+                                className="px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-md text-[11px] transition-colors cursor-pointer"
+                              >
+                                Cancel
+                              </button>
+                            </>
+                          )}
 
-              </div>
-            );
-          })
+                          {status === 'checked_in' && (
+                            <button
+                              onClick={() => {
+                                if (window.confirm(`Collect ₹${balanceRs.toLocaleString('en-IN')} balance and check out ${b.guest?.name}?`)) {
+                                  handleStatusChange(b, 'checked_out', 'fully_paid');
+                                }
+                              }}
+                              disabled={isActionLoading}
+                              className="px-2.5 py-1 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md text-[11px] transition-colors cursor-pointer"
+                            >
+                              {isActionLoading ? 'Saving...' : 'Check-Out (Collect Bal)'}
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
-
     </div>
   );
 }
