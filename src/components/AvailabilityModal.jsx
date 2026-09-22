@@ -6,7 +6,6 @@ import {
 import { Button, Card, Badge } from './ui/Primitives';
 import { stayInventory } from '../content/stayInventory';
 import { resortInfo } from '../content/resortInfo';
-import { FEATURES } from '../content/features';
 import { apiCreateBooking } from '../services/api';
 
 export function AvailabilityModal({ isOpen, onClose }) {
@@ -25,7 +24,6 @@ export function AvailabilityModal({ isOpen, onClose }) {
   const [adults, setAdults] = useState(2);
   const [children5to10, setChildren5to10] = useState(0);
   const [infantsUnder5, setInfantsUnder5] = useState(0);
-  const [includeNonVegPlan, setIncludeNonVegPlan] = useState(false);
   const [includeBonfire, setIncludeBonfire] = useState(false);
 
   // Guest Details State (Step 2)
@@ -104,14 +102,6 @@ export function AvailabilityModal({ isOpen, onClose }) {
     const childRatePerNight = isCamping ? 750 : 700;
     const childrenTotal = children5to10 * childRatePerNight * nights;
 
-    // Non-veg meal supplements
-    let nonVegTotal = 0;
-    if (FEATURES.nonVegSupplements && includeNonVegPlan) {
-      const adultSupplementRate = isCamping ? 150 : 300;
-      const childSupplementRate = 150;
-      nonVegTotal = (adults * adultSupplementRate + children5to10 * childSupplementRate) * nights;
-    }
-
     // Bonfire add-on (cottages only)
     let bonfireTotal = 0;
     if (includeBonfire && !isCamping) {
@@ -119,7 +109,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
       bonfireTotal = billableBonfireGuests * 250 * nights;
     }
 
-    const grandTotal = baseStayTotal + childrenTotal + nonVegTotal + bonfireTotal;
+    const grandTotal = baseStayTotal + childrenTotal + bonfireTotal;
     const advance50 = Math.round(grandTotal * 0.5);
     const balanceAtCheckIn = grandTotal - advance50;
 
@@ -127,13 +117,12 @@ export function AvailabilityModal({ isOpen, onClose }) {
       baseRatePerNight,
       baseStayTotal,
       childrenTotal,
-      nonVegTotal,
       bonfireTotal,
       grandTotal,
       advance50,
       balanceAtCheckIn
     };
-  }, [selectedUnitType, currentUnit, isCamping, adults, nights, children5to10, includeNonVegPlan, includeBonfire, is3GuestMaxUnit]);
+  }, [selectedUnitType, currentUnit, isCamping, adults, nights, children5to10, includeBonfire, is3GuestMaxUnit]);
 
   // Live Countdown Timer for Step 3
   useEffect(() => {
@@ -200,7 +189,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
         adults,
         children5to10,
         infantsUnder5,
-        nonVegPlan: includeNonVegPlan,
+        nonVegPlan: false,
         bonfireAddon: includeBonfire && !isCamping,
         guest: {
           name: guestName.trim(),
@@ -441,23 +430,6 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
                 <h4 className="text-xs uppercase tracking-wider font-semibold text-[#143628]">
                   Optional Add-ons
                 </h4>
-                
-                {FEATURES.nonVegSupplements && (
-                  <label className="flex items-start gap-3 p-2.5 rounded-lg border border-[#E8DFCE] bg-white cursor-pointer hover:border-[#C5A059]">
-                    <input
-                      type="checkbox"
-                      checked={includeNonVegPlan}
-                      onChange={(e) => setIncludeNonVegPlan(e.target.checked)}
-                      className="mt-0.5 rounded text-[#C25E3E] focus:ring-[#C25E3E]"
-                    />
-                    <div className="text-xs sm:text-sm">
-                      <span className="font-semibold text-[#143628]">Non-Vegetarian Meal Supplement (Chicken / Seasonal Fish)</span>
-                      <p className="text-[#143628]/70 text-xs mt-0.5">
-                        {isCamping ? '₹150/guest for camping dinner' : '₹300/guest per stay (covers Lunch + Dinner)'}
-                      </p>
-                    </div>
-                  </label>
-                )}
 
                 {!isCamping && (
                   <label className="flex items-start gap-3 p-2.5 rounded-lg border border-[#E8DFCE] bg-white cursor-pointer hover:border-[#C5A059]">
@@ -470,7 +442,7 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
                     <div className="text-xs sm:text-sm">
                       <span className="font-semibold text-[#143628]">Private Cottage Bonfire Hearth Add-on</span>
                       <p className="text-[#143628]/70 text-xs mt-0.5">
-                        ₹250/guest (min 2 paying guests) with freshly arranged riverfront lawn hearth.
+                        ₹250/guest (min 2 paying guests = ₹500) with freshly arranged riverfront lawn hearth.
                       </p>
                     </div>
                   </label>
@@ -495,12 +467,6 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
                     <div className="flex justify-between">
                       <span>Children (5–10 yrs: {children5to10})</span>
                       <span className="font-medium">+₹{calculation.childrenTotal.toLocaleString('en-IN')}</span>
-                    </div>
-                  )}
-                  {FEATURES.nonVegSupplements && includeNonVegPlan && (
-                    <div className="flex justify-between">
-                      <span>Non-Veg Supplements</span>
-                      <span className="font-medium">+₹{calculation.nonVegTotal.toLocaleString('en-IN')}</span>
                     </div>
                   )}
                   {includeBonfire && !isCamping && (
