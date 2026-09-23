@@ -15,7 +15,7 @@ export const sightseeingContent = {
       category: "Natural Waterfall",
       distance: "10.7 km · one way",
       description: "A secluded multi-tiered forest cascade tumbling down rock shelves into cool natural pools.",
-      image: "/jhikraWaterfall.png"
+      image: "/Jhikrawaterfall.webp"
     },
     {
       id: "pacheri-waterfall",
@@ -23,7 +23,7 @@ export const sightseeingContent = {
       category: "River Cascade",
       distance: "17.2 km · one way",
       description: "A wide, scenic river cascade forming natural swirling rock pools in the Keonjhar valley.",
-      image: "/PacheriWaterfall.jpg"
+      image: "/Pacheri.JPG"
     },
     {
       id: "kiriburu-sunset",
@@ -39,7 +39,7 @@ export const sightseeingContent = {
       category: "Riverside Landscape",
       distance: "20 km · one way",
       description: "A clear hill stream winding through gravel banks and quiet forest valleys away from tourist crowds.",
-      image: "/sightseeing-pundul.jpg"
+      image: "/sightseeing-pundul.jpeg"
     },
     {
       id: "mirgsingha-temple",

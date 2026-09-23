@@ -26,7 +26,7 @@ export const experiencesContent = {
       id: 3,
       number: "03",
       title: "Camping — A Little Adventure, A Lot of Peace",
-      image: "/camping.jpeg",
+      image: "/camping.png",
       description: "Sleep beneath the trees and wake to birdsong in the welcoming surroundings of Saranda Safari Resort. Whether travelling with friends or as a woman exploring solo, enjoy a camping escape close to nature."
     },
     {
@@ -47,28 +47,28 @@ export const experiencesContent = {
       id: 6,
       number: "06",
       title: "Bonfire, Antakshari & Starry Nights",
-      image: "/bonfire.jpg",
+      image: "/bonfire.png",
       description: "Gather around a glowing bonfire, sing your favourite songs in a cheerful round of Antakshari, and hear our family's tales of Saranda's wild visitors. On clear nights, pause between melodies to gaze at the stars—letting laughter, music and a little wonder fill your evening."
     },
     {
       id: 7,
       number: "07",
       title: "When Winter Gives Way to Spring",
-      image: "/spring.jpg",
+      image: "/spring.png",
       description: "Feel the crisp crunch of fallen leaves beneath your feet and hear the lively chatter of “Seven Sisters” babblers mingle with the morning calls of visiting migratory birds. As winter's chill fades, mahua blossoms fall, spreading their sweet fragrance and offering a seasonal feast that may attract deer and bears in the surrounding forest. Pause, listen, and feel the season change around you."
     },
     {
       id: 8,
       number: "08",
       title: "Angling — Cast a Line, Find Your Calm",
-      image: "/angling.jpg",
+      image: "/angling.png",
       description: "Enjoy peaceful angling by the River, surrounded by greenery and birdsong—where every ripple invites you to slow down."
     },
     {
       id: 9,
       number: "09",
       title: "Fruit Orchard — A Taste of the Seasons",
-      image: "/fruitOrchard.jpg",
+      image: "/fruitOrchard.jpeg",
       description: "Wander through our orchard, where mangoes, falsa, jamun, and other fruits bring their sweetness in different seasons. With permission from our team, enjoy picking a little seasonal delight—fresh from the tree, close to nature."
     },
     {

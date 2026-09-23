@@ -5,7 +5,7 @@
 export const stayContent = {
   heroTitle: "Accommodation",
   heroDescription: "At Saranda Safari Resort, our accommodations are designed to bring you closer to nature without compromising on comfort and warmth. Tucked alongside the peaceful Karo River and surrounded by lush foliage, each of our distinct stays features its own unique character—from rustic, handcrafted wooden chalets to vibrant, lawn-facing retreats with spacious open verandas. Whether you are looking for a front-row seat to the morning river view, a cozy stay nestled under a canopy of mature trees, or a peaceful sanctuary for quiet reflection, our stays provide the perfect backdrop to slow down, unwind, and feel right at home.",
-  heroImage: "/place-why-visit.jpg",
+  heroImage: "/placewhyvisit.jpg",
 
   featuredCottages: [
     {
@@ -56,7 +56,7 @@ export const stayContent = {
       tagline: "A cheerful retreat overlooking the lawns.",
       subtitle: "A cheerful retreat overlooking the lawns.",
       setting: "Front-facing open green lawns, spacious sit-out verandas, relaxed family-friendly ambiance.",
-      image: "/stay-spring.jpg",
+      image: "/SpringAbode.png",
       description: "With welcoming verandas and open lawns stretching out in front, Spring Abode offers a relaxed setting to enjoy Saranda Safari Resort’s natural surroundings. Its simple cottage charm makes it a lovely choice for families and friends."
     },
     {
@@ -68,7 +68,7 @@ export const stayContent = {
       tagline: "A little wooden retreat with a wide view of resort life.",
       subtitle: "A little wooden retreat with a wide view of resort life.",
       setting: "Warm red wooden exterior, yellow window frames, elevated perspective of lawns and resort life.",
-      image: "/stay-gulmohar.jpg",
+      image: "/GulmoharCottage.png",
       description: "With its warm red wooden walls and cheerful yellow windows, Gulmohar offers rustic charm amid the trees. From here, much of the resort’s landscape unfolds before you — the open lawns, neighbouring cottages, and surrounding greenery."
     },
     {
@@ -89,7 +89,7 @@ export const stayContent = {
     title: "Camping Under the Open Sky",
     subtitle: "Close to the river, beneath the forest canopy.",
     capacity: "2 tents · 5 guests total",
-    image: "/package-camping.jpg",
+    image: "/CampingA.png",
     description: "Sleep beneath the trees and wake to birdsong in the welcoming surroundings of Saranda Safari Resort. Whether travelling with friends or as a woman exploring solo, enjoy a camping escape close to nature, complete with starlight evenings and unhurried quiet."
   }
 };

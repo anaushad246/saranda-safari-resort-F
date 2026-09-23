@@ -119,7 +119,7 @@ export function ThePlacePage({ onOpenBooking, onNavigate }) {
             <div className="lg:col-span-5">
               <div className="rounded-2xl overflow-hidden shadow-md border border-[#E8DFCE] relative group">
                 <img
-                  src="/place-morning-mist.jpg"
+                  src="/placemorningmist.webp"
                   alt="Morning mist along Karo River"
                   className="w-full h-80 lg:h-[480px] object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
@@ -146,7 +146,7 @@ export function ThePlacePage({ onOpenBooking, onNavigate }) {
             <div className="lg:col-span-5 order-2 lg:order-1">
               <div className="rounded-2xl overflow-hidden shadow-md border border-[#E8DFCE] relative group">
                 <img
-                  src="/place-wildlife.jpg"
+                  src="/placewildlife.png"
                   alt="Tea and binoculars on the verandah"
                   className="w-full h-80 lg:h-[480px] object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
@@ -262,7 +262,7 @@ export function ThePlacePage({ onOpenBooking, onNavigate }) {
             <div className="lg:col-span-5">
               <div className="rounded-2xl overflow-hidden shadow-md border border-[#E8DFCE] relative group">
                 <img
-                  src="/place-why-visit.jpg"
+                  src="/placewhyvisit.png"
                   alt="Gentle Karo River lawn and open sky"
                   className="w-full h-80 lg:h-[500px] object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
