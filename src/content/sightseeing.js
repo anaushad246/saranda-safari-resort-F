@@ -6,7 +6,7 @@ export const sightseeingContent = {
   heroBadge: "Sightseeing & Assistance",
   heroTitle: "Explore Beyond the Resort",
   heroSubtitle: "Discover waterfalls, riverside landscapes, hilltop sunsets and places of worship during your stay. Whether you prefer a relaxed outing or a day exploring the surroundings, our team can help you plan your visit.",
-  heroImage: "/sightseeing-hero.jpg",
+  heroImage: "/sightseeing-hero.webp",
 
   destinations: [
     {
@@ -23,7 +23,7 @@ export const sightseeingContent = {
       category: "River Cascade",
       distance: "17.2 km · one way",
       description: "A wide, scenic river cascade forming natural swirling rock pools in the Keonjhar valley.",
-      image: "/Pacheri.JPG"
+      image: "/Pacheri.webp"
     },
     {
       id: "kiriburu-sunset",
@@ -31,7 +31,7 @@ export const sightseeingContent = {
       category: "Hilltop Vantage",
       distance: "20 km · one way",
       description: "Famous panoramic hilltop vista overlooking the endless rolling 700 hills of Saranda at dusk.",
-      image: "/KiriburuSunsetPoint.png"
+      image: "/KiriburuSunsetPoint.webp"
     },
     {
       id: "pundul-river",
@@ -39,7 +39,7 @@ export const sightseeingContent = {
       category: "Riverside Landscape",
       distance: "20 km · one way",
       description: "A clear hill stream winding through gravel banks and quiet forest valleys away from tourist crowds.",
-      image: "/sightseeing-pundul.jpeg"
+      image: "/sightseeing-pundul.webp"
     },
     {
       id: "mirgsingha-temple",
@@ -47,7 +47,7 @@ export const sightseeingContent = {
       category: "Sacred Shrine",
       distance: "25 km · one way",
       description: "An ancient regional stone temple reverently set amidst natural rock outcrops and sal trees.",
-      image: "/sightseeing-mirgsingha.jpg"
+      image: "/sightseeing-mirgsingha.webp"
     },
     {
       id: "jateshwar-temple",
@@ -55,7 +55,7 @@ export const sightseeingContent = {
       category: "Forest Shiva Shrine",
       distance: "28 km · one way",
       description: "A venerated forest Shiva shrine in a quiet woodland clearing, known for its tranquil spiritual presence.",
-      image: "/sightseeing-jateshwar.jpg"
+      image: "/sightseeing-jateshwar.webp"
     }
   ],
 

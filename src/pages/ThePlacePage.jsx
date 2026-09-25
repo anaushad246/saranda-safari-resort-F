@@ -146,7 +146,7 @@ export function ThePlacePage({ onOpenBooking, onNavigate }) {
             <div className="lg:col-span-5 order-2 lg:order-1">
               <div className="rounded-2xl overflow-hidden shadow-md border border-[#E8DFCE] relative group">
                 <img
-                  src="/placewildlife.png"
+                  src="/placewildlife.webp"
                   alt="Tea and binoculars on the verandah"
                   className="w-full h-80 lg:h-[480px] object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"

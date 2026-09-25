@@ -84,11 +84,11 @@ export function Navbar({ currentPage, onNavigate, onOpenBooking }) {
               "
             >
               <img
-                src="/logo.jpeg"
+                src="/logo.webp"
                 alt="Saranda Safari Resort"
                 className="h-full w-full object-cover"
                 onError={(e) => {
-                  e.currentTarget.src = '/logo.jpg';
+                  e.currentTarget.src = '/logo.webp';
                 }}
               />
             </div>
