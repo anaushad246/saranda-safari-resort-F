@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import {
   BookOpen, Search, Phone, MessageSquare, CheckCircle, Clock, XCircle,
-  Users, ArrowRight, IndianRupee, AlertCircle, RefreshCw, LogIn, LogOut, ShieldAlert
+  Users, ArrowRight, IndianRupee, AlertCircle, RefreshCw, LogIn, LogOut, ShieldAlert, X
 } from 'lucide-react';
 import { apiGetBookings, apiUpdateBookingStatus } from '../services/api';
+
+// Mirrors the paymentStatus enum on the Booking model.
+const PAYMENT_BADGES = {
+  pending: { label: 'Payment Awaited', cls: 'bg-amber-50 text-amber-800 border-amber-200' },
+  advance_paid: { label: 'Advance Paid', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+  fully_paid: { label: 'Fully Paid', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+  refunded: { label: 'Refunded', cls: 'bg-sky-50 text-sky-700 border-sky-200' },
+  failed: { label: 'Payment Failed', cls: 'bg-red-50 text-red-700 border-red-200' }
+};
 
 export function BookingsManager() {
   const [bookings, setBookings] = useState([]);
@@ -80,20 +89,32 @@ export function BookingsManager() {
     };
   };
 
-  const handleStatusChange = async (booking, newStatus, paymentStatus = null) => {
+  // `transactionReference` is the 4th argument the Verify Advance modal passes. It was missing
+  // from this signature, so the operator's UTR was silently thrown away and the audit trail
+  // recorded transactionReference: null.
+  const handleStatusChange = async (booking, newStatus, paymentStatus = null, transactionReference = null) => {
     setActionLoadingId(booking._id);
     setActionMessage(null);
     try {
       const payload = { status: newStatus };
       if (paymentStatus) payload.paymentStatus = paymentStatus;
+      if (transactionReference) payload.transactionReference = transactionReference;
       const res = await apiUpdateBookingStatus(booking._id, payload);
-      const updated = res?.data || { ...booking, bookingStatus: newStatus, ...(paymentStatus ? { paymentStatus } : {}) };
-      
+      const updated = res?.data || {
+        ...booking,
+        bookingStatus: newStatus,
+        ...(paymentStatus ? { paymentStatus } : {}),
+        ...(transactionReference ? { transactionReference } : {})
+      };
+
       setBookings(prev => prev.map(b => (b._id === booking._id ? updated : b)));
       setActionMessage({
         type: 'success',
         text: `Booking ${booking.bookingReference} status updated to ${newStatus.replace('_', ' ')}.`
       });
+      // The modal has no other exit on success — without this it stayed open over the row.
+      setVerifyingBooking(null);
+      setUtrInput('');
     } catch (err) {
       setActionMessage({
         type: 'error',
@@ -142,6 +163,19 @@ export function BookingsManager() {
   const totalBalanceDue = bookings
     .filter(b => getStatus(b) === 'confirmed' || getStatus(b) === 'checked_in')
     .reduce((sum, b) => sum + getFinancials(b).balanceRs, 0);
+
+  // The status badge below is driven by bookingStatus alone, so a confirmed-but-unpaid booking
+  // and a confirmed-and-paid one rendered identically. This is the only place paymentStatus is
+  // surfaced per row.
+  const getPaymentBadge = (b) => {
+    const pay = PAYMENT_BADGES[b.paymentStatus];
+    if (!pay) return null;
+    return (
+      <span className={`inline-flex items-center px-1.5 py-0.5 mt-1.5 rounded border text-[10px] font-semibold uppercase tracking-wide ${pay.cls}`}>
+        {pay.label}
+      </span>
+    );
+  };
 
   const getStatusBadge = (b) => {
     const status = getStatus(b);
@@ -416,6 +450,7 @@ export function BookingsManager() {
                       {/* Status */}
                       <td className="py-3.5 px-4">
                         {getStatusBadge(b)}
+                        <div>{getPaymentBadge(b)}</div>
                       </td>
 
                       {/* Operational Actions */}
