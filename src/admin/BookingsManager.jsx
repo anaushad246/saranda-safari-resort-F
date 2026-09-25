@@ -13,6 +13,8 @@ export function BookingsManager() {
   const [searchTerm, setSearchTerm] = useState('');
   const [actionLoadingId, setActionLoadingId] = useState(null);
   const [actionMessage, setActionMessage] = useState(null);
+  const [verifyingBooking, setVerifyingBooking] = useState(null);
+  const [utrInput, setUtrInput] = useState('');
 
   useEffect(() => {
     loadBookings();
@@ -436,7 +438,7 @@ export function BookingsManager() {
                           {status === 'pending' && (
                             <>
                               <button
-                                onClick={() => handleStatusChange(b, 'confirmed', 'advance_paid')}
+                                onClick={() => { setVerifyingBooking(b); setUtrInput(''); }}
                                 disabled={isActionLoading}
                                 className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-md text-[11px] transition-colors cursor-pointer"
                               >
