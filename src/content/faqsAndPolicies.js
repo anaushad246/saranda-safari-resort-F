@@ -22,7 +22,7 @@ export const faqsAndPolicies = {
     {
       id: 4,
       question: "Are meals included in cottage bookings?",
-      answer: "Complimentary breakfast is included in our one-night cottage stay. Meal inclusions for other packages will be specified when booking."
+      answer: "Yes, our one-night (24-hour) cottage stay includes vegetarian breakfast, lunch, and dinner. Breakfast is served on the departure morning at check-out. Meal inclusions for other visits or packages are specified during booking."
     },
     {
       id: 5,
@@ -32,7 +32,7 @@ export const faqsAndPolicies = {
     {
       id: 6,
       question: "What facilities are available?",
-      answer: "Cottages have attached bathrooms. Parking and hot water are available. Wi-Fi and power backup are currently unavailable."
+      answer: "Cottages feature attached western bathrooms. Parking on-site and hot water on request are available. Both Jio and Airtel mobile networks offer voice and mobile data coverage across the grounds. Wi-Fi and power backup are currently unavailable."
     },
     {
       id: 7,

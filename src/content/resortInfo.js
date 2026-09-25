@@ -29,6 +29,11 @@ export const resortInfo = {
 
   // Transparent truth-in-marketing audit
   amenitiesStatus: {
+    mobileNetwork: {
+      available: true,
+      title: "Jio & Airtel Coverage Available",
+      desc: "Jio and Airtel mobile networks offer reliable calling and 4G connectivity across the resort grounds. Please note there is no property Wi-Fi."
+    },
     electricity: {
       available: true,
       title: "Electricity Available",

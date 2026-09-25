@@ -455,7 +455,7 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
                   <span className="text-xs uppercase tracking-wider text-[#DFCA95] font-semibold">
                     Estimated Tariff Breakdown
                   </span>
-                  <span className="text-xs text-[#DFCA95]">Inclusive of breakfast</span>
+                  <span className="text-xs text-[#DFCA95]">Includes breakfast, lunch & dinner</span>
                 </div>
 
                 <div className="space-y-1 text-xs sm:text-sm">
@@ -714,7 +714,7 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
           {/* Left notice / back */}
           <div className="text-xs text-[#143628]/75 text-center sm:text-left">
             {step === 1 && (
-              <span>Includes vegetarian breakfast • Attached baths • Parking on-site</span>
+              <span>Includes vegetarian breakfast, lunch & dinner • Attached baths • Parking on-site</span>
             )}
             {step === 2 && (
               <button

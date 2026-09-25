@@ -33,7 +33,7 @@ export const tariffsAndPackages = {
           { guests: "4 guests", rate: 6600, note: "Valid on log house & other 4-person cottage" }
         ],
         inclusions: [
-          "Complimentary vegetarian breakfast",
+          "Vegetarian breakfast, lunch, and dinner included (breakfast served on departure morning at check-out)",
           "Private cottage with attached western bath & verandah",
           "Electricity with generator backup & ceiling fans"
         ],
@@ -179,7 +179,7 @@ export const tariffsAndPackages = {
           "Overnight sleeping accommodation",
           "Cook/chef service (available on separate enquiry)"
         ],
-        notes: "These are day-use group capacities, not sleeping capacities. Final timings and operating details confirmed upon enquiry."
+        notes: "These are day-use group capacities, not sleeping capacities. Cottages are assigned dynamically based on daytime availability. No security deposit required (₹0 deposit)."
       },
       {
         id: "evening-under-stars",
@@ -235,11 +235,11 @@ export const tariffsAndPackages = {
           "Restroom facilities"
         ],
         exclusions: [
-          "Tea/coffee/snacks are not yet confirmed as included (enquiry-led)",
+          "Refreshments are not included in the entry ticket (snacks, tea, and beverages available on-site for separate purchase)",
           "Cottage access or room use",
           "Bonfire"
         ],
-        notes: "Food and beverage inclusions are subject to confirmation with resort staff on the day of visit."
+        notes: "Snacks, tea, and beverages are available for separate on-site purchase during your visit."
       }
     ]
   },
