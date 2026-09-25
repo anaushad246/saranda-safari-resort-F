@@ -503,6 +503,77 @@ export function BookingsManager() {
             </table>
           </div>
         )}
+      {/* Verify Advance Payment Modal */}
+      {verifyingBooking && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 border border-[#E8DFCE] animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-[#143628]">Verify Advance Payment</h3>
+              <button
+                onClick={() => { setVerifyingBooking(null); setUtrInput(''); }}
+                className="text-gray-400 hover:text-gray-600 p-1 rounded-md"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="bg-[#FAF7F2] rounded-lg p-4 mb-4 text-xs space-y-2 border border-[#E8DFCE]">
+              <div className="flex justify-between">
+                <span className="text-gray-500">Booking Reference:</span>
+                <span className="font-bold text-[#143628]">{verifyingBooking.bookingReference}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Guest Name:</span>
+                <span className="font-semibold text-[#143628]">{verifyingBooking.guest?.name}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Guest Phone:</span>
+                <span className="font-semibold text-[#143628]">{verifyingBooking.guest?.phone}</span>
+              </div>
+              <div className="flex justify-between border-t border-[#E8DFCE] pt-2">
+                <span className="text-[#8F6C27] font-semibold">50% Advance Required:</span>
+                <span className="font-bold text-[#143628]">
+                  ₹{Math.round((verifyingBooking.financials?.advancePayablePaise || 0) / 100).toLocaleString('en-IN')}
+                </span>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-xs font-semibold text-[#143628] uppercase tracking-wider mb-1.5">
+                UPI / Bank UTR Reference (Optional)
+              </label>
+              <input
+                type="text"
+                value={utrInput}
+                onChange={(e) => setUtrInput(e.target.value)}
+                placeholder="e.g. 426819284729 or UPI-123456"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+              <p className="text-[11px] text-gray-500 mt-1">
+                Verifying will confirm the booking, clear the 2-hour hold timer, and record the UTR in audit history.
+              </p>
+            </div>
+
+            <div className="flex gap-2 justify-end">
+              <button
+                type="button"
+                onClick={() => { setVerifyingBooking(null); setUtrInput(''); }}
+                className="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleStatusChange(verifyingBooking, 'confirmed', 'advance_paid', utrInput.trim() || undefined)}
+                disabled={actionLoadingId === verifyingBooking._id}
+                className="px-4 py-2 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors cursor-pointer shadow-sm"
+              >
+                {actionLoadingId === verifyingBooking._id ? 'Verifying...' : 'Confirm & Mark Advance Paid'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );
