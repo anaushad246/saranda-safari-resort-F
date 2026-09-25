@@ -2,59 +2,12 @@
 import { Mail, Phone, MessageSquare, Car, Compass, Calendar, CheckCircle2, Clock, Filter, AlertCircle } from 'lucide-react';
 import { apiGetEnquiries, apiUpdateEnquiry } from '../services/api';
 
-const DEMO_ENQUIRIES = [
-  {
-    _id: 'enq-1',
-    type: 'pickup',
-    guest: { name: 'Subhashish Das', phone: '9437011223', email: 'subhashish@gmail.com' },
-    details: {
-      station: 'Barbil (BBN) Railway Station',
-      arrivalDate: '2026-10-18',
-      arrivalTime: '11:30 AM',
-      passengers: 4,
-      luggagePieces: 3,
-      vehiclePreference: 'Bolero / Scorpio (Rugged SUV)'
-    },
-    status: 'new',
-    staffNotes: '',
-    createdAt: '2026-09-11T18:00:00.000Z'
-  },
-  {
-    _id: 'enq-2',
-    type: 'sightseeing',
-    guest: { name: 'Ananya Roy', phone: '9831254321', email: 'ananya.roy@example.com' },
-    details: {
-      circuit: 'Sal Forest Trail & Karo River Rapids',
-      preferredDate: '2026-10-21',
-      partySize: 3,
-      assistanceNeeded: 'Local village guide and packed lunch.'
-    },
-    status: 'contacted',
-    staffNotes: 'Guide allocated: Mangal Munda. Rate ₹1,200.',
-    createdAt: '2026-09-10T12:20:00.000Z'
-  },
-  {
-    _id: 'enq-3',
-    type: 'event',
-    guest: { name: 'Dr. Debabrata Mishra', phone: '9438098765', email: 'debabrata@hospital.org' },
-    details: {
-      eventType: 'Small Medical Team Nature Retreat',
-      groupSize: 18,
-      dates: '12-14 Nov 2026 (2 nights)',
-      overnightNoticeConfirmed: true,
-      requirements: 'Full resort booking (within 25 max capacity cap), special tribal dinner request.'
-    },
-    status: 'quoted',
-    staffNotes: 'Sent custom quote ₹1,45,000 including all cottages + both tents + non-veg meals.',
-    createdAt: '2026-09-09T09:40:00.000Z'
-  }
-];
-
 export function EnquiriesManager() {
-  const [enquiries, setEnquiries] = useState(DEMO_ENQUIRIES);
+  const [enquiries, setEnquiries] = useState([]);
+  const [error, setError] = useState(null);
   const [typeFilter, setTypeFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadEnquiries();
@@ -62,12 +15,14 @@ export function EnquiriesManager() {
 
   const loadEnquiries = async () => {
     setLoading(true);
+    setError(null);
     try {
       const res = await apiGetEnquiries();
-      const list = res?.data?.enquiries || (Array.isArray(res?.data) ? res.data : null);
-      if (list && list.length) setEnquiries(list);
-    } catch {
-      // Fallback to demo
+      const list = res?.data?.enquiries || (Array.isArray(res?.data) ? res.data : []);
+      setEnquiries(list);
+    } catch (err) {
+      setError(err.message || 'Failed to load enquiries from database.');
+      setEnquiries([]);
     } finally {
       setLoading(false);
     }
@@ -76,10 +31,10 @@ export function EnquiriesManager() {
   const handleStatusChange = async (id, newStatus) => {
     try {
       await apiUpdateEnquiry(id, { status: newStatus });
-    } catch {
-      // Local fallback
+      setEnquiries(prev => prev.map(e => e._id === id ? { ...e, status: newStatus } : e));
+    } catch (err) {
+      alert(`Could not update enquiry status: ${err.message}`);
     }
-    setEnquiries(enquiries.map(e => e._id === id ? { ...e, status: newStatus } : e));
   };
 
   const filteredEnquiries = enquiries.filter(e => {
