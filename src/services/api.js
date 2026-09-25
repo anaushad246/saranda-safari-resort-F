@@ -29,7 +29,7 @@ async function fetchApi(endpoint, options = {}) {
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const timeoutId = setTimeout(() => controller.abort(), 25000);
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...fetchOptions,
@@ -52,6 +52,11 @@ async function fetchApi(endpoint, options = {}) {
 
     return result;
   } catch (error) {
+    if (error.name === 'AbortError') {
+      const timeoutErr = new Error('The server took longer to respond. Please try again.');
+      console.warn(`[API Service Warning] ${endpoint}:`, timeoutErr.message);
+      throw timeoutErr;
+    }
     console.warn(`[API Service Warning] ${endpoint}:`, error.message);
     throw error;
   }
