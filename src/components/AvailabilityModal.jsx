@@ -373,9 +373,21 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
                     onChange={(e) => setNights(Number(e.target.value))}
                     className="w-full bg-white border border-[#E8DFCE] rounded-md px-3 py-2 text-sm text-[#143628] focus:outline-none focus:ring-1 focus:ring-[#C5A059]"
                   >
-                    {[1, 2, 3, 4, 5, 6, 7].map(n => (
-                      <option key={n} value={n}>{n} Night{n > 1 ? 's' : ''} (Check-out: {checkOutDate})</option>
-                    ))}
+                    {[1, 2, 3, 4, 5, 6, 7].map(n => {
+                      let optionCheckOut = '';
+                      try {
+                        const d = new Date(checkInDate);
+                        if (!isNaN(d.getTime())) {
+                          d.setDate(d.getDate() + Number(n));
+                          optionCheckOut = d.toISOString().split('T')[0];
+                        }
+                      } catch {}
+                      return (
+                        <option key={n} value={n}>
+                          {n} Night{n > 1 ? 's' : ''} {optionCheckOut ? `(Check-out: ${optionCheckOut})` : ''}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
 
