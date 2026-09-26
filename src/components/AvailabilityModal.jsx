@@ -235,14 +235,14 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#0E261C]/80 backdrop-blur-sm animate-fadeIn">
-      <div 
-        className="bg-[#F9F6F0] rounded-xl shadow-2xl border border-[#E8DFCE] w-full max-w-3xl max-h-[94vh] flex flex-col overflow-hidden"
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#0E261C]/80 backdrop-blur-sm animate-fadeIn print:static print:block print:p-0 print:bg-white print:backdrop-blur-none">
+      <div
+        className="bg-[#F9F6F0] rounded-xl shadow-2xl border border-[#E8DFCE] w-full max-w-3xl max-h-[94vh] flex flex-col overflow-hidden print:max-w-none print:max-h-none print:overflow-visible print:rounded-none print:border-0 print:shadow-none print:bg-white"
         role="dialog" 
         aria-modal="true"
       >
         {/* Header */}
-        <div className="bg-[#143628] text-[#F9F6F0] px-5 sm:px-6 py-3.5 sm:py-4 flex items-center justify-between border-b border-[#C5A059]/40 shrink-0">
+        <div className="bg-[#143628] text-[#F9F6F0] px-5 sm:px-6 py-3.5 sm:py-4 flex items-center justify-between border-b border-[#C5A059]/40 shrink-0 print:hidden">
           <div>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#C5A059] animate-pulse" />
@@ -267,7 +267,7 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
         </div>
 
         {/* Step Progress Pill Bar */}
-        <div className="bg-[#F4EFE6] px-6 py-2 border-b border-[#E8DFCE] flex items-center justify-between text-xs font-medium text-[#143628]/70 shrink-0">
+        <div className="bg-[#F4EFE6] px-6 py-2 border-b border-[#E8DFCE] flex items-center justify-between text-xs font-medium text-[#143628]/70 shrink-0 print:hidden">
           <span className={step >= 1 ? 'text-[#C25E3E] font-bold flex items-center gap-1.5' : ''}>
             <span className="w-5 h-5 rounded-full bg-[#C25E3E] text-white flex items-center justify-center text-[10px]">1</span>
             Accommodation
@@ -285,7 +285,7 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
         </div>
 
         {/* Body Content */}
-        <div className="p-5 sm:p-6 overflow-y-auto space-y-5 text-[#143628]">
+        <div className="p-5 sm:p-6 overflow-y-auto space-y-5 text-[#143628] print:p-0 print:overflow-visible">
           {/* Error Notice */}
           {errorMessage && (
             <div className="bg-red-50 border border-red-200 text-red-900 rounded-lg p-3.5 flex items-start gap-2.5 text-xs sm:text-sm animate-fadeIn">
@@ -722,11 +722,15 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
         </div>
 
         {/* Modal Footer */}
-        <div className="bg-[#F4EFE6] px-5 sm:px-6 py-3 sm:py-4 border-t border-[#E8DFCE] flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+        <div className="bg-[#F4EFE6] px-5 sm:px-6 py-3 sm:py-4 border-t border-[#E8DFCE] flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0 print:hidden">
           {/* Left notice / back */}
           <div className="text-xs text-[#143628]/75 text-center sm:text-left">
             {step === 1 && (
-              <span>Includes vegetarian breakfast, lunch & dinner • Attached baths • Parking on-site</span>
+              <span>
+                {isCamping
+                  ? 'Includes complimentary vegetarian breakfast • Shared washroom block • Parking on-site'
+                  : 'Includes vegetarian breakfast, lunch & dinner • Attached baths • Parking on-site'}
+              </span>
             )}
             {step === 2 && (
               <button

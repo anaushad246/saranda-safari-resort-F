@@ -68,3 +68,32 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #143628;
 }
+
+/* ---------------------------------------------------------------------------
+   Print / Save Receipt
+   The receipt's Print button calls window.print(), which prints the whole
+   document — so the marketing site sitting behind the modal was paginating the
+   receipt into ~6 sheets. Everything outside the receipt has to leave the flow
+   entirely here: `visibility: hidden` will not do, because hidden content still
+   occupies space and still generates pages.
+   The modal's own shell (fixed overlay, viewport-height cap, scrolling body,
+   header, footer) is neutralised with `print:` utilities on those elements.
+   --------------------------------------------------------------------------- */
+@page {
+  size: A4 portrait;
+  margin: 12mm;
+}
+
+@media print {
+  header,
+  main,
+  footer {
+    display: none !important;
+  }
+
+  html,
+  body {
+    height: auto !important;
+    background: #fff !important;
+  }
+}

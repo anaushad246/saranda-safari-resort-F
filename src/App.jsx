@@ -261,7 +261,7 @@ export function App() {
       </footer>
 
       {/* Sticky Mobile Bottom Booking Bar */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#143628] text-[#F9F6F0] px-4 py-2.5 border-t border-[#C5A059]/40 shadow-lg flex items-center justify-between gap-2">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#143628] text-[#F9F6F0] px-4 py-2.5 border-t border-[#C5A059]/40 shadow-lg flex items-center justify-between gap-2 print:hidden">
         <div className="text-left">
           <span className="text-[10px] text-[#DFCA95] uppercase font-semibold block">Oct 2026 Stays</span>
           <span className="text-xs font-serif font-bold text-white">From ₹3,000 / night</span>
