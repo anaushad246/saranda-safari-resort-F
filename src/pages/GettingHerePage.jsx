@@ -21,10 +21,10 @@ export function GettingHerePage({ onOpenPickup }) {
 
   const resortAddress = {
     name: 'Saranda Safari Resort',
-    line1: 'Village Nimture, P.O. Bolani',
+    line1: 'Village Nimtur, P.O. Bolani',
     district: 'District Keonjhar',
     stateZip: 'Odisha 758037',
-    fullDisplay: 'Saranda Safari Resort, Village Nimture, P.O. Bolani, Keonjhar, Odisha.'
+    fullDisplay: 'Saranda Safari Resort, Village Nimtur, P.O. Bolani, Keonjhar, Odisha.'
   };
 
   const trainStations = [
@@ -43,11 +43,11 @@ export function GettingHerePage({ onOpenPickup }) {
   const roadApproaches = [
     {
       from: 'From Kolkata (~320 km)',
-      route: 'Kolkata → Kharagpur → Baharagora → Baripada or Jamshedpur / Chaibasa → Noamundi → Barbil → Bolani / Nimture.'
+      route: 'Kolkata → Kharagpur → Baharagora → Baripada or Jamshedpur / Chaibasa → Noamundi → Barbil → Bolani / Nimtur.'
     },
     {
       from: 'From Bhubaneswar (~290 km)',
-      route: 'Bhubaneswar → Cuttack → Panikoili → Keonjhar (NH 20) → Champua → Barbil → Bolani / Nimture.'
+      route: 'Bhubaneswar → Cuttack → Panikoili → Keonjhar (NH 20) → Champua → Barbil → Bolani / Nimtur.'
     },
     {
       from: 'From Rourkela (~102 km)',
@@ -55,13 +55,13 @@ export function GettingHerePage({ onOpenPickup }) {
     },
     {
       from: 'From Jamshedpur (~150 km)',
-      route: 'Jamshedpur → Chaibasa → Noamundi → Barbil → Bolani / Nimture.'
+      route: 'Jamshedpur → Chaibasa → Noamundi → Barbil → Bolani / Nimtur.'
     }
   ];
 
   const handleOpenMap = () => {
     window.open(
-      'https://maps.google.com/?q=Village+Nimture,+Bolani,+Keonjhar,+Odisha',
+      resortInfo.address.googleMapsUrl || 'https://maps.app.goo.gl/3z5mvBJd6X9egYYk6?g_st=aw',
       '_blank'
     );
   };
@@ -345,7 +345,7 @@ export function GettingHerePage({ onOpenPickup }) {
                   <div className="w-full h-80 sm:h-[450px] lg:h-[540px] rounded-xl overflow-hidden">
                     <iframe
                       title="Saranda Safari Resort Location Map"
-                      src="https://maps.google.com/maps?q=Bolani,Keonjhar,Odisha&t=&z=12&ie=UTF8&iwloc=&output=embed"
+                      src="https://maps.google.com/maps?cid=13881081948884384834&t=&z=13&ie=UTF8&iwloc=&output=embed"
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}

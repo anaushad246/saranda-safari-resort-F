@@ -4,12 +4,12 @@
 
 export const gettingHereContent = {
   propertyLocation: {
-    village: "Village Nimture",
+    village: "Village Nimtur",
     po: "P.O. Bolani",
     district: "District Keonjhar",
     state: "Odisha",
     pin: "758037",
-    fullAddress: "Village Nimture, P.O. Bolani, District Keonjhar, Odisha – 758037",
+    fullAddress: "Village Nimtur, P.O. Bolani, District Keonjhar, Odisha – 758037",
     geography: "Border country of District Keonjhar, nestled along the Karo River."
   },
 
@@ -76,15 +76,15 @@ export const gettingHereContent = {
   roadDirections: [
     {
       from: "From Rourkela (102 km)",
-      route: "Take SH-10 toward Rajgangpur/Bisra -> proceed via Manoharpur / Bolani approach road toward Village Nimture."
+      route: "Take SH-10 toward Rajgangpur/Bisra -> proceed via Manoharpur / Bolani approach road toward Village Nimtur."
     },
     {
       from: "From Keonjhar (Approx. 85 km)",
-      route: "Follow NH-520 through Rimuli -> Barbil -> take the Bolani town bypass to Village Nimture."
+      route: "Follow NH-520 through Rimuli -> Barbil -> take the Bolani town bypass to Village Nimtur."
     },
     {
       from: "From Jamshedpur / Chaibasa",
-      route: "Head south via Chaibasa on NH-20 toward Noamundi -> Barbil -> proceed to Village Nimture along the Karo River."
+      route: "Head south via Chaibasa on NH-20 toward Noamundi -> Barbil -> proceed to Village Nimtur along the Karo River."
     }
   ],
 

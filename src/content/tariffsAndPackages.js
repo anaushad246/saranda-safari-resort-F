@@ -388,7 +388,7 @@ export const tariffsAndPackages = {
 
   diningPolicy: {
     title: "Dining Policy & Add-ons",
-    notice: "Complimentary vegetarian breakfast is included with every overnight cottage and camping stay.",
-    subtext: "Breakfast is served hot and fresh on your departure morning before check-out. It is the only meal bundled into a package tariff."
+    notice: "Vegetarian breakfast, lunch, and dinner are included with one-night (24-hour) cottage stays. Overnight camping includes complimentary vegetarian breakfast.",
+    subtext: "Breakfast is served fresh on your departure morning before check-out. All other packages and day visits do not bundle meals."
   }
 };

@@ -278,7 +278,7 @@ export const stayInventory = {
         age5to10: 750,
         age11Plus: 1499
       },
-      mealInclusion: "Complimentary vegetarian breakfast & bonfire included; shared bath facilities.",
+      mealInclusion: "Complimentary vegetarian breakfast included; starlight evening bonfire; clean shared bath facilities.",
       timings: "Check-in: 4:00 PM | Check-out: 9:00 AM next day"
     }
   ],

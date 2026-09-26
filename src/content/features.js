@@ -13,5 +13,15 @@ export const FEATURES = {
    * both the guest site and the admin dashboard. The pricing engine and the
    * `nonVeg*Paise` unit fields still work, so this is a display switch only.
    */
-  nonVegSupplements: false
+  nonVegSupplements: false,
+
+  /**
+   * School Excursions & Nature Camps (Group & Educational Experiences).
+   *
+   * Hidden for now — owner decision (26 Sep 2026). The package bundles a lunch
+   * and two snacks, which the locked meal rule permits only for 24-hour cottage
+   * stays and overnight camping; it is also absent from SPEC.md. Content and
+   * tariffs are retained, so this is a display switch only.
+   */
+  schoolExcursions: false
 };

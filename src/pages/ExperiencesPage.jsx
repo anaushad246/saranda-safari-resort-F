@@ -24,7 +24,7 @@ export function ExperiencesPage({ onOpenBooking, onNavigate }) {
           </div>
 
           <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white tracking-tight leading-tight">
-            10 Signature Saranda Experiences
+            {experiencesContent.sectionTitle}
           </h1>
 
           <p className="mt-3 text-sm sm:text-base text-[#DFCA95] font-light leading-relaxed max-w-2xl mx-auto">
@@ -95,6 +95,16 @@ export function ExperiencesPage({ onOpenBooking, onNavigate }) {
                     <p className="mt-3 text-xs sm:text-[13.5px] text-[#143628]/80 leading-relaxed font-light">
                       {exp.description}
                     </p>
+                    {exp.pricing && (
+                      <div className="mt-3 inline-block px-2.5 py-1 rounded bg-[#F4EFE6] border border-[#E8DFCE] text-[11px] font-semibold text-[#8F6C27]">
+                        {exp.pricing}
+                      </div>
+                    )}
+                    {exp.note && (
+                      <p className="mt-2 text-[11px] text-[#8F6C27] italic font-serif">
+                        ({exp.note})
+                      </p>
+                    )}
                   </div>
 
                   {/* Card Footer Bar */}

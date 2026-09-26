@@ -221,11 +221,20 @@ export function App() {
                 <span className="font-cinzel text-lg font-bold text-white">{resortInfo.name}</span>
               </div>
               <p className="text-xs text-[#DFCA95] mt-1">
-                Estd. 1998 • Village Nimture, P.O. Bolani, District Keonjhar, Odisha — 758037
+                Estd. 1998 • Village Nimtur, P.O. Bolani, District Keonjhar, Odisha — 758037
               </p>
               <p className="text-[11px] text-[#F9F6F0]/60 mt-0.5">
                 "{resortInfo.photoDisclaimer}" • {resortInfo.taxDisplayNote}
               </p>
+              <div className="flex items-center justify-center md:justify-start gap-4 mt-2 text-xs text-[#DFCA95]">
+                <a href={resortInfo.contact.socialLinks?.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-white hover:underline">
+                  Instagram: @sarandasafariresort
+                </a>
+                <span>•</span>
+                <a href={resortInfo.contact.socialLinks?.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-white hover:underline">
+                  Facebook: Saranda Safari Resort
+                </a>
+              </div>
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-3">

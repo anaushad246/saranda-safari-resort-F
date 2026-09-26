@@ -7,7 +7,7 @@ export const faqsAndPolicies = {
     {
       id: 1,
       question: "Where is Saranda Safari Resort located?",
-      answer: "Our resort is in Nimture, near Bolani, Odisha, close to the Karo River and the Saranda forest landscape."
+      answer: "Our resort is in Nimtur, near Bolani, Odisha, close to the Karo River and the Saranda forest landscape."
     },
     {
       id: 2,

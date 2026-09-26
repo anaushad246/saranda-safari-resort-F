@@ -49,7 +49,7 @@ export function HomePage({
           {/* <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#143628] border border-[#C5A059]/40 text-[#DFCA95] text-xs font-medium uppercase tracking-widest mb-6 shadow-sm">
             <span>Established 1998</span>
             <span>•</span>
-            <span>Village Nimture, Bolani, Odisha</span>
+            <span>Village Nimtur, Bolani, Odisha</span>
           </div> */}
 
           <h1 className="font-cinzel tracking-wider text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#F9F6F0] leading-tight">
@@ -65,7 +65,7 @@ export function HomePage({
           </p>
 
           <p className="max-w-3xl mx-auto text-sm sm:text-base text-[#F9F6F0]/85 mt-4 leading-relaxed font-sans">
-            Unwind among trees, open lawns and peaceful surroundings at Saranda Safari Resort in Nimture, Bolani, Odisha. Enjoy a cottage stay, settle into our wooden log house, or spend a night camping beneath the open sky.
+            Unwind among trees, open lawns and peaceful surroundings at Saranda Safari Resort in Nimtur, Bolani, Odisha. Enjoy a cottage stay, settle into our wooden log house, or spend a night camping beneath the open sky.
           </p>
 
           {/* October 2026 Season Pre-Booking Banner */}
@@ -144,7 +144,7 @@ export function HomePage({
           <div className="mx-auto max-w-3xl text-center">
 
             <p className="text-[10px] sm:text-xs font-medium uppercase tracking-[0.18em] text-[#8F6C27]">
-              Village Nimture, Bolani, Odisha
+              Village Nimtur, Bolani, Odisha
             </p>
 
             <h2 className="mt-2 font-serif text-3xl font-bold leading-tight text-[#143628] sm:text-4xl">
@@ -202,7 +202,7 @@ export function HomePage({
                 Where You Stay
               </h2>
               <p className="mt-2 font-serif text-sm sm:text-base italic text-[#143628]/75 max-w-xl mx-auto">
-                Comfortable stays surrounded by forest, open lawns and the quiet of nature.
+                Comfortable stays surrounded by forest, open lawns and the silence of nature.
               </p>
             </div>
 
@@ -351,7 +351,7 @@ export function HomePage({
                 <div>
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#143628]">
                     <img 
-                      src="/exp-leopard-caves.webp" 
+                      src="/1picture1trektoLeopardscave.webp" 
                       alt="Leopard Caves Trail"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -384,7 +384,7 @@ export function HomePage({
                 <div>
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#143628]">
                     <img 
-                      src="/exp-waterfalls.webp" 
+                      src="/2picture2explorewaterfalls.webp" 
                       alt="Waterfalls Exploration"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -417,7 +417,7 @@ export function HomePage({
                 <div>
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#143628]">
                     <img 
-                      src="/exp-sunset.webp" 
+                      src="/3Picture3KiriburuSunsetPoint.webp" 
                       alt="Kiriburu Sunset Point"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -451,7 +451,7 @@ export function HomePage({
 
             {/* Secondary note */}
             <div className="mt-5 text-center text-xs text-[#143628]/75">
-              <span>10 experiences • Every season brings something different</span>
+              <span>{experiencesContent.experiences.length} curated experiences • Every season brings something different</span>
             </div>
 
             {/* CTA */}
@@ -484,7 +484,7 @@ export function HomePage({
               Packages &amp; Official Tariffs
             </h2>
             <p className="mt-1.5 font-serif text-sm sm:text-base italic text-[#143628]/75 max-w-xl mx-auto">
-              Breakfast included in every stay • 9:00 AM check-in
+              3 vegetarian meals included with 24-hr Cottage stays • 9:00 AM check-in
             </p>
           </div>
 
@@ -525,7 +525,7 @@ export function HomePage({
 
               <div className="mt-3 pt-2.5 border-t border-[#E8DFCE] text-[11px] sm:text-xs text-[#8F6C27] flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-                <span>Includes Veg Breakfast</span>
+                <span>Includes Breakfast, Lunch & Dinner</span>
               </div>
             </Card>
 
@@ -562,7 +562,7 @@ export function HomePage({
 
               <div className="mt-3 pt-2.5 border-t border-[#E8DFCE] text-[11px] sm:text-xs text-[#8F6C27] flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-                <span>Includes Breakfast, Bonfire &amp; Bath</span>
+                <span>Includes Breakfast, Bonfire &amp; Shared Washroom</span>
               </div>
             </Card>
 
@@ -811,7 +811,7 @@ export function HomePage({
                 Getting to Saranda
               </h2>
               <p className="mt-1.5 font-serif text-sm sm:text-base italic text-[#143628]/75 max-w-xl mx-auto">
-                Village Nimture, Bolani, Keonjhar, Odisha — accessible by direct rail, scenic highways, and connecting flights.
+                Village Nimtur, Bolani, Keonjhar, Odisha — accessible by direct rail, scenic highways, and connecting flights.
               </p>
             </div>
 
@@ -969,7 +969,7 @@ export function HomePage({
               </div>
 
               <p className="text-xs text-[#F9F6F0]/80 leading-relaxed max-w-md">
-                A quiet forest retreat in Village Nimture along the Karo River in District Keonjhar, Odisha. Welcoming guests with authentic cottage stays, wooden cabin living, and starlit camping.
+                A quiet forest retreat in Village Nimtur along the Karo River in District Keonjhar, Odisha. Welcoming guests with authentic cottage stays, wooden cabin living, and starlit camping.
               </p>
 
               <div className="text-xs text-[#DFCA95] space-y-1.5 pt-1">
@@ -1069,7 +1069,7 @@ export function HomePage({
           {/* Bottom Disclaimers & Copyright */}
           <div className="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#F9F6F0]/60 gap-4 text-center sm:text-left">
             <div>
-              <p>© {new Date().getFullYear()} {resortInfo.name}. All Rights Reserved. Established in Village Nimture.</p>
+              <p>© {new Date().getFullYear()} {resortInfo.name}. All Rights Reserved. Established in Village Nimtur.</p>
               <p className="text-[11px] text-[#DFCA95]/70 mt-0.5">
                 "{resortInfo.photoDisclaimer}" • {resortInfo.taxDisplayNote}
               </p>

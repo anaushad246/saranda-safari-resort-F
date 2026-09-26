@@ -146,9 +146,44 @@ export function ContactPage({ onOpenBooking }) {
                     <p className="text-xs sm:text-sm text-[#143628]/85 mt-0.5 leading-relaxed">
                       {resortInfo.address.fullAddress}
                     </p>
-                    <span className="inline-block text-[11px] font-medium text-[#8F6C27] mt-1 bg-[#F4EFE6] px-2 py-0.5 rounded">
-                      Karo Riverfront • Near Bolani Railhead
-                    </span>
+                    <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                      <span className="inline-block text-[11px] font-medium text-[#8F6C27] bg-[#F4EFE6] px-2 py-0.5 rounded">
+                        Karo Riverfront • Near Bolani Railhead
+                      </span>
+                      <a
+                        href={resortInfo.address.googleMapsUrl || 'https://maps.app.goo.gl/3z5mvBJd6X9egYYk6?g_st=aw'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] font-semibold text-[#8F6C27] hover:text-[#143628] hover:underline"
+                      >
+                        View on Google Maps &rarr;
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Card: Social Media & Official Channels */}
+              <Card className="p-4 sm:p-5 border-[#C5A059]/30 bg-white shadow-xs">
+                <h3 className="font-serif font-bold text-sm text-[#143628] mb-2">Connect With Us</h3>
+                <div className="space-y-2 text-xs">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#143628]/70">Official Email:</span>
+                    <a href="mailto:sarandasafariresort@gmail.com" className="font-semibold text-[#143628] hover:text-[#C5A059]">
+                      sarandasafariresort@gmail.com
+                    </a>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#143628]/70">Instagram:</span>
+                    <a href="https://www.instagram.com/sarandasafariresort/" target="_blank" rel="noopener noreferrer" className="font-semibold text-[#8F6C27] hover:underline">
+                      @sarandasafariresort &rarr;
+                    </a>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#143628]/70">Facebook:</span>
+                    <a href="https://www.facebook.com/106514337484845" target="_blank" rel="noopener noreferrer" className="font-semibold text-[#8F6C27] hover:underline">
+                      Saranda Safari Resort &rarr;
+                    </a>
                   </div>
                 </div>
               </Card>
@@ -412,7 +447,7 @@ export function ContactPage({ onOpenBooking }) {
               {/* Notice footnote */}
               <div className="mt-6 pt-4 border-t border-[#E8DFCE] flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#143628]/65 gap-2 text-center sm:text-left">
                 <span>{resortInfo.taxDisplayNote}</span>
-                <span>Established 1998 • Village Nimture, Bolani, Keonjhar, Odisha</span>
+                <span>Established 1998 • Village Nimtur, Bolani, Keonjhar, Odisha</span>
               </div>
 
             </div>

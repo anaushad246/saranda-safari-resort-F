@@ -66,7 +66,7 @@ export function ThePlacePage({ onOpenBooking, onNavigate }) {
       {/* Page Header */}
       <section className="bg-[#0E261C] text-[#F9F6F0] py-12 sm:py-16 border-b border-[#C5A059]/30">
         <Container className="text-center max-w-4xl">
-          <Badge variant="gold" className="mb-3">Village Nimture, Bolani, Keonjhar</Badge>
+          <Badge variant="gold" className="mb-3">Village Nimtur, Bolani, Keonjhar</Badge>
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
             The Place &amp; Our Story
           </h1>
@@ -152,7 +152,7 @@ export function ThePlacePage({ onOpenBooking, onNavigate }) {
                   loading="lazy"
                 />
                 <div className="absolute bottom-3 left-3 right-3 bg-[#143628]/90 backdrop-blur-xs text-white p-3 rounded-xl text-xs border border-[#C5A059]/40">
-                  <span className="font-serif font-bold text-[#DFCA95] block">Estd. 1998 in Nimture</span>
+                  <span className="font-serif font-bold text-[#DFCA95] block">Estd. 1998 in Nimtur</span>
                   <span className="text-white/80 text-[11px]">Over two decades of quiet presence &amp; wildlife encounters</span>
                 </div>
               </div>

@@ -7,24 +7,31 @@ export const resortInfo = {
   tagline: "Nature • Wildlife • Tranquility",
   subtext: "A little closer to nature. A little further from the everyday.",
   preBookingNotice: "Welcoming guests from October 2026 — pre-book your stay now.",
-  heroDescription: "Unwind among trees, open lawns and peaceful surroundings at Saranda Safari Resort in Nimture, Bolani, Odisha. Enjoy a cottage stay, settle into our wooden log house, or spend a night camping beneath the open sky.",
+  heroDescription: "Unwind among trees, open lawns and peaceful surroundings at Saranda Safari Resort in Nimtur, Bolani, Odisha. Enjoy a cottage stay, settle into our wooden log house, or spend a night camping beneath the open sky.",
   
   address: {
-    village: "Village Nimture",
+    village: "Village Nimtur",
     postOffice: "P.O. Bolani",
     district: "District Keonjhar",
     state: "Odisha",
     pincode: "758037",
-    fullAddress: "Village Nimture, P.O. Bolani, District Keonjhar, Odisha – 758037",
+    fullAddress: "Village Nimtur, P.O. Bolani, District Keonjhar, Odisha – 758037",
     landmark: "Nestled along the Karo River, bordered by the lush Sal forest hills of Jharkhand and Odisha",
+    googleMapsUrl: "https://maps.app.goo.gl/3z5mvBJd6X9egYYk6?g_st=aw",
+    googleMapsEmbedUrl: "https://maps.google.com/maps?cid=13881081948884384834&output=embed",
   },
 
   contact: {
-    phone: "+91 94370 XXXXX", // Official handover placeholder
-    whatsapp: "+91 9899373222",
-    whatsappNumberRaw: "9899373222",
-    email: "info@sarandasafariresort.com",
+    phone: "+91 7008307064",
+    phoneRaw: "7008307064",
+    whatsapp: "+91 7008307064",
+    whatsappNumberRaw: "7008307064",
+    email: "sarandasafariresort@gmail.com",
     deskHours: "8:00 AM – 8:00 PM IST",
+    socialLinks: {
+      instagram: "https://www.instagram.com/sarandasafariresort/",
+      facebook: "https://www.facebook.com/106514337484845"
+    }
   },
 
   // Transparent truth-in-marketing audit

@@ -111,6 +111,8 @@ Please provide availability, date confirmation and arrangement details.`;
           >
             Day & Evening
           </button>
+          {FEATURES.schoolExcursions && (
+          <>
           <span className="text-[#C5A059]/60">•</span>
           <button
             onClick={() => scrollToSection('groups-events')}
@@ -118,6 +120,8 @@ Please provide availability, date confirmation and arrangement details.`;
           >
             Groups & Events
           </button>
+          </>
+          )}
         </Container>
       </div>
 
@@ -502,7 +506,8 @@ Please provide availability, date confirmation and arrangement details.`;
         </Container>
       </section>
 
-      {/* 5. GROUPS & EDUCATIONAL EXPERIENCES */}
+      {/* 5. GROUPS & EDUCATIONAL EXPERIENCES — hidden for now, see FEATURES.schoolExcursions */}
+      {FEATURES.schoolExcursions && (
       <section id="groups-events" className="py-10 sm:py-14 scroll-mt-28">
         <Container className="max-w-6xl px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
@@ -600,6 +605,7 @@ Please provide availability, date confirmation and arrangement details.`;
           </div>
         </Container>
       </section>
+      )}
 
       {/* 6. CELEBRATIONS & EVENTS (EVENT_QUOTE Mode) */}
       <section className="py-12 sm:py-16 bg-[#0E261C] text-[#F9F6F0] relative overflow-hidden">
@@ -871,7 +877,7 @@ Please provide availability, date confirmation and arrangement details.`;
               {(selectedPackage.extras || selectedPackage.optionalAddons) && (
                 <div className="bg-[#F9F6F0] p-3.5 rounded-xl border border-[#EADFC9] space-y-1.5">
                   <span className="font-bold text-[11px] text-[#8F6C27] block font-cinzel uppercase tracking-wider">
-                    Dinner & Additional Options:
+                    Additional Options & Extras:
                   </span>
                   {(selectedPackage.extras || selectedPackage.optionalAddons).map((ex, i) => (
                     <div key={i} className="flex justify-between items-center text-xs py-1 border-b border-[#EADFC9]/40 last:border-b-0">

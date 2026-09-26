@@ -1,8 +1,8 @@
-// 10 Signature Saranda Experiences
+// Signature Saranda Experiences
 // Authentic resort experiences celebrating nature, leisure, and tranquil forest life.
 
 export const experiencesContent = {
-  sectionTitle: "10 Signature Saranda Experiences",
+  sectionTitle: "Signature Saranda Experiences",
   subtitle: "Curated Resort Experiences",
   tagline: "Where the forest whispers, the river ripples, and time gently slows down.",
   note: "Experiences vary with the seasons and weather. Mango picking requires staff permission; bonfires are available by arrangement. River bathing depends on safe water conditions and local guidance, with close adult supervision for children. For your safety, please check with us about campsite security and overnight assistance before booking.",
@@ -77,6 +77,31 @@ export const experiencesContent = {
       title: "Summer Days by the Karo",
       image: "/summerDays.webp",
       description: "Enjoy a refreshing summer river bath when conditions permit, followed by an unhurried afternoon beside the water. Sit, listen to the river's gentle gurgle, and let the afternoon drift by."
+    },
+    {
+      id: 11,
+      number: "11",
+      title: "Musical Evenings",
+      image: "/musicalEvenings.webp",
+      description: "A few guitar chords, your favourite songs, and good company beneath twinkling lights—simple moments that make an evening special. At Saranda Safari Resort, slow down, sing along, and create memories surrounded by nature.",
+      note: "Prior enquiry required to arrange a live musician. Subject to availability; additional charges apply."
+    },
+    {
+      id: 12,
+      number: "12",
+      title: "Cycling Through the Forest’s Calm",
+      image: "/cyclingForest.webp",
+      description: "Pedal along quiet forest roads, where sunlight dances through the leaves and birdsong guides your way. Enjoy a leisurely ride of around 3 km, letting every turn bring you closer to nature.",
+      note: "Pre-booking required for bicycles."
+    },
+    {
+      id: 13,
+      number: "13",
+      title: "A Little Closer to the Stars",
+      image: "/closerToStars.webp",
+      description: "As the forest settles into silence, let your gaze wander beyond the treetops. Look through a telescope at the moon’s delicate craters and the distant wonders of the night sky—a quiet hour of wonder beneath a canopy of stars.",
+      pricing: "₹500 / hr (up to 4 guests, sharing 1 telescope with basic staff assistance)",
+      note: "Prior enquiry required. Additional charges apply; subject to clear skies and telescope availability."
     }
   ]
 };

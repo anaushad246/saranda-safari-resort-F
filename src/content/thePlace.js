@@ -3,14 +3,14 @@
 // The five official seasonal blocks: Winter, Summer, Monsoon, Late winter and spring, Autumn
 
 export const thePlaceContent = {
-  shortSummary: "Nestled in Village Nimture near Bolani, Odisha, along the gentle curves of the Karo River, Saranda Safari Resort was established in 1998 as a peaceful haven at the gateway to the legendary 'land of seven hundred hills' and magnificent sal trees.",
+  shortSummary: "Nestled in Village Nimtur near Bolani, Odisha, along the gentle curves of the Karo River, Saranda Safari Resort was established in 1998 as a peaceful haven at the gateway to the legendary 'land of seven hundred hills' and magnificent sal trees.",
   
   fullStory: {
     heading: "The Land of Seven Hundred Hills & Whispering Sal",
     paragraphs: [
   "Saranda, often called the “land of seven hundred hills,” is a landscape of rolling forested slopes and magnificent sal trees in Jharkhand. The Karo and Koina rivers weave through this region, bringing life to its forests and adding to its quiet, enduring beauty.",
 
-  "Established in 1998, Saranda Safari Resort offers a peaceful retreat in Nimture, Bolani, Odisha, near the Karo River. With riverside views, mature mango orchards and open green spaces, it is a place to step away from busy routines and enjoy the simple pleasure of being close to nature.",
+  "Established in 1998, Saranda Safari Resort offers a peaceful retreat in Nimtur, Bolani, Odisha, near the Karo River. With riverside views, mature mango orchards and open green spaces, it is a place to step away from busy routines and enjoy the simple pleasure of being close to nature.",
 
   "Here, mornings unfold to the chirping of birds and sunlight filtering through the leaves. Take a leisurely walk beneath the trees, pause in the shade of the mango orchard, or settle down with a cup of tea and a view of the river.",
   "Whether you choose a cottage, our wooden log house or a night in a tent, there is room to rest, reconnect and enjoy unhurried moments with the people you love.As evening settles over the grounds, conversation, shared meals and the warmth of a bonfire make space for memories that linger.",

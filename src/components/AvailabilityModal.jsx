@@ -467,7 +467,9 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
                   <span className="text-xs uppercase tracking-wider text-[#DFCA95] font-semibold">
                     Estimated Tariff Breakdown
                   </span>
-                  <span className="text-xs text-[#DFCA95]">Includes breakfast, lunch & dinner</span>
+                  <span className="text-xs text-[#DFCA95]">
+                    {isCamping ? 'Includes complimentary breakfast' : 'Includes breakfast, lunch & dinner'}
+                  </span>
                 </div>
 
                 <div className="space-y-1 text-xs sm:text-sm">
@@ -688,21 +690,29 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                  <div className="bg-[#0E261C] p-3 rounded-lg border border-[#C5A059]/30 space-y-1.5">
-                    <span className="text-[10px] uppercase text-[#DFCA95] block">Official Resort UPI ID</span>
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-white text-sm">9899373222@okbizaxis</span>
-                      <button
-                        type="button"
-                        onClick={() => copyToClipboard('9899373222@okbizaxis', 'upi')}
-                        className="text-[#DFCA95] hover:text-white cursor-pointer p-1 rounded hover:bg-white/10"
-                        title="Copy UPI ID"
-                      >
-                        {copiedField === 'upi' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-                      </button>
+                  {confirmedBooking?.paymentInstructions?.upiVpa ? (
+                    <div className="bg-[#0E261C] p-3 rounded-lg border border-[#C5A059]/30 space-y-1.5">
+                      <span className="text-[10px] uppercase text-[#DFCA95] block">Official Resort UPI ID</span>
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono font-bold text-white text-sm">{confirmedBooking.paymentInstructions.upiVpa}</span>
+                        <button
+                          type="button"
+                          onClick={() => copyToClipboard(confirmedBooking.paymentInstructions.upiVpa, 'upi')}
+                          className="text-[#DFCA95] hover:text-white cursor-pointer p-1 rounded hover:bg-white/10"
+                          title="Copy UPI ID"
+                        >
+                          {copiedField === 'upi' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                        </button>
+                      </div>
+                      <span className="text-[11px] text-[#DFCA95]/80 block">Payee Name: Saranda Safari Resort</span>
                     </div>
-                    <span className="text-[11px] text-[#DFCA95]/80 block">Payee Name: Saranda Safari Resort</span>
-                  </div>
+                  ) : (
+                    <div className="bg-[#0E261C] p-3 rounded-lg border border-[#C5A059]/30 space-y-1.5">
+                      <span className="text-[10px] uppercase text-[#DFCA95] block">Payment Concierge</span>
+                      <p className="text-white text-xs leading-snug">Official UPI & Bank Transfer details provided via WhatsApp.</p>
+                      <span className="text-[11px] text-[#DFCA95]/80 block">Helpline: +91 {confirmedBooking?.paymentInstructions?.phone || '9899373222'}</span>
+                    </div>
+                  )}
 
                   <div className="bg-[#0E261C] p-3 rounded-lg border border-[#C5A059]/30 space-y-1.5">
                     <span className="text-[10px] uppercase text-[#DFCA95] block">Balance Due on Arrival</span>
