@@ -1,3 +1,4 @@
+import { IMAGES } from './images';
 // Verified Sightseeing Destinations & Assistance Request Workflow
 // Single Source of Truth based on Client Handover Specification
 // Note: Internal quotation rates are strictly kept offline. Public site shows approximate one-way distances and enquiry-led workflow.
@@ -6,7 +7,7 @@ export const sightseeingContent = {
   heroBadge: "Sightseeing & Assistance",
   heroTitle: "Explore Beyond the Resort",
   heroSubtitle: "Discover waterfalls, riverside landscapes, hilltop sunsets and places of worship during your stay. Whether you prefer a relaxed outing or a day exploring the surroundings, our team can help you plan your visit.",
-  heroImage: "/sightseeing-hero.webp",
+  heroImage: IMAGES.sightseeingHero,
 
   destinations: [
     {
@@ -15,7 +16,7 @@ export const sightseeingContent = {
       category: "Natural Waterfall",
       distance: "10.7 km · one way",
       description: "A secluded multi-tiered forest cascade tumbling down rock shelves into cool natural pools.",
-      image: "/Jhikrawaterfall.webp"
+      image: IMAGES.jhikraWaterfall
     },
     {
       id: "pacheri-waterfall",
@@ -23,7 +24,7 @@ export const sightseeingContent = {
       category: "River Cascade",
       distance: "17.2 km · one way",
       description: "A wide, scenic river cascade forming natural swirling rock pools in the Keonjhar valley.",
-      image: "/Pacheri.webp"
+      image: IMAGES.pacheriWaterfall
     },
     {
       id: "kiriburu-sunset",
@@ -31,7 +32,7 @@ export const sightseeingContent = {
       category: "Hilltop Vantage",
       distance: "20 km · one way",
       description: "Famous panoramic hilltop vista overlooking the endless rolling 700 hills of Saranda at dusk.",
-      image: "/KiriburuSunsetPoint.webp"
+      image: IMAGES.kiriburuSunset
     },
     {
       id: "pundul-river",
@@ -39,7 +40,7 @@ export const sightseeingContent = {
       category: "Riverside Landscape",
       distance: "20 km · one way",
       description: "A clear hill stream winding through gravel banks and quiet forest valleys away from tourist crowds.",
-      image: "/sightseeing-pundul.webp"
+      image: IMAGES.pundulRiver
     },
     {
       id: "mirgsingha-temple",
@@ -47,7 +48,7 @@ export const sightseeingContent = {
       category: "Sacred Shrine",
       distance: "25 km · one way",
       description: "An ancient regional stone temple reverently set amidst natural rock outcrops and sal trees.",
-      image: "/sightseeing-mirgsingha.webp"
+      image: IMAGES.mirgsinghaTemple
     },
     {
       id: "jateshwar-temple",
@@ -55,7 +56,7 @@ export const sightseeingContent = {
       category: "Forest Shiva Shrine",
       distance: "28 km · one way",
       description: "A venerated forest Shiva shrine in a quiet woodland clearing, known for its tranquil spiritual presence.",
-      image: "/sightseeing-jateshwar.webp"
+      image: IMAGES.jateshwarTemple
     }
   ],
 

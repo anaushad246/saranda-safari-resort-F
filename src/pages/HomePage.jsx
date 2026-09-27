@@ -1,3 +1,4 @@
+import { IMAGES } from '../content/images';
 import React, { useState } from 'react';
 import { 
   Compass, Calendar, Trees, Waves, Sparkles, MapPin, 
@@ -34,7 +35,7 @@ export function HomePage({
         {/* Main Property Photograph Background */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-105 transition-transform duration-1000 ease-out"
-          style={{ backgroundImage: "url('/resort-hero.webp')" }}
+          style={{ backgroundImage: `url("${IMAGES.resortHero}")` }}
         />
 
         {/* Sophisticated Multi-stop Dark Forest Overlay for optimal typography legibility */}
@@ -217,7 +218,7 @@ export function HomePage({
                 <div>
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#143628]">
                     <img 
-                      src="/RIVERWOODCOTTAGE.webp" 
+                      src={IMAGES.riverwood} 
                       alt="Riverwood"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -253,7 +254,7 @@ export function HomePage({
                 <div>
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#143628]">
                     <img 
-                      src="/CHERRYBLOSSOM.webp" 
+                      src={IMAGES.cherryBlossom} 
                       alt="Cherry Blossom"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -351,7 +352,7 @@ export function HomePage({
                 <div>
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#143628]">
                     <img 
-                      src="/1picture1trektoLeopardscave.webp" 
+                      src={IMAGES.leopardCaves} 
                       alt="Leopard Caves Trail"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -384,7 +385,7 @@ export function HomePage({
                 <div>
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#143628]">
                     <img 
-                      src="/2picture2explorewaterfalls.webp" 
+                      src={IMAGES.waterfallsDiscovery} 
                       alt="Waterfalls Exploration"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -417,7 +418,7 @@ export function HomePage({
                 <div>
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#143628]">
                     <img 
-                      src="/3Picture3KiriburuSunsetPoint.webp" 
+                      src={IMAGES.sunsetDiscovery} 
                       alt="Kiriburu Sunset Point"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -496,7 +497,7 @@ export function HomePage({
               <div>
                 <div className="w-full h-36 sm:h-40 rounded-lg overflow-hidden mb-3 relative border border-[#E8DFCE]/80">
                   <img 
-                    src="/package-cottage.webp" 
+                    src={IMAGES.pkgCottage} 
                     alt="Cottages & Log House" 
                     className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                     loading="lazy"
@@ -534,7 +535,7 @@ export function HomePage({
               <div>
                 <div className="w-full h-36 sm:h-40 rounded-lg overflow-hidden mb-3 relative border border-[#E8DFCE]/80">
                   <img 
-                    src="/package-camping.webp" 
+                    src={IMAGES.pkgCamping} 
                     alt="Wilderness Tents" 
                     className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                     loading="lazy"
@@ -571,7 +572,7 @@ export function HomePage({
               <div>
                 <div className="w-full h-36 sm:h-40 rounded-lg overflow-hidden mb-3 relative border border-[#E8DFCE]/80">
                   <img 
-                    src="/package-bonfire.webp" 
+                    src={IMAGES.pkgBonfire} 
                     alt="Add-ons, Bonfires & Day Use" 
                     className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                     loading="lazy"
@@ -950,7 +951,7 @@ export function HomePage({
               <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-full bg-[#143628] flex items-center justify-center border border-[#C5A059]/50 overflow-hidden shadow-xs shrink-0">
                   <img
-                    src="/logo.webp"
+                    src={IMAGES.logo}
                     alt="Saranda Safari Resort"
                     className="w-full h-full object-cover"
                     onError={(e) => {

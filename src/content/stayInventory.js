@@ -1,3 +1,4 @@
+import { IMAGES } from './images';
 // Official Accommodation Catalogue & Stays
 // Single Source of Truth based strictly on Client Handover Specification
 
@@ -5,7 +6,7 @@
 export const stayContent = {
   heroTitle: "Accommodation",
   heroDescription: "At Saranda Safari Resort, our accommodations are designed to bring you closer to nature without compromising on comfort and warmth. Tucked alongside the peaceful Karo River and surrounded by lush foliage, each of our distinct stays features its own unique character—from rustic, handcrafted wooden chalets to vibrant, lawn-facing retreats with spacious open verandas. Whether you are looking for a front-row seat to the morning river view, a cozy stay nestled under a canopy of mature trees, or a peaceful sanctuary for quiet reflection, our stays provide the perfect backdrop to slow down, unwind, and feel right at home.",
-  heroImage: "/placewhyvisit.webp",
+  heroImage: IMAGES.placeWhyVisit,
 
   featuredCottages: [
     {
@@ -17,7 +18,7 @@ export const stayContent = {
       tagline: "The warmth of wood, the calm of the riverside.",
       subtitle: "The warmth of wood, the calm of the riverside.",
       setting: "Riverside location, rustic wooden charm, leisurely river-facing veranda.",
-      image: "/RIVERWOODCOTTAGE.webp",
+      image: IMAGES.riverwood,
       description: "Riverwood brings together rustic wooden charm and a beautiful riverside view at Saranda Safari Resort. Settle into a leisurely morning, sip your tea, and watch the changing light over the water."
     },
     {
@@ -29,7 +30,7 @@ export const stayContent = {
       tagline: "A peaceful retreat with our finest river views.",
       subtitle: "A peaceful retreat with our finest river views.",
       setting: "Direct Karo River vantage, white walls with red accents, graceful arched verandas, mature tree cover.",
-      image: "/CHERRYBLOSSOM.webp",
+      image: IMAGES.cherryBlossom,
       description: "Offering the best riverside views, Cherry Blossom invites you to slow down and enjoy the beauty of the Karo River. Their white walls, cheerful red accents, and graceful arched verandas create a charming setting amid mature trees and open lawns."
     }
   ],
@@ -44,7 +45,7 @@ export const stayContent = {
       tagline: "Where mornings arrive in gold.",
       subtitle: "Where mornings arrive in gold.",
       setting: "First morning sunrise rays, golden-yellow pillars, verandas beneath leafy shade.",
-      image: "/AUTUMNABODE.webp",
+      image: IMAGES.autumnAbode,
       description: "The first rays of sunrise fall on Autumn Abode’s cheerful yellow pillars, bathing the cottages in a warm golden glow. Set beneath mature trees, their welcoming verandas offer a lovely place for morning tea and birdsong."
     },
     {
@@ -56,7 +57,7 @@ export const stayContent = {
       tagline: "A cheerful retreat overlooking the lawns.",
       subtitle: "A cheerful retreat overlooking the lawns.",
       setting: "Front-facing open green lawns, spacious sit-out verandas, relaxed family-friendly ambiance.",
-      image: "/SpringAbode.webp",
+      image: IMAGES.springAbode,
       description: "With welcoming verandas and open lawns stretching out in front, Spring Abode offers a relaxed setting to enjoy Saranda Safari Resort’s natural surroundings. Its simple cottage charm makes it a lovely choice for families and friends."
     },
     {
@@ -68,7 +69,7 @@ export const stayContent = {
       tagline: "A little wooden retreat with a wide view of resort life.",
       subtitle: "A little wooden retreat with a wide view of resort life.",
       setting: "Warm red wooden exterior, yellow window frames, elevated perspective of lawns and resort life.",
-      image: "/GulmoharCottage.webp",
+      image: IMAGES.gulmohar,
       description: "With its warm red wooden walls and cheerful yellow windows, Gulmohar offers rustic charm amid the trees. From here, much of the resort’s landscape unfolds before you — the open lawns, neighbouring cottages, and surrounding greenery."
     },
     {
@@ -80,7 +81,7 @@ export const stayContent = {
       tagline: "A quiet retreat beneath the trees.",
       subtitle: "A quiet retreat beneath the trees.",
       setting: "Natural rustic wooden craftsmanship, earthy color palette, dappled sunlight beneath dense canopy.",
-      image: "/AMBERWOOD.webp",
+      image: IMAGES.amberwood,
       description: "With its rustic wooden charm, warm earthy tones, and welcoming veranda, Amberwood invites you to slow down and savour the peaceful surroundings. Sunlight filters through the leafy canopy, casting gentle patterns across the cottage."
     }
   ],
@@ -89,7 +90,7 @@ export const stayContent = {
     title: "Camping Under the Open Sky",
     subtitle: "Close to the river, beneath the forest canopy.",
     capacity: "2 tents · 5 guests total",
-    image: "/CampingA.webp",
+    image: IMAGES.campingA,
     description: "Sleep beneath the trees and wake to birdsong in the welcoming surroundings of Saranda Safari Resort. Whether travelling with friends or as a woman exploring solo, enjoy a camping escape close to nature, complete with starlight evenings and unhurried quiet."
   }
 };

@@ -81,3 +81,24 @@ export const resortInfo = {
   photoDisclaimer: "Photographed before renovation; updated interiors coming soon.",
   taxDisplayNote: "No tax is added to published tariffs. All extras are clearly separated.",
 };
+
+
+export function updateResortConfig(config) {
+  if (!config) return;
+  if (config.phone) {
+    const raw = String(config.phone).replace(/[^0-9]/g, '');
+    resortInfo.contact.phone = `+91 ${raw}`;
+    resortInfo.contact.phoneRaw = raw;
+  }
+  if (config.whatsapp) {
+    const raw = String(config.whatsapp).replace(/[^0-9]/g, '');
+    resortInfo.contact.whatsapp = `+91 ${raw}`;
+    resortInfo.contact.whatsappNumberRaw = raw;
+  }
+  if (config.email) {
+    resortInfo.contact.email = config.email;
+  }
+  if (config.upiVpa !== undefined) {
+    resortInfo.contact.upiId = config.upiVpa;
+  }
+}

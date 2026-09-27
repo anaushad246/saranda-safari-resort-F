@@ -1,3 +1,4 @@
+import { IMAGES } from './images';
 // Official Tariffs, Packages & Pricing Architecture
 // Single Source of Truth based on Client Handover Specification & Approved Package Postings
 // Note: Tariff values and inclusions are consumed by both the public catalogue and booking/enquiry engine.
@@ -7,7 +8,7 @@ export const tariffsAndPackages = {
   heroTitle: "Packages",
   heroSubtitle: "Made for Slow Days & Special Moments",
   heroDescription: "From a few quiet hours in nature to an overnight stay, camping experience, long-term homestay or educational excursion, choose the package that suits your time and occasion.",
-  heroImage: "/dining.webp",
+  heroImage: IMAGES.dining,
   heroTagline: "Stay • Unwind • Learn • Celebrate",
 
   // 1. OVERNIGHT STAYS
@@ -21,7 +22,7 @@ export const tariffsAndPackages = {
         id: "cottage-stay",
         name: "One Night Cottage Stay",
         tagline: "Traditional brick cottage or handcrafted wooden log house",
-        image: "/onenight.webp",
+        image: IMAGES.onenight,
         bookingType: "BOOKING",
         pricingModel: "GUEST_SLABS",
         timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day",
@@ -47,7 +48,7 @@ export const tariffsAndPackages = {
         id: "overnight-camping",
         name: "Overnight Camping",
         tagline: "Sleep beneath the trees close to the Karo River",
-        image: "/CampingA.webp",
+        image: IMAGES.campingA,
         bookingType: "BOOKING",
         pricingModel: "PER_PERSON_OR_COUPLE",
         timings: "Check-in: 4:00 PM | Check-out: 9:00 AM next day",
@@ -77,7 +78,7 @@ export const tariffsAndPackages = {
         name: "Women’s Nature Retreat",
         tagline: "Solo Women Travelers Welcome • Safe, serene and close to nature",
         badge: "Special Women Travel Tariff",
-        image: "/womanretreat.webp",
+        image: IMAGES.womanretreat,
         bookingType: "ENQUIRY",
         pricingModel: "SHARING_SLABS",
         timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day",
@@ -107,7 +108,7 @@ export const tariffsAndPackages = {
         name: "Homestay for Two",
         tagline: "Stay longer. Feel at home. • Unwind, Explore, Belong",
         badge: "Long-Term Nature Living",
-        image: "/homeStay.webp",
+        image: IMAGES.homeStay,
         bookingType: "ENQUIRY",
         pricingModel: "DURATION_SLABS",
         timings: "Weekly & Monthly Flexible Stay",
@@ -151,7 +152,7 @@ export const tariffsAndPackages = {
         name: "Hourly Stay (6 Hours)",
         badge: "Cook • Relax • Reconnect",
         tagline: "Private cottage day-use for families & travel groups",
-        image: "/hourlyStay.webp",
+        image: IMAGES.hourlyStay,
         bookingType: "ENQUIRY",
         pricingModel: "GROUP_SLABS",
         timings: "6 Hours Day-Use (Advance slot)",
@@ -186,7 +187,7 @@ export const tariffsAndPackages = {
         name: "Evening Under the Stars",
         badge: "Bonfire & Hearth",
         tagline: "Bonfire, barbecue and night skies by the Karo River",
-        image: "/eveningUnderStar.webp",
+        image: IMAGES.eveningUnderStar,
         bookingType: "ENQUIRY",
         pricingModel: "TIERED_PER_PERSON",
         timings: "6:00 PM – 11:00 PM (Min 2 guests)",
@@ -217,7 +218,7 @@ export const tariffsAndPackages = {
         name: "An Evening Pause in Nature",
         badge: "Riverbank Tea",
         tagline: "A peaceful 2-hour late afternoon breath of fresh air",
-        image: "/eveningpause.webp",
+        image: IMAGES.eveningpause,
         bookingType: "ENQUIRY",
         pricingModel: "ENTRY_FEE",
         timings: "4:00 PM – 6:00 PM",
@@ -253,7 +254,7 @@ export const tariffsAndPackages = {
       name: "School Excursions & Nature Camps",
       badge: "Learning Beyond Classrooms",
       tagline: "Where Nature Becomes a Classroom • For Classes I – XII",
-      image: "/schoolExcursion.webp",
+      image: IMAGES.schoolExcursion,
       bookingType: "ENQUIRY",
       timings: "9:30 AM – 4:00 PM (Full Day Itinerary)",
       pricingSummary: "From ₹349 / student",
@@ -301,7 +302,7 @@ export const tariffsAndPackages = {
   celebrations: {
     title: "Gather, Celebrate, Remember",
     subtitle: "Open riverfront lawns and ancient tree canopies for intimate gatherings and milestone occasions.",
-    image: "/resort-hero.webp",
+    image: IMAGES.resortHero,
     notice: "Important: Launch overnight stay capacity is strictly 25 guests. Event groups exceeding 25 guests can celebrate on the lawn and grounds with customized day/evening arrangements.",
     events: [
       {
@@ -309,7 +310,7 @@ export const tariffsAndPackages = {
         name: "Open for Weddings & Parties",
         subtitle: "Special Destination Wedding Accommodation Packages",
         tagline: "Enchanting outdoor celebrations amidst ancient trees & Karo riverfront lawns",
-        image: "/wedding.webp",
+        image: IMAGES.wedding,
         advanceNotice: "Advance Booking Required — Please Pre-Book 6 Months in Advance",
         pricingType: "SLAB_TARIFF",
         pricingSummary: "Slabs from ₹24,000 / night",
@@ -336,7 +337,7 @@ export const tariffsAndPackages = {
         name: "New Year, Puja & Seasonal Gatherings",
         subtitle: "Festival & Seasonal Lawn Events",
         tagline: "Festival get-togethers, family reunions & holiday celebrations",
-        image: "/newYear.webp",
+        image: IMAGES.newYear,
         pricingType: "INDICATIVE_RANGE",
         pricingSummary: "Indicative venue pricing (Quotation-based)",
         description: "Celebrate Durga Puja, Diwali, New Year, or Holi surrounded by the wilderness of Saranda. Expansive open grounds allow customized shamianas, sound setups, and holiday buffet banquets.",

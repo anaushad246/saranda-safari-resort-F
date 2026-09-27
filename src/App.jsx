@@ -12,7 +12,7 @@ import { ContactPage } from './pages/ContactPage';
 import { AvailabilityModal } from './components/AvailabilityModal';
 import { PickupModal, SightseeingModal, EventModal } from './components/EnquiryModals';
 import { Container, Button } from './components/ui/Primitives';
-import { resortInfo } from './content/resortInfo';
+import { resortInfo, updateResortConfig } from './content/resortInfo';
 import { AdminLogin } from './admin/AdminLogin';
 import { AdminDashboard } from './admin/AdminDashboard';
 
@@ -48,6 +48,19 @@ export function App() {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
+    // Dynamically synchronize contact & payment config from Backend Environment
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+    fetch(`${apiUrl}/config/public`)
+      .then(res => res.json())
+      .then(json => {
+        if (json?.data) {
+          updateResortConfig(json.data);
+        }
+      })
+      .catch(() => {
+        // Gracefully falls back to hardcoded defaults in resortInfo.js
+      });
+
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 400);
     };

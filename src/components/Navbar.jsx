@@ -1,3 +1,4 @@
+import { IMAGES } from '../content/images';
 import React, { useState, useEffect } from 'react';
 import {
   Menu,
@@ -84,7 +85,7 @@ export function Navbar({ currentPage, onNavigate, onOpenBooking }) {
               "
             >
               <img
-                src="/logo.webp"
+                src={IMAGES.logo}
                 alt="Saranda Safari Resort"
                 className="h-full w-full object-cover"
                 onError={(e) => {
