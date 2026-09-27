@@ -7,9 +7,9 @@ import { Button, Card, Badge } from './ui/Primitives';
 import { stayInventory } from '../content/stayInventory';
 import { resortInfo } from '../content/resortInfo';
 import { apiCreateBooking } from '../services/api';
+import { SubmissionLoader } from './SubmissionLoader';
 
 export function AvailabilityModal({ isOpen, onClose }) {
-  if (!isOpen) return null;
 
   const unitsList = stayInventory?.units || [];
   const defaultUnitId = unitsList[0]?.id || 'riverwood';
@@ -234,13 +234,24 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
     return `https://wa.me/${resortInfo.contact.whatsappNumberRaw}?text=${encodeURIComponent(message)}`;
   };
 
+  // Silently pre-warm backend (e.g. Render free tier) while user fills the form
+  useEffect(() => {
+    if (isOpen) {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+      fetch(`${apiUrl}/health`).catch(() => {});
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#0E261C]/80 backdrop-blur-sm animate-fadeIn print:static print:block print:p-0 print:bg-white print:backdrop-blur-none">
       <div
-        className="bg-[#F9F6F0] rounded-xl shadow-2xl border border-[#E8DFCE] w-full max-w-3xl max-h-[94vh] flex flex-col overflow-hidden print:max-w-none print:max-h-none print:overflow-visible print:rounded-none print:border-0 print:shadow-none print:bg-white"
+        className="bg-[#F9F6F0] rounded-xl shadow-2xl border border-[#E8DFCE] w-full max-w-3xl max-h-[94vh] flex flex-col overflow-hidden relative print:max-w-none print:max-h-none print:overflow-visible print:rounded-none print:border-0 print:shadow-none print:bg-white"
         role="dialog" 
         aria-modal="true"
       >
+        {isSubmitting && <SubmissionLoader />}
         {/* Header */}
         <div className="bg-[#143628] text-[#F9F6F0] px-5 sm:px-6 py-3.5 sm:py-4 flex items-center justify-between border-b border-[#C5A059]/40 shrink-0 print:hidden">
           <div>

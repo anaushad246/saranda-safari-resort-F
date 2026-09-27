@@ -29,7 +29,7 @@ async function fetchApi(endpoint, options = {}) {
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 25000);
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...fetchOptions,
