@@ -6,8 +6,18 @@ import {
 import { Button, Card, Badge } from './ui/Primitives';
 import { stayInventory } from '../content/stayInventory';
 import { resortInfo } from '../content/resortInfo';
-import { apiCreateBooking } from '../services/api';
+import { apiCreateBooking, apiGetQuote } from '../services/api';
 import { SubmissionLoader } from './SubmissionLoader';
+
+const UNIT_TYPE_MAP = {
+  'riverwood': 'wooden_log_house',
+  'cherry-blossom': 'red_white_cottage',
+  'autumn-abode': 'other_cottage',
+  'spring-abode': 'other_cottage',
+  'gulmohar': 'red_white_cottage',
+  'amberwood': 'other_cottage',
+  'camping-tents': 'camping_tent'
+};
 
 export function AvailabilityModal({ isOpen, onClose }) {
 
@@ -35,6 +45,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
   // API Interaction State
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [liveQuote, setLiveQuote] = useState(null);
 
   // Receipt / Confirmed Booking State (Step 3)
   const [confirmedBooking, setConfirmedBooking] = useState(null);
@@ -71,8 +82,47 @@ export function AvailabilityModal({ isOpen, onClose }) {
   const is3GuestMaxUnit = maxAllowedAdults === 3;
   const is3GuestUnitWith4Adults = is3GuestMaxUnit && adults > 3;
 
-  // Price Calculation Engine
+  // Live Quote Fetcher directly from backend pricingEngine
+  useEffect(() => {
+    if (!isOpen) return;
+    const mappedType = UNIT_TYPE_MAP[selectedUnitType] || 'other_cottage';
+    let isCancelled = false;
+
+    apiGetQuote({
+      unitType: mappedType,
+      adults,
+      nights,
+      children5to10,
+      infantsUnder5,
+      includeBonfire: includeBonfire && !isCamping
+    })
+      .then(res => {
+        if (!isCancelled && res?.data?.inr) {
+          setLiveQuote(res.data.inr);
+        }
+      })
+      .catch(() => {
+        // Falls back to local calculation if offline/network error
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [isOpen, selectedUnitType, adults, nights, children5to10, infantsUnder5, includeBonfire, isCamping]);
+
+  // Price Calculation Engine (Consumes liveQuote first with local offline fallback)
   const calculation = useMemo(() => {
+    if (liveQuote) {
+      return {
+        baseRatePerNight: liveQuote.baseRatePerNight,
+        baseStayTotal: liveQuote.baseStayTotal,
+        childrenTotal: liveQuote.childrenTotal,
+        bonfireTotal: liveQuote.bonfireTotal,
+        grandTotal: liveQuote.grandTotal,
+        advance50: liveQuote.advancePayable,
+        balanceAtCheckIn: liveQuote.balanceDue
+      };
+    }
     let baseRatePerNight = 0;
 
     if (isCamping) {
@@ -122,7 +172,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
       advance50,
       balanceAtCheckIn
     };
-  }, [selectedUnitType, currentUnit, isCamping, adults, nights, children5to10, includeBonfire, is3GuestMaxUnit]);
+  }, [liveQuote, selectedUnitType, currentUnit, isCamping, adults, nights, children5to10, includeBonfire, is3GuestMaxUnit]);
 
   // Live Countdown Timer for Step 3
   useEffect(() => {
