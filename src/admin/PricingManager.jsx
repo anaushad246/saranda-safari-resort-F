@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import { apiGetUnits, apiUpdateUnitPricing, apiUpdatePricingByType, apiGetQuote } from '../services/api';
 import { FEATURES } from '../content/features';
+import { updateInventoryPricing } from '../content/stayInventory';
+import { updateTariffsPricing } from '../content/tariffsAndPackages';
 
 export function PricingManager() {
   const [units, setUnits] = useState([]);
@@ -58,6 +60,8 @@ export function PricingManager() {
       const res = await apiGetUnits();
       const unitList = res.data || [];
       setUnits(unitList);
+      updateInventoryPricing(unitList);
+      updateTariffsPricing(unitList);
 
       // Initialize editable rates in Rupees (convert from paise)
       const ratesMap = {};

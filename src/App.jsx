@@ -13,6 +13,8 @@ import { AvailabilityModal } from './components/AvailabilityModal';
 import { PickupModal, SightseeingModal, EventModal } from './components/EnquiryModals';
 import { Container, Button } from './components/ui/Primitives';
 import { resortInfo, updateResortConfig } from './content/resortInfo';
+import { updateInventoryPricing } from './content/stayInventory';
+import { updateTariffsPricing } from './content/tariffsAndPackages';
 import { AdminLogin } from './admin/AdminLogin';
 import { AdminDashboard } from './admin/AdminDashboard';
 
@@ -59,6 +61,19 @@ export function App() {
       })
       .catch(() => {
         // Gracefully falls back to hardcoded defaults in resortInfo.js
+      });
+
+    // Dynamically synchronize live tariffs & units pricing from Backend Database
+    fetch(`${apiUrl}/units`)
+      .then(res => res.json())
+      .then(json => {
+        if (json?.data) {
+          updateInventoryPricing(json.data);
+          updateTariffsPricing(json.data);
+        }
+      })
+      .catch(() => {
+        // Falls back to static defaults in content files
       });
 
     const handleScroll = () => {

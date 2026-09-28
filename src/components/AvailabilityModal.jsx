@@ -48,7 +48,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
     type: 'log_house',
     maxAdultsPerUnit: 4,
     unitCount: 1,
-    pricingTiers: { 1: 3000, 2: 4000, 3: 5400, 4: 6600 }
+    pricingTiers: { 1: 3000, 2: 4500, 3: 5400, 4: 6600 }
   };
 
   const isCamping = currentUnit.type === 'camping' || selectedUnitType === 'camping-tents';
@@ -88,7 +88,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
         baseRatePerNight = currentUnit.pricingTiers[adults];
       } else {
         if (adults === 1) baseRatePerNight = 3000;
-        else if (adults === 2) baseRatePerNight = 4000;
+        else if (adults === 2) baseRatePerNight = 4500;
         else if (adults === 3) baseRatePerNight = 5400;
         else if (adults >= 4) {
           baseRatePerNight = is3GuestMaxUnit ? 0 : 6600;

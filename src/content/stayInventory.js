@@ -122,7 +122,7 @@ export const stayInventory = {
         "Electricity & ceiling fans",
         "Direct Karo river view"
       ],
-      pricingTiers: { 1: 3000, 2: 4000, 3: 5400, 4: 6600 },
+      pricingTiers: { 1: 3000, 2: 4500, 3: 5400, 4: 6600 },
       childPricing: { under5: 0, age5to10: 700, age11Plus: "regular_rate" },
       mealInclusion: "Vegetarian breakfast, lunch, and dinner included (breakfast served on departure morning).",
       timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day"
@@ -146,7 +146,7 @@ export const stayInventory = {
         "Electricity & ceiling fans",
         "Lawn & riverside breeze"
       ],
-      pricingTiers: { 1: 3000, 2: 4000, 3: 5400 },
+      pricingTiers: { 1: 3000, 2: 4500, 3: 5400 },
       childPricing: { under5: 0, age5to10: 700, age11Plus: "regular_rate" },
       mealInclusion: "Vegetarian breakfast, lunch, and dinner included (breakfast served on departure morning).",
       timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day"
@@ -170,7 +170,7 @@ export const stayInventory = {
         "Electricity & ceiling fans",
         "Fresh forest air"
       ],
-      pricingTiers: { 1: 3000, 2: 4000, 3: 5400, 4: 6600 },
+      pricingTiers: { 1: 3000, 2: 4500, 3: 5400, 4: 6600 },
       childPricing: { under5: 0, age5to10: 700, age11Plus: "regular_rate" },
       mealInclusion: "Vegetarian breakfast, lunch, and dinner included (breakfast served on departure morning).",
       timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day"
@@ -194,7 +194,7 @@ export const stayInventory = {
         "Electricity & ceiling fans",
         "Family-friendly setting"
       ],
-      pricingTiers: { 1: 3000, 2: 4000, 3: 5400, 4: 6600 },
+      pricingTiers: { 1: 3000, 2: 4500, 3: 5400, 4: 6600 },
       childPricing: { under5: 0, age5to10: 700, age11Plus: "regular_rate" },
       mealInclusion: "Vegetarian breakfast, lunch, and dinner included (breakfast served on departure morning).",
       timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day"
@@ -218,7 +218,7 @@ export const stayInventory = {
         "Veranda overlooking resort life",
         "Electricity & ceiling fans"
       ],
-      pricingTiers: { 1: 3000, 2: 4000, 3: 5400 },
+      pricingTiers: { 1: 3000, 2: 4500, 3: 5400 },
       childPricing: { under5: 0, age5to10: 700, age11Plus: "regular_rate" },
       mealInclusion: "Vegetarian breakfast, lunch, and dinner included (breakfast served on departure morning).",
       timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day"
@@ -242,7 +242,7 @@ export const stayInventory = {
         "Rustic timber craftsmanship",
         "Electricity & ceiling fans"
       ],
-      pricingTiers: { 1: 3000, 2: 4000, 3: 5400, 4: 6600 },
+      pricingTiers: { 1: 3000, 2: 4500, 3: 5400, 4: 6600 },
       childPricing: { under5: 0, age5to10: 700, age11Plus: "regular_rate" },
       mealInclusion: "Vegetarian breakfast, lunch, and dinner included (breakfast served on departure morning).",
       timings: "Check-in: 9:00 AM | Check-out: 9:00 AM next day"
@@ -286,3 +286,29 @@ export const stayInventory = {
 
   inventoryNote: "Current operational capacity is strictly 25 overnight guests (20 cottage/log-house guests + 5 camping guests). Future accommodations currently undergoing finishing will not be opened for bookings until fully verified."
 };
+
+export function updateInventoryPricing(backendUnits) {
+  if (!Array.isArray(backendUnits) || backendUnits.length === 0) return;
+  backendUnits.forEach(bu => {
+    const t1 = bu.pricingTiers?.oneAdult || (bu.pricingTiersPaise?.oneAdult ? Math.round(bu.pricingTiersPaise.oneAdult / 100) : 3000);
+    const t2 = bu.pricingTiers?.twoAdults || (bu.pricingTiersPaise?.twoAdults ? Math.round(bu.pricingTiersPaise.twoAdults / 100) : 4500);
+    const t3 = bu.pricingTiers?.threeAdults || (bu.pricingTiersPaise?.threeAdults ? Math.round(bu.pricingTiersPaise.threeAdults / 100) : 5400);
+    const t4 = bu.pricingTiers?.fourAdults || (bu.pricingTiersPaise?.fourAdults ? Math.round(bu.pricingTiersPaise.fourAdults / 100) : 6600);
+
+    stayInventory.units.forEach(u => {
+      let matches = false;
+      if (bu.unitType === 'wooden_log_house' && u.id === 'riverwood') matches = true;
+      if (bu.unitType === 'red_white_cottage' && (u.id === 'cherry-blossom' || u.id === 'gulmohar')) matches = true;
+      if (bu.unitType === 'other_cottage' && (u.id === 'autumn-abode' || u.id === 'spring-abode' || u.id === 'amberwood')) matches = true;
+
+      if (matches) {
+        u.pricingTiers = {
+          1: t1,
+          2: t2,
+          3: t3,
+          ...(bu.unitType === 'red_white_cottage' ? {} : { 4: t4 })
+        };
+      }
+    });
+  });
+}

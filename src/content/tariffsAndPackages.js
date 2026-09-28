@@ -29,7 +29,7 @@ export const tariffsAndPackages = {
         pricingSummary: "From ₹3,000 / night",
         tariffs: [
           { guests: "1 guest", rate: 3000, note: "Single occupancy" },
-          { guests: "2 guests", rate: 4000, note: "₹2,000 per person" },
+          { guests: "2 guests", rate: 4500, note: "₹2,250 per person" },
           { guests: "3 guests", rate: 5400, note: "₹1,800 per person" },
           { guests: "4 guests", rate: 6600, note: "Valid on log house & other 4-person cottage" }
         ],
@@ -364,7 +364,7 @@ export const tariffsAndPackages = {
     timings: "9:00 AM Check-in to 9:00 AM Next Day",
     rates: [
       { guests: 1, rate: 3000, note: "Single occupancy" },
-      { guests: 2, rate: 4000, note: "Double occupancy (₹2,000/person)" },
+      { guests: 2, rate: 4500, note: "Double occupancy (₹2,250/person)" },
       { guests: 3, rate: 5400, note: "Triple occupancy (₹1,800/person)" },
       { guests: 4, rate: 6600, note: "Quad occupancy (Log House / Other Cottage)" }
     ]
@@ -393,3 +393,23 @@ export const tariffsAndPackages = {
     subtext: "Breakfast is served fresh on your departure morning before check-out. All other packages and day visits do not bundle meals."
   }
 };
+
+
+export function updateTariffsPricing(backendUnits) {
+  if (!Array.isArray(backendUnits) || backendUnits.length === 0) return;
+  const sampleCottage = backendUnits.find(u => u.unitType !== 'camping_tent') || backendUnits[0];
+  if (sampleCottage) {
+    const t1 = sampleCottage.pricingTiers?.oneAdult || (sampleCottage.pricingTiersPaise?.oneAdult ? Math.round(sampleCottage.pricingTiersPaise.oneAdult / 100) : 3000);
+    const t2 = sampleCottage.pricingTiers?.twoAdults || (sampleCottage.pricingTiersPaise?.twoAdults ? Math.round(sampleCottage.pricingTiersPaise.twoAdults / 100) : 4500);
+    const t3 = sampleCottage.pricingTiers?.threeAdults || (sampleCottage.pricingTiersPaise?.threeAdults ? Math.round(sampleCottage.pricingTiersPaise.threeAdults / 100) : 5400);
+    const t4 = sampleCottage.pricingTiers?.fourAdults || (sampleCottage.pricingTiersPaise?.fourAdults ? Math.round(sampleCottage.pricingTiersPaise.fourAdults / 100) : 6600);
+
+    const standardStay = tariffsAndPackages.overnight?.standardStays?.[0];
+    if (standardStay && Array.isArray(standardStay.tariffs)) {
+      standardStay.tariffs[0] = { guests: "1 guest", rate: t1, note: "Single occupancy" };
+      standardStay.tariffs[1] = { guests: "2 guests", rate: t2, note: `₹${Math.round(t2 / 2).toLocaleString('en-IN')} per person` };
+      standardStay.tariffs[2] = { guests: "3 guests", rate: t3, note: `₹${Math.round(t3 / 3).toLocaleString('en-IN')} per person` };
+      standardStay.tariffs[3] = { guests: "4 guests", rate: t4, note: "Valid on log house & other 4-person cottage" };
+    }
+  }
+}
