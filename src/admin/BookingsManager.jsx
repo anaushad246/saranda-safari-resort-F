@@ -66,13 +66,16 @@ export function BookingsManager() {
   };
 
   const getFinancials = (b) => {
-    const totalPaise = b.financials?.totalPaise ?? b.priceSnapshot?.baseRateApplied ?? 0;
+    if (!b) return { totalRs: 0, advanceRs: 0, balanceRs: 0 };
+    const totalPaise = b.financials?.totalPaise ?? (b.priceSnapshot?.baseRateApplied ? b.priceSnapshot.baseRateApplied * 100 : 0);
     const advancePaise = b.financials?.advancePayablePaise ?? Math.round(totalPaise / 2);
-    const balancePaise = b.financials?.balanceDuePaise ?? (totalPaise - advancePaise);
+    const totalRs = b.financials?.grandTotalInr ?? Math.round(totalPaise / 100);
+    const advanceRs = b.financials?.advancePayableInr ?? Math.round(advancePaise / 100);
+    const balanceRs = b.financials?.balanceDueInr ?? (totalRs - advanceRs);
     return {
-      totalRs: Math.round(totalPaise / 100),
-      advanceRs: Math.round(advancePaise / 100),
-      balanceRs: Math.round(balancePaise / 100)
+      totalRs,
+      advanceRs,
+      balanceRs
     };
   };
 
@@ -568,7 +571,7 @@ export function BookingsManager() {
               <div className="flex justify-between border-t border-[#E8DFCE] pt-2">
                 <span className="text-[#8F6C27] font-semibold">50% Advance Required:</span>
                 <span className="font-bold text-[#143628]">
-                  ₹{Math.round((verifyingBooking.financials?.advancePayablePaise || 0) / 100).toLocaleString('en-IN')}
+                  ₹{getFinancials(verifyingBooking).advanceRs.toLocaleString('en-IN')}
                 </span>
               </div>
             </div>

@@ -16,10 +16,12 @@ import {
 } from 'lucide-react';
 import { apiGetUnits, apiUpdateUnitPricing, apiUpdatePricingByType, apiGetQuote } from '../services/api';
 import { FEATURES } from '../content/features';
+import { useInventory } from '../context/InventoryContext';
 import { updateInventoryPricing } from '../content/stayInventory';
 import { updateTariffsPricing } from '../content/tariffsAndPackages';
 
 export function PricingManager() {
+  const { refreshInventory } = useInventory();
   const [units, setUnits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState(null);
@@ -137,6 +139,7 @@ export function PricingManager() {
 
       // Reload fresh data to sync everything
       await loadUnits();
+      await refreshInventory();
       setTimeout(() => setSaveSuccess(''), 4000);
     } catch (err) {
       setError('Failed to save pricing: ' + (err.message || 'Server error'));

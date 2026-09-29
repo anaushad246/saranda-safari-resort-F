@@ -7,6 +7,7 @@ import { Button, Card, Badge } from './ui/Primitives';
 import { stayInventory } from '../content/stayInventory';
 import { resortInfo } from '../content/resortInfo';
 import { apiCreateBooking, apiGetQuote } from '../services/api';
+import { useInventory } from '../context/InventoryContext';
 import { SubmissionLoader } from './SubmissionLoader';
 
 const UNIT_TYPE_MAP = {
@@ -46,6 +47,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [liveQuote, setLiveQuote] = useState(null);
+  const { findUnit } = useInventory();
 
   // Receipt / Confirmed Booking State (Step 3)
   const [confirmedBooking, setConfirmedBooking] = useState(null);
@@ -76,51 +78,84 @@ export function AvailabilityModal({ isOpen, onClose }) {
     }
   }, [checkInDate, nights]);
 
+  // The selected variety resolved to its database record. Quoting by this record's _id
+  // rather than by unitType is what lets each variety carry its own rate: a type-level
+  // quote collapses every unit of that type onto a single row, so a rate the owner edits
+  // on one unit (Amberwood) would keep quoting at another unit's (Autumn Abode) figure.
+  // Declared ahead of the capacity guard below, which reads it.
+  const backendUnit = useMemo(() => findUnit(selectedUnitType), [findUnit, selectedUnitType]);
+
   // Capacity validation guard
-  const maxAllowedAdults = isCamping ? 5 : (currentUnit.maxAdultsPerUnit || 4);
+  const maxAllowedAdults = isCamping ? 5 : (backendUnit?.maxAdults || currentUnit.maxAdultsPerUnit || 4);
   const isOverCapacity = adults > maxAllowedAdults;
   const is3GuestMaxUnit = maxAllowedAdults === 3;
   const is3GuestUnitWith4Adults = is3GuestMaxUnit && adults > 3;
 
+  // Identifies the exact inputs a quote was priced for, so a quote can never be shown
+  // against a different unit, guest count or stay length than the one it priced.
+  const quoteKey = [
+    selectedUnitType,
+    backendUnit?._id || 'unresolved',
+    adults,
+    nights,
+    children5to10,
+    infantsUnder5,
+    includeBonfire && !isCamping
+  ].join('|');
+
   // Live Quote Fetcher directly from backend pricingEngine
   useEffect(() => {
     if (!isOpen) return;
-    const mappedType = UNIT_TYPE_MAP[selectedUnitType] || 'other_cottage';
     let isCancelled = false;
 
-    apiGetQuote({
-      unitType: mappedType,
+    const quoteParams = {
       adults,
       nights,
       children5to10,
       infantsUnder5,
       includeBonfire: includeBonfire && !isCamping
-    })
+    };
+    if (backendUnit?._id) {
+      quoteParams.unitId = backendUnit._id;
+    } else {
+      // Before the inventory arrives, or if the API is unreachable, fall back to a
+      // type-level quote — the backend prices it from the same engine.
+      quoteParams.unitType = UNIT_TYPE_MAP[selectedUnitType] || 'other_cottage';
+    }
+
+    apiGetQuote(quoteParams)
       .then(res => {
         if (!isCancelled && res?.data?.inr) {
-          setLiveQuote(res.data.inr);
+          setLiveQuote({ key: quoteKey, inr: res.data.inr });
         }
       })
       .catch(() => {
-        // Falls back to local calculation if offline/network error
+        // Nothing to store. `calculation` only honours a quote whose key matches the
+        // current selection, so a failed request falls through to the local calculation
+        // instead of re-displaying the previous selection's price.
       });
 
     return () => {
       isCancelled = true;
     };
-  }, [isOpen, selectedUnitType, adults, nights, children5to10, infantsUnder5, includeBonfire, isCamping]);
+    // quoteKey already encodes every input this request is built from.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, quoteKey]);
 
   // Price Calculation Engine (Consumes liveQuote first with local offline fallback)
   const calculation = useMemo(() => {
-    if (liveQuote) {
+    // A quote priced for other inputs is stale by definition and is discarded, so a
+    // guest switching from 4 adults to 2 never sees the 4-adult figure.
+    const live = liveQuote && liveQuote.key === quoteKey ? liveQuote.inr : null;
+    if (live) {
       return {
-        baseRatePerNight: liveQuote.baseRatePerNight,
-        baseStayTotal: liveQuote.baseStayTotal,
-        childrenTotal: liveQuote.childrenTotal,
-        bonfireTotal: liveQuote.bonfireTotal,
-        grandTotal: liveQuote.grandTotal,
-        advance50: liveQuote.advancePayable,
-        balanceAtCheckIn: liveQuote.balanceDue
+        baseRatePerNight: live.baseRatePerNight,
+        baseStayTotal: live.baseStayTotal,
+        childrenTotal: live.childrenTotal,
+        bonfireTotal: live.bonfireTotal,
+        grandTotal: live.grandTotal,
+        advance50: live.advancePayable,
+        balanceAtCheckIn: live.balanceDue
       };
     }
     let baseRatePerNight = 0;
@@ -172,7 +207,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
       advance50,
       balanceAtCheckIn
     };
-  }, [liveQuote, selectedUnitType, currentUnit, isCamping, adults, nights, children5to10, includeBonfire, is3GuestMaxUnit]);
+  }, [liveQuote, quoteKey, selectedUnitType, currentUnit, isCamping, adults, nights, children5to10, includeBonfire, is3GuestMaxUnit]);
 
   // Live Countdown Timer for Step 3
   useEffect(() => {

@@ -6,7 +6,7 @@ import { IMAGES } from './images';
 export const stayContent = {
   heroTitle: "Accommodation",
   heroDescription: "At Saranda Safari Resort, our accommodations are designed to bring you closer to nature without compromising on comfort and warmth. Tucked alongside the peaceful Karo River and surrounded by lush foliage, each of our distinct stays features its own unique character—from rustic, handcrafted wooden chalets to vibrant, lawn-facing retreats with spacious open verandas. Whether you are looking for a front-row seat to the morning river view, a cozy stay nestled under a canopy of mature trees, or a peaceful sanctuary for quiet reflection, our stays provide the perfect backdrop to slow down, unwind, and feel right at home.",
-  heroImage: IMAGES.placeWhyVisit,
+  heroImage: IMAGES.hourlyStay,
 
   featuredCottages: [
     {

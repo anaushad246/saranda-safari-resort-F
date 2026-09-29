@@ -129,8 +129,8 @@ export const apiUpdateEnquiry = async (id, updateData) => {
 };
 
 // 4. Units & Blocked Dates API
-export const apiGetUnits = async () => {
-  return await fetchApi('/units');
+export const apiGetUnits = async (options = {}) => {
+  return await fetchApi('/units', options);
 };
 
 // Owner-only. `status` must be one of the Unit model's enum values:

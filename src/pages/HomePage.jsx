@@ -15,6 +15,7 @@ import { tariffsAndPackages } from '../content/tariffsAndPackages';
 import { sightseeingContent } from '../content/sightseeing';
 import { gettingHereContent } from '../content/gettingHere';
 import { faqsAndPolicies } from '../content/faqsAndPolicies';
+import { useInventory } from '../context/InventoryContext';
 
 export function HomePage({ 
   onNavigate, 
@@ -23,6 +24,10 @@ export function HomePage({
   onOpenSightseeing, 
   onOpenEvent 
 }) {
+  const { livePricing, findUnit } = useInventory();
+  const riverwoodRate = findUnit('riverwood')?.pricingTiers?.oneAdult ?? livePricing.cottage.oneAdult;
+  const cherryBlossomRate = findUnit('cherry-blossom')?.pricingTiers?.oneAdult ?? livePricing.cottage.oneAdult;
+
   return (
     <div className="w-full">
       {/* =========================================================================
@@ -239,7 +244,7 @@ export function HomePage({
                   </div>
                 </div>
                 <div className="px-4 sm:px-5 pb-4 pt-2 border-t border-[#E8DFCE]/60 flex items-center justify-between text-xs font-semibold text-[#8F6C27]">
-                  <span>From ₹3,000 / night</span>
+                  <span>From ₹{riverwoodRate.toLocaleString('en-IN')} / night</span>
                   <span className="text-[#143628] group-hover:text-[#C25E3E] flex items-center gap-1">
                     Explore Stay <ArrowRight className="w-3.5 h-3.5" />
                   </span>
@@ -275,7 +280,7 @@ export function HomePage({
                   </div>
                 </div>
                 <div className="px-4 sm:px-5 pb-4 pt-2 border-t border-[#E8DFCE]/60 flex items-center justify-between text-xs font-semibold text-[#8F6C27]">
-                  <span>From ₹3,000 / night</span>
+                  <span>From ₹{cherryBlossomRate.toLocaleString('en-IN')} / night</span>
                   <span className="text-[#143628] group-hover:text-[#C25E3E] flex items-center gap-1">
                     Explore Stays <ArrowRight className="w-3.5 h-3.5" />
                   </span>
@@ -510,7 +515,7 @@ export function HomePage({
                 <p className="text-[11px] sm:text-xs text-[#143628]/70 mt-0.5">9:00 AM Check-in to 9:00 AM Next Day</p>
                 
                 <div className="mt-3 divide-y divide-[#E8DFCE]/80 text-xs">
-                  {tariffsAndPackages.overnightCottage.rates.map(tier => (
+                  {livePricing.cottage.rates.map(tier => (
                     <div key={tier.guests} className="py-1.5 flex justify-between items-center">
                       <div>
                         <span className="font-semibold text-[#143628]">{tier.guests} Adult{tier.guests > 1 ? 's' : ''}</span>
@@ -548,7 +553,7 @@ export function HomePage({
                 <p className="text-[11px] sm:text-xs text-[#143628]/70 mt-0.5">4:00 PM Check-in to 9:00 AM Next Day</p>
 
                 <div className="mt-3 divide-y divide-[#E8DFCE]/80 text-xs">
-                  {tariffsAndPackages.overnightCamping.rates.map((tier, idx) => (
+                  {livePricing.camping.rates.map((tier, idx) => (
                     <div key={idx} className="py-1.5 flex justify-between items-center">
                       <span className="font-semibold text-[#143628]">{tier.type}</span>
                       <span className="font-serif font-bold text-sm text-[#143628]">₹{tier.rate.toLocaleString('en-IN')}</span>

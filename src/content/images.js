@@ -26,7 +26,8 @@ export const IMAGES = {
   logo: cld('logo.webp'),
 
   // Hero & Place
-  resortHero: cld('resort-hero.webp', 1600),
+  // resortHero: cld('resort-hero.webp', 1600),
+  resortHero: cld('placewildlife.webp', 1200),
   placeMorningMist: cld('placemorningmist.webp', 1200),
   placeWildlife: cld('placewildlife.webp', 1200),
   placeWhyVisit: cld('placewhyvisit.webp', 1000),
@@ -47,8 +48,8 @@ export const IMAGES = {
 
   // Packages & Tariffs
   pkgCottage: cld('package-cottage.webp', 800),
-  pkgCamping: cld('package-camping.webp', 800),
-  pkgBonfire: cld('package-bonfire.webp', 800),
+  pkgCamping: cld('CampingA.webp', 800),
+  pkgBonfire: cld('bonfire.webp', 800),
   dining: cld('dining.webp', 800),
   onenight: cld('onenight.webp', 800),
   womanretreat: cld('womanretreat.webp', 800),
@@ -76,7 +77,8 @@ export const IMAGES = {
   expStars: cld('closerToStars.webp', 800),
 
   // Sightseeing
-  sightseeingHero: cld('sightseeing-hero.webp', 1200),
+  // sightseeingHero: cld('sightseeing-hero.webp', 1200),
+  sightseeingHero: cld('sightseeing-hero.jpg', 1200),
   jhikraWaterfall: cld('Jhikrawaterfall.webp', 800),
   pacheriWaterfall: cld('Pacheri.webp', 800),
   kiriburuSunset: cld('KiriburuSunsetPoint.webp', 800),

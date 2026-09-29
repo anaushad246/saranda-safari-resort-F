@@ -21,8 +21,10 @@ import { Container, Button, Badge } from '../components/ui/Primitives';
 import { tariffsAndPackages } from '../content/tariffsAndPackages';
 import { FEATURES } from '../content/features';
 import { resortInfo } from '../content/resortInfo';
+import { useInventory } from '../context/InventoryContext';
 
 export function PackagesPage({ onOpenBooking, onOpenEvent }) {
+  const { livePricing } = useInventory();
   // State for Reusable PackageDetailModal
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [showSchoolModal, setShowSchoolModal] = useState(false);
@@ -172,7 +174,11 @@ Please provide availability, date confirmation and arrangement details.`;
                       </div>
 
                       <div className="absolute bottom-3.5 right-3.5 bg-[#C85A32] text-white px-3 py-1 rounded-md text-xs font-semibold shadow">
-                        {pkg.pricingSummary}
+                        {pkg.id === 'cottage-stay' 
+                          ? `From ₹${livePricing.cottage.oneAdult.toLocaleString('en-IN')} / night`
+                          : (pkg.id === 'overnight-camping'
+                              ? `₹${livePricing.camping.perPerson.toLocaleString('en-IN')} / person • ₹${livePricing.camping.couple.toLocaleString('en-IN')} / couple`
+                              : pkg.pricingSummary)}
                       </div>
                     </div>
 
@@ -201,7 +207,7 @@ Please provide availability, date confirmation and arrangement details.`;
                         <span className="text-[11px] font-cinzel font-bold text-[#8F6C27] uppercase tracking-wider block border-b border-[#EADFC9] pb-1.5 mb-2">
                           Official Tariff Schedule
                         </span>
-                        {pkg.tariffs.map((t, idx) => (
+                        {(pkg.id === 'cottage-stay' ? livePricing.cottage.rates : (pkg.id === 'overnight-camping' ? livePricing.camping.rates : pkg.tariffs)).map((t, idx) => (
                           <div key={idx} className="flex items-center justify-between text-xs py-1 border-b border-[#EADFC9]/50 last:border-b-0">
                             <div>
                               <span className="font-bold text-[#143628]">{t.guests || t.label}</span>
