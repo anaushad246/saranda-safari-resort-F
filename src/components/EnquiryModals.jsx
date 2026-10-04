@@ -6,10 +6,13 @@ import { sightseeingContent } from '../content/sightseeing';
 import { tariffsAndPackages } from '../content/tariffsAndPackages';
 import { resortInfo } from '../content/resortInfo';
 
+const todayStr = new Date().toISOString().split('T')[0];
+const minSelectableDate = todayStr > '2026-11-01' ? todayStr : '2026-11-01';
+
 // 1. Pickup & Drop Assistance Modal
 export function PickupModal({ isOpen, onClose }) {
   const [station, setStation] = useState('Barbil Railway Station (15 km)');
-  const [date, setDate] = useState('2026-10-15');
+  const [date, setDate] = useState('2026-11-05');
   const [passengers, setPassengers] = useState(2);
   const [vehicle, setVehicle] = useState('Bolero / SUV');
   const [guestName, setGuestName] = useState('');
@@ -71,6 +74,7 @@ Please provide vehicle availability and fare quotation.`;
               <label className="block text-xs uppercase font-semibold text-[#143628] mb-1">Date</label>
               <input
                 type="date"
+                min={minSelectableDate}
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 className="w-full bg-white border border-[#E8DFCE] rounded-md px-3 py-2 text-sm text-[#143628]"
@@ -128,7 +132,7 @@ Please provide vehicle availability and fare quotation.`;
 // 2. Sightseeing Assistance Request Modal
 export function SightseeingModal({ isOpen, onClose }) {
   const [selectedSpots, setSelectedSpots] = useState(['Jhikra Waterfall', 'Kiriburu Sunset Point']);
-  const [date, setDate] = useState('2026-10-16');
+  const [date, setDate] = useState('2026-11-06');
   const [guestCount, setGuestCount] = useState(3);
   const [guestName, setGuestName] = useState('');
 
@@ -202,6 +206,7 @@ Please provide vehicle availability and sightseeing quotation.`;
             <label className="block text-xs uppercase font-semibold text-[#143628] mb-1">Target Date</label>
             <input
               type="date"
+              min={minSelectableDate}
               value={date}
               onChange={(e) => setDate(e.target.value)}
               className="w-full bg-white border border-[#E8DFCE] rounded-md px-3 py-1.5 text-xs text-[#143628]"
@@ -233,7 +238,7 @@ Please provide vehicle availability and sightseeing quotation.`;
 // 3. Private Event & Gathering Quote Modal
 export function EventModal({ isOpen, onClose }) {
   const [eventType, setEventType] = useState('Family Reunion / Gathering');
-  const [targetMonth, setTargetMonth] = useState('October 2026 or later');
+  const [targetMonth, setTargetMonth] = useState('November 2026 or later');
   const [attendees, setAttendees] = useState(30);
   const [guestName, setGuestName] = useState('');
 

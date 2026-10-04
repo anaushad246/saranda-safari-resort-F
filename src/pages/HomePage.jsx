@@ -6,6 +6,7 @@ import {
   Car, Coffee, Utensils, Moon, HelpCircle
 } from 'lucide-react';
 import { Section, Container, Heading, Button, Card, Badge } from '../components/ui/Primitives';
+import { SeasonCountdown } from '../components/SeasonCountdown';
 import { resortInfo } from '../content/resortInfo';
 import { FEATURES } from '../content/features';
 import { thePlaceContent } from '../content/thePlace';
@@ -34,7 +35,7 @@ export function HomePage({
           SECTION 1: HERO
           SARANDA SAFARI RESORT | Nature • Wildlife • Tranquility
           "A little closer to nature. A little further from the everyday."
-          October 2026 Pre-Booking Notice & Quick Booking Bar
+          November 2026 Pre-Booking Notice & Quick Booking Bar
          ========================================================================= */}
       <section className="relative min-h-[90vh] flex flex-col justify-center bg-[#0E261C] text-[#F9F6F0] py-20 border-b border-[#C5A059]/30 overflow-hidden">
         {/* Main Property Photograph Background */}
@@ -74,12 +75,14 @@ export function HomePage({
             Unwind among trees, open lawns and peaceful surroundings at Saranda Safari Resort in Nimtur, Bolani, Odisha. Enjoy a cottage stay, settle into our wooden log house, or spend a night camping beneath the open sky.
           </p>
 
-          {/* October 2026 Season Pre-Booking Banner */}
-          <div className="mt-8 inline-block bg-[#143628]/90 border border-[#C5A059]/60 rounded-xl px-5 py-3 max-w-xl mx-auto shadow-md backdrop-blur-sm">
+          {/* November 2026 Season Pre-Booking Banner */}
+          <div className="mt-8 inline-block bg-[#143628]/90 border border-[#C5A059]/60 rounded-xl px-5 py-3.5 max-w-xl mx-auto shadow-xl shadow-black/40 backdrop-blur-sm transition-all duration-300 hover:border-[#DFCA95] hover:shadow-2xl">
             <div className="flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold text-[#DFCA95] tracking-wide">
               <span className="w-2 h-2 rounded-full bg-[#C5A059] animate-ping" />
               <span>{resortInfo.preBookingNotice}</span>
             </div>
+
+            <SeasonCountdown targetDate="2026-11-01T09:00:00+05:30" />
           </div>
 
           {/* Action CTAs: Explore Our Stays | Check Availability | WhatsApp Us */}
@@ -103,7 +106,7 @@ export function HomePage({
             </Button>
 
             <a
-              href={`https://wa.me/${resortInfo.contact.whatsappNumberRaw}?text=${encodeURIComponent("Hello, I would like to enquire about pre-booking at Saranda Safari Resort for October 2026 onwards.")}`}
+              href={`https://wa.me/${resortInfo.contact.whatsappNumberRaw}?text=${encodeURIComponent("Hello, I would like to enquire about pre-booking at Saranda Safari Resort for November 2026 onwards.")}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center font-medium rounded-md text-base px-6 py-3.5 bg-emerald-900/80 hover:bg-emerald-800 text-white border border-emerald-500/50 shadow-sm transition-colors gap-2"
@@ -117,7 +120,7 @@ export function HomePage({
           {/* <div className="mt-14 max-w-4xl mx-auto bg-white/95 backdrop-blur-md text-[#143628] rounded-xl p-4 shadow-xl border border-[#E8DFCE] hidden sm:grid grid-cols-4 gap-4 text-left items-center">
             <div className="border-r border-[#E8DFCE] pr-3">
               <span className="text-[11px] uppercase tracking-wider font-semibold text-[#8F6C27] block">Season</span>
-              <span className="text-sm font-serif font-bold text-[#143628]">Oct 2026 Stays</span>
+              <span className="text-sm font-serif font-bold text-[#143628]">Nov 2026 Stays</span>
             </div>
             <div className="border-r border-[#E8DFCE] pr-3">
               <span className="text-[11px] uppercase tracking-wider font-semibold text-[#8F6C27] block">Timing</span>
@@ -1066,7 +1069,7 @@ export function HomePage({
               </div>
 
               <div className="pt-1 text-[11px] text-[#DFCA95]/85">
-                Pre-booking open for October 2026 onwards • 50% advance to confirm booking
+                Pre-booking open for November 2026 onwards • 50% advance to confirm booking
               </div>
             </div>
 

@@ -6,7 +6,7 @@ export const resortInfo = {
   established: 1998,
   tagline: "Nature • Wildlife • Tranquility",
   subtext: "A little closer to nature. A little further from the everyday.",
-  preBookingNotice: "Welcoming guests from October 2026 — pre-book your stay now.",
+  preBookingNotice: "Welcoming guests from November 2026 — pre-book your stay now.",
   heroDescription: "Unwind among trees, open lawns and peaceful surroundings at Saranda Safari Resort in Nimtur, Bolani, Odisha. Enjoy a cottage stay, settle into our wooden log house, or spend a night camping beneath the open sky.",
   
   address: {

@@ -191,7 +191,7 @@ export function ContactPage({ onOpenBooking }) {
               {/* Quick Quote Banner */}
               <div className="bg-[#143628] rounded-xl p-4 text-white flex items-center justify-between gap-3 shadow-xs">
                 <div>
-                  <h4 className="font-serif font-bold text-xs sm:text-sm text-[#DFCA95]">Planning an October 2026 Stay?</h4>
+                  <h4 className="font-serif font-bold text-xs sm:text-sm text-[#DFCA95]">Planning a November 2026 Stay?</h4>
                   <p className="text-[11px] text-white/80 mt-0.5">Calculate instant prices & pre-book your dates.</p>
                 </div>
                 <button

@@ -6,7 +6,8 @@ import {
 import { Button, Card, Badge } from './ui/Primitives';
 import { stayInventory } from '../content/stayInventory';
 import { resortInfo } from '../content/resortInfo';
-import { apiCreateBooking, apiGetQuote } from '../services/api';
+import { apiCreateBooking, apiGetQuote, apiLookupBooking } from '../services/api';
+import { saveActiveHold, clearActiveHold } from '../utils/bookingHoldCache';
 import { useInventory } from '../context/InventoryContext';
 import { SubmissionLoader } from './SubmissionLoader';
 
@@ -20,17 +21,21 @@ const UNIT_TYPE_MAP = {
   'camping-tents': 'camping_tent'
 };
 
-export function AvailabilityModal({ isOpen, onClose }) {
+export function AvailabilityModal({ isOpen, onClose, initialBooking = null, initialStep = 1 }) {
 
   const unitsList = stayInventory?.units || [];
   const defaultUnitId = unitsList[0]?.id || 'riverwood';
 
   // Step state: 1 = 'select', 2 = 'details', 3 = 'receipt'
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(initialStep || 1);
+
+  const todayStr = new Date().toISOString().split('T')[0];
+  const seasonOpeningStr = '2026-11-01';
+  const minCheckInDate = todayStr > seasonOpeningStr ? todayStr : seasonOpeningStr;
 
   // Form State (Step 1)
   const [selectedUnitType, setSelectedUnitType] = useState(defaultUnitId);
-  const [checkInDate, setCheckInDate] = useState('2026-10-15');
+  const [checkInDate, setCheckInDate] = useState('2026-11-05');
   const [nights, setNights] = useState(1);
   const [adults, setAdults] = useState(2);
   const [children5to10, setChildren5to10] = useState(0);
@@ -46,14 +51,26 @@ export function AvailabilityModal({ isOpen, onClose }) {
   // API Interaction State
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [activeHoldConflict, setActiveHoldConflict] = useState(null);
   const [liveQuote, setLiveQuote] = useState(null);
   const { findUnit } = useInventory();
 
   // Receipt / Confirmed Booking State (Step 3)
-  const [confirmedBooking, setConfirmedBooking] = useState(null);
+  const [confirmedBooking, setConfirmedBooking] = useState(initialBooking || null);
   const [copiedField, setCopiedField] = useState('');
   const [timeRemaining, setTimeRemaining] = useState('');
   const [isHoldExpired, setIsHoldExpired] = useState(false);
+
+  // Synchronize initialBooking prop if passed from external restore/lookup
+  useEffect(() => {
+    if (initialBooking && isOpen) {
+      setConfirmedBooking(initialBooking);
+      setStep(initialStep || 3);
+      if (initialBooking.guest?.name) setGuestName(initialBooking.guest.name);
+      if (initialBooking.guest?.phone) setGuestPhone(initialBooking.guest.phone);
+      if (initialBooking.guest?.email) setGuestEmail(initialBooking.guest.email);
+    }
+  }, [initialBooking, initialStep, isOpen]);
 
   const currentUnit = unitsList.find(u => u.id === selectedUnitType) || unitsList[0] || {
     id: 'riverwood',
@@ -221,6 +238,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
       if (diff <= 0) {
         setTimeRemaining('00:00:00');
         setIsHoldExpired(true);
+        clearActiveHold();
         clearInterval(timer);
       } else {
         const hrs = Math.floor(diff / (1000 * 60 * 60));
@@ -242,16 +260,25 @@ export function AvailabilityModal({ isOpen, onClose }) {
   };
 
   const handleProceedToDetails = () => {
+    if (!checkInDate || checkInDate < minCheckInDate) {
+      setErrorMessage(`Please select a valid check-in date (from ${minCheckInDate === seasonOpeningStr ? '1st November 2026' : 'today'} onwards). Past dates are not allowed.`);
+      return;
+    }
     if (is3GuestUnitWith4Adults) {
       setErrorMessage('Please adjust party size or pick a larger unit (max 3 adults for this unit).');
       return;
     }
     setErrorMessage('');
+    setActiveHoldConflict(null);
     setStep(2);
   };
 
   const handleConfirmReservation = async (e) => {
     if (e && e.preventDefault) e.preventDefault();
+    if (!checkInDate || checkInDate < minCheckInDate) {
+      setErrorMessage('Check-in date cannot be in the past or before the November 2026 season opening.');
+      return;
+    }
     if (!guestName.trim()) {
       setErrorMessage('Please enter your full name.');
       return;
@@ -264,6 +291,7 @@ export function AvailabilityModal({ isOpen, onClose }) {
 
     setIsSubmitting(true);
     setErrorMessage('');
+    setActiveHoldConflict(null);
 
     try {
       const bookingPayload = {
@@ -288,10 +316,57 @@ export function AvailabilityModal({ isOpen, onClose }) {
       const res = await apiCreateBooking(bookingPayload);
       const data = res.data || res;
       setConfirmedBooking(data);
+      saveActiveHold({
+        bookingReference: data.bookingReference,
+        expiresAt: data.holdExpiresAt,
+        phone: cleanPhone
+      });
       setStep(3);
     } catch (err) {
       console.error('Reservation creation failed:', err);
+      // Check for ACTIVE_BOOKING_HOLD (429)
+      if (err.code === 'ACTIVE_BOOKING_HOLD' || err.data?.code === 'ACTIVE_BOOKING_HOLD' || err.status === 429) {
+        const ref = err.bookingReference || err.data?.bookingReference;
+        const expiresAt = err.expiresAt || err.data?.expiresAt;
+        if (ref) {
+          setActiveHoldConflict({
+            bookingReference: ref,
+            expiresAt,
+            phone: cleanPhone
+          });
+          return;
+        }
+      }
       setErrorMessage(err.message || 'Unable to place reservation hold. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleRecoverConflictHold = async () => {
+    if (!activeHoldConflict) return;
+    setIsSubmitting(true);
+    setErrorMessage('');
+    try {
+      const res = await apiLookupBooking({
+        reference: activeHoldConflict.bookingReference,
+        mobile: activeHoldConflict.phone
+      });
+      const booking = res.data?.booking || res.data;
+      if (booking) {
+        setConfirmedBooking(booking);
+        saveActiveHold({
+          bookingReference: booking.bookingReference,
+          expiresAt: booking.holdExpiresAt,
+          phone: activeHoldConflict.phone
+        });
+        setActiveHoldConflict(null);
+        setStep(3);
+      } else {
+        setErrorMessage('Unable to recover active hold. Please check your reference ID.');
+      }
+    } catch (recoverErr) {
+      setErrorMessage(recoverErr.message || 'Unable to recover hold. Please contact resort desk.');
     } finally {
       setIsSubmitting(false);
     }
@@ -400,7 +475,7 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
               <div className="bg-[#F4EFE6] border border-[#C5A059]/50 rounded-lg p-3 flex items-start gap-2.5 text-xs text-[#143628]">
                 <Info className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-semibold">October 2026 Season: </span>
+                  <span className="font-semibold">November 2026 Season: </span>
                   <span>Direct reservations place an automatic 2-hour hold on the unit. 50% advance secures your stay with 100% refund guarantee if canceled by resort.</span>
                 </div>
               </div>
@@ -446,11 +521,11 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-semibold text-[#143628] mb-1.5">
-                    Check-in Date (Oct 2026 Season)
+                    Check-in Date (Nov 2026 Season)
                   </label>
                   <input
                     type="date"
-                    min="2026-10-01"
+                    min={minCheckInDate}
                     value={checkInDate}
                     onChange={(e) => setCheckInDate(e.target.value)}
                     className="w-full bg-white border border-[#E8DFCE] rounded-md px-3 py-2 text-sm text-[#143628] focus:outline-none focus:ring-1 focus:ring-[#C5A059]"
@@ -690,6 +765,34 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
                   </p>
                 </div>
               </div>
+
+              {/* Enriched 429 Active Hold Recovery Alert */}
+              {activeHoldConflict && (
+                <div className="bg-amber-50 border-2 border-[#C5A059] rounded-xl p-4 text-amber-950 space-y-3 animate-fadeIn">
+                  <div className="flex items-start gap-3">
+                    <Clock className="w-5 h-5 text-[#C25E3E] shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+                      <h4 className="font-serif font-bold text-sm sm:text-base text-[#143628]">
+                        Active Reservation Hold Detected
+                      </h4>
+                      <p className="text-xs text-stone-700 leading-relaxed">
+                        An active reservation hold (<strong className="font-mono text-[#143628] font-bold">{activeHoldConflict.bookingReference}</strong>) is already locked in our registry for this mobile number.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="pt-1">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={handleRecoverConflictHold}
+                      disabled={isSubmitting}
+                      className="w-full sm:w-auto bg-[#C25E3E] hover:bg-[#AA4E31] text-white font-semibold cursor-pointer"
+                    >
+                      {isSubmitting ? 'Verifying Hold...' : 'Continue Payment for Active Hold'} <ArrowRight className="w-3.5 h-3.5 ml-1.5 inline" />
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -886,29 +989,50 @@ I have initiated the UPI transfer. Sharing screenshot for confirmation!`;
                 <Button
                   variant="outline"
                   size="md"
-                  onClick={() => setStep(1)}
+                  onClick={() => {
+                    setActiveHoldConflict(null);
+                    setStep(1);
+                  }}
                   className="w-1/3 sm:w-auto cursor-pointer"
                 >
                   Back
                 </Button>
-                <button
-                  type="button"
-                  onClick={handleConfirmReservation}
-                  disabled={isSubmitting}
-                  className="flex-1 sm:w-auto inline-flex items-center justify-center font-semibold rounded-md px-5 py-2.5 text-sm transition-colors text-white bg-[#C25E3E] hover:bg-[#AA4E31] shadow-sm cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                      Securing 2-Hr Hold...
-                    </>
-                  ) : (
-                    <>
-                      <Clock className="w-4 h-4 mr-2" />
-                      Lock 2-Hour Reservation Hold
-                    </>
-                  )}
-                </button>
+                {activeHoldConflict ? (
+                  <button
+                    type="button"
+                    onClick={handleRecoverConflictHold}
+                    disabled={isSubmitting}
+                    className="flex-1 sm:w-auto inline-flex items-center justify-center font-semibold rounded-md px-5 py-2.5 text-sm transition-colors text-white bg-[#C25E3E] hover:bg-[#AA4E31] shadow-sm cursor-pointer disabled:bg-gray-400"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                        Verifying Hold...
+                      </>
+                    ) : (
+                      'Continue Payment for Active Hold'
+                    )}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleConfirmReservation}
+                    disabled={isSubmitting}
+                    className="flex-1 sm:w-auto inline-flex items-center justify-center font-semibold rounded-md px-5 py-2.5 text-sm transition-colors text-white bg-[#C25E3E] hover:bg-[#AA4E31] shadow-sm cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                        Securing 2-Hr Hold...
+                      </>
+                    ) : (
+                      <>
+                        <Clock className="w-4 h-4 mr-2" />
+                        Lock 2-Hour Reservation Hold
+                      </>
+                    )}
+                  </button>
+                )}
               </>
             )}
 

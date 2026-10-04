@@ -1,5 +1,5 @@
-﻿import React, { useState, useEffect } from 'react';
-import { Calendar, Phone, MessageSquare, Trees, ArrowUp, Lock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Calendar, Phone, MessageSquare, Trees, ArrowUp, Lock, Search } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { HomePage } from './pages/HomePage';
 import { ThePlacePage } from './pages/ThePlacePage';
@@ -11,22 +11,46 @@ import { GettingHerePage } from './pages/GettingHerePage';
 import { ContactPage } from './pages/ContactPage';
 import { AvailabilityModal } from './components/AvailabilityModal';
 import { PickupModal, SightseeingModal, EventModal } from './components/EnquiryModals';
+import { TrackBookingModal } from './components/TrackBookingModal';
 import { Container, Button } from './components/ui/Primitives';
 import { resortInfo, updateResortConfig } from './content/resortInfo';
 import { updateInventoryPricing } from './content/stayInventory';
 import { updateTariffsPricing } from './content/tariffsAndPackages';
 import { AdminLogin } from './admin/AdminLogin';
 import { AdminDashboard } from './admin/AdminDashboard';
+import { getActiveHold, clearActiveHold } from './utils/bookingHoldCache';
+import { apiLookupBooking } from './services/api';
+
+const VALID_PAGES = [
+  'home',
+  'the-place',
+  'experiences',
+  'stay',
+  'packages',
+  'sightseeing',
+  'getting-here',
+  'contact',
+  'admin'
+];
+
+function getPageFromUrl() {
+  if (typeof window === 'undefined') return 'home';
+  if (window.location.hash === '#admin' || window.location.pathname.startsWith('/admin')) {
+    return 'admin';
+  }
+  const cleanPath = window.location.pathname.replace(/^\/+|\/+$/g, '');
+  if (cleanPath && VALID_PAGES.includes(cleanPath)) {
+    return cleanPath;
+  }
+  const cleanHash = window.location.hash.replace(/^#+/, '');
+  if (cleanHash && VALID_PAGES.includes(cleanHash)) {
+    return cleanHash;
+  }
+  return 'home';
+}
 
 export function App() {
-  const [currentPage, setCurrentPage] = useState(() => {
-    if (typeof window !== 'undefined') {
-      if (window.location.hash === '#admin' || window.location.pathname.startsWith('/admin')) {
-        return 'admin';
-      }
-    }
-    return 'home';
-  });
+  const [currentPage, setCurrentPage] = useState(getPageFromUrl);
 
   const [adminUser, setAdminUser] = useState(() => {
     try {
@@ -48,6 +72,72 @@ export function App() {
   const [isSightseeingOpen, setIsSightseeingOpen] = useState(false);
   const [isEventOpen, setIsEventOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+
+  // Active Hold & Track Booking State
+  const [isTrackBookingOpen, setIsTrackBookingOpen] = useState(false);
+  const [activeHold, setActiveHold] = useState(() => getActiveHold());
+  const [activeHoldBooking, setActiveHoldBooking] = useState(null);
+  const [activeHoldStep, setActiveHoldStep] = useState(1);
+  const [isValidatingHold, setIsValidatingHold] = useState(false);
+
+  // Keep active hold state in sync with localStorage across tabs & events
+  useEffect(() => {
+    const syncHold = () => {
+      setActiveHold(getActiveHold());
+    };
+    window.addEventListener('ssr:hold_updated', syncHold);
+    window.addEventListener('focus', syncHold);
+    return () => {
+      window.removeEventListener('ssr:hold_updated', syncHold);
+      window.removeEventListener('focus', syncHold);
+    };
+  }, []);
+
+  // When guest clicks the active hold pill in the navbar, ALWAYS verify with backend
+  const handleActiveHoldClick = async () => {
+    if (!activeHold?.reference) return;
+    setIsValidatingHold(true);
+    try {
+      const res = await apiLookupBooking({
+        reference: activeHold.reference,
+        mobile: activeHold.mobile
+      });
+      const booking = res.data?.booking || res.data;
+      if (booking) {
+        if (booking.bookingStatus === 'pending') {
+          const isExpired = booking.holdExpiresAt && new Date(booking.holdExpiresAt) <= new Date();
+          if (isExpired) {
+            clearActiveHold();
+            setActiveHold(null);
+            alert('Your 2-hour reservation hold has expired. The unit has been released back to inventory.');
+          } else {
+            setActiveHoldBooking(booking);
+            setActiveHoldStep(3);
+            setIsBookingOpen(true);
+          }
+        } else if (booking.bookingStatus === 'confirmed') {
+          clearActiveHold();
+          setActiveHold(null);
+          setActiveHoldBooking(booking);
+          setActiveHoldStep(3);
+          setIsBookingOpen(true);
+        } else {
+          clearActiveHold();
+          setActiveHold(null);
+          setIsTrackBookingOpen(true);
+        }
+      } else {
+        clearActiveHold();
+        setActiveHold(null);
+        setIsTrackBookingOpen(true);
+      }
+    } catch (err) {
+      console.warn('[ActiveHold Verification Error]:', err.message);
+      setIsTrackBookingOpen(true);
+    } finally {
+      setIsValidatingHold(false);
+    }
+  };
 
   useEffect(() => {
     // Dynamically synchronize contact & payment config from Backend Environment
@@ -81,12 +171,7 @@ export function App() {
     };
 
     const handleUrlSync = () => {
-      const isAdmin = window.location.hash === '#admin' || window.location.pathname.startsWith('/admin');
-      if (isAdmin) {
-        setCurrentPage('admin');
-      } else {
-        setCurrentPage('home');
-      }
+      setCurrentPage(getPageFromUrl());
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -125,11 +210,9 @@ export function App() {
       } catch {}
     } else {
       try {
-        if (window.location.pathname.startsWith('/admin')) {
-          history.pushState(null, '', '/');
-        }
-        if (window.location.hash === '#admin') {
-          history.replaceState(null, '', '/');
+        const targetPath = pageId === 'home' ? '/' : `/${pageId}`;
+        if (window.location.pathname !== targetPath || window.location.hash) {
+          history.pushState(null, '', targetPath);
         }
       } catch {}
     }
@@ -178,7 +261,15 @@ export function App() {
       <Navbar
         currentPage={currentPage}
         onNavigate={navigateTo}
-        onOpenBooking={() => setIsBookingOpen(true)}
+        onOpenBooking={() => {
+          setActiveHoldBooking(null);
+          setActiveHoldStep(1);
+          setIsBookingOpen(true);
+        }}
+        onOpenTrackBooking={() => setIsTrackBookingOpen(true)}
+        activeHold={activeHold}
+        onActiveHoldClick={handleActiveHoldClick}
+        isValidatingHold={isValidatingHold}
       />
 
       {/* Main Page Content */}
@@ -186,7 +277,11 @@ export function App() {
         {currentPage === 'home' && (
           <HomePage
             onNavigate={navigateTo}
-            onOpenBooking={() => setIsBookingOpen(true)}
+            onOpenBooking={() => {
+              setActiveHoldBooking(null);
+              setActiveHoldStep(1);
+              setIsBookingOpen(true);
+            }}
             onOpenPickup={() => setIsPickupOpen(true)}
             onOpenSightseeing={() => setIsSightseeingOpen(true)}
             onOpenEvent={() => setIsEventOpen(true)}
@@ -196,26 +291,42 @@ export function App() {
         {currentPage === 'the-place' && (
           <ThePlacePage
             onNavigate={navigateTo}
-            onOpenBooking={() => setIsBookingOpen(true)}
+            onOpenBooking={() => {
+              setActiveHoldBooking(null);
+              setActiveHoldStep(1);
+              setIsBookingOpen(true);
+            }}
           />
         )}
 
         {currentPage === 'experiences' && (
           <ExperiencesPage
             onNavigate={navigateTo}
-            onOpenBooking={() => setIsBookingOpen(true)}
+            onOpenBooking={() => {
+              setActiveHoldBooking(null);
+              setActiveHoldStep(1);
+              setIsBookingOpen(true);
+            }}
           />
         )}
 
         {currentPage === 'stay' && (
           <StayPage
-            onOpenBooking={() => setIsBookingOpen(true)}
+            onOpenBooking={() => {
+              setActiveHoldBooking(null);
+              setActiveHoldStep(1);
+              setIsBookingOpen(true);
+            }}
           />
         )}
 
         {currentPage === 'packages' && (
           <PackagesPage
-            onOpenBooking={() => setIsBookingOpen(true)}
+            onOpenBooking={() => {
+              setActiveHoldBooking(null);
+              setActiveHoldStep(1);
+              setIsBookingOpen(true);
+            }}
             onOpenEvent={() => setIsEventOpen(true)}
           />
         )}
@@ -234,7 +345,11 @@ export function App() {
 
         {currentPage === 'contact' && (
           <ContactPage
-            onOpenBooking={() => setIsBookingOpen(true)}
+            onOpenBooking={() => {
+              setActiveHoldBooking(null);
+              setActiveHoldStep(1);
+              setIsBookingOpen(true);
+            }}
           />
         )}
       </main>
@@ -267,9 +382,21 @@ export function App() {
 
             <div className="flex flex-wrap items-center justify-center gap-3">
               <Button
+                variant="outline-light"
+                size="sm"
+                onClick={() => setIsTrackBookingOpen(true)}
+                icon={Search}
+              >
+                Track Booking
+              </Button>
+              <Button
                 variant="terracotta"
                 size="sm"
-                onClick={() => setIsBookingOpen(true)}
+                onClick={() => {
+                  setActiveHoldBooking(null);
+                  setActiveHoldStep(1);
+                  setIsBookingOpen(true);
+                }}
                 icon={Calendar}
               >
                 Check Availability
@@ -300,7 +427,7 @@ export function App() {
       {/* Sticky Mobile Bottom Booking Bar */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#143628] text-[#F9F6F0] px-4 py-2.5 border-t border-[#C5A059]/40 shadow-lg flex items-center justify-between gap-2 print:hidden">
         <div className="text-left">
-          <span className="text-[10px] text-[#DFCA95] uppercase font-semibold block">Oct 2026 Stays</span>
+          <span className="text-[10px] text-[#DFCA95] uppercase font-semibold block">Nov 2026 Stays</span>
           <span className="text-xs font-serif font-bold text-white">From ₹3,000 / night</span>
         </div>
         <div className="flex items-center gap-2">
@@ -315,7 +442,11 @@ export function App() {
           </a>
           <button
             type="button"
-            onClick={() => setIsBookingOpen(true)}
+            onClick={() => {
+              setActiveHoldBooking(null);
+              setActiveHoldStep(1);
+              setIsBookingOpen(true);
+            }}
             className="bg-[#C25E3E] text-white px-4 py-2 rounded text-xs font-semibold shadow-sm active:bg-[#AA4E31] cursor-pointer"
           >
             Check Availability
@@ -338,7 +469,23 @@ export function App() {
       {/* Interactive Modals */}
       <AvailabilityModal
         isOpen={isBookingOpen}
-        onClose={() => setIsBookingOpen(false)}
+        initialBooking={activeHoldBooking}
+        initialStep={activeHoldStep}
+        onClose={() => {
+          setIsBookingOpen(false);
+          setActiveHoldBooking(null);
+          setActiveHoldStep(1);
+        }}
+      />
+
+      <TrackBookingModal
+        isOpen={isTrackBookingOpen}
+        onClose={() => setIsTrackBookingOpen(false)}
+        onOpenPaymentStep={(booking) => {
+          setActiveHoldBooking(booking);
+          setActiveHoldStep(3);
+          setIsBookingOpen(true);
+        }}
       />
 
       <PickupModal

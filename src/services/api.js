@@ -1,4 +1,4 @@
-﻿const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
 
 const ADMIN_TOKEN_KEY = 'ssr_admin_token';
 const ADMIN_USER_KEY = 'ssr_admin_user';
@@ -47,7 +47,14 @@ async function fetchApi(endpoint, options = {}) {
           new CustomEvent('ssr:unauthorized', { detail: { message: result.message } })
         );
       }
-      throw new Error(result.message || 'API request failed');
+      const apiError = new Error(result.message || 'API request failed');
+      apiError.status = response.status;
+      apiError.code = result.code || result.data?.code;
+      apiError.bookingReference = result.bookingReference || result.data?.bookingReference;
+      apiError.expiresAt = result.expiresAt || result.data?.expiresAt;
+      apiError.action = result.action || result.data?.action;
+      apiError.data = result.data;
+      throw apiError;
     }
 
     return result;
@@ -61,6 +68,14 @@ async function fetchApi(endpoint, options = {}) {
     throw error;
   }
 }
+
+// Booking Lookup & Hold Recovery API
+export const apiLookupBooking = async (lookupPayload) => {
+  return await fetchApi('/bookings/lookup', {
+    method: 'POST',
+    body: JSON.stringify(lookupPayload)
+  });
+};
 
 // 1. Availability & Quote API
 export const apiCheckAvailability = async (checkIn, checkOut, adults = 1) => {

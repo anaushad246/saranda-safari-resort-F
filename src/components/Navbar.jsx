@@ -5,13 +5,46 @@ import {
   X,
   Calendar,
   MessageSquare,
+  Clock,
+  Search,
 } from 'lucide-react';
 import { Button } from './ui/Primitives';
 import { resortInfo } from '../content/resortInfo';
 
-export function Navbar({ currentPage, onNavigate, onOpenBooking }) {
+export function Navbar({ 
+  currentPage, 
+  onNavigate, 
+  onOpenBooking,
+  onOpenTrackBooking,
+  activeHold,
+  onActiveHoldClick,
+  isValidatingHold
+}) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [remainingText, setRemainingText] = useState('');
+
+  useEffect(() => {
+    if (!activeHold?.expiresAt) {
+      setRemainingText('');
+      return;
+    }
+
+    const updateTimer = () => {
+      const diff = new Date(activeHold.expiresAt).getTime() - Date.now();
+      if (diff <= 0) {
+        setRemainingText('expired');
+      } else {
+        const hrs = Math.floor(diff / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        setRemainingText(hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`);
+      }
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 30000);
+    return () => clearInterval(interval);
+  }, [activeHold]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,6 +75,8 @@ export function Navbar({ currentPage, onNavigate, onOpenBooking }) {
       behavior: 'smooth',
     });
   };
+
+  const isHoldLive = activeHold && remainingText && remainingText !== 'expired';
 
   return (
     <header
@@ -136,7 +171,7 @@ export function Navbar({ currentPage, onNavigate, onOpenBooking }) {
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-5 xl:gap-7">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-6">
             {navLinks.slice(1).map((link) => {
               const isActive = currentPage === link.id;
 
@@ -171,8 +206,37 @@ export function Navbar({ currentPage, onNavigate, onOpenBooking }) {
             })}
           </nav>
 
-          {/* Desktop CTA */}
-          <div className="hidden sm:flex shrink-0 items-center lg:ml-2">
+          {/* Desktop CTA & Hold Pill */}
+          <div className="hidden sm:flex shrink-0 items-center gap-2.5 lg:ml-2">
+            {/* Active Hold Compact Pill */}
+            {isHoldLive && (
+              <button
+                type="button"
+                onClick={onActiveHoldClick}
+                disabled={isValidatingHold}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 border border-[#C5A059] text-[#143628] hover:bg-amber-100 transition-all text-xs font-semibold shadow-xs cursor-pointer"
+                title="Active 2-Hour Reservation Hold - Click to verify and view payment"
+              >
+                {isValidatingHold ? (
+                  <span className="w-3 h-3 border-2 border-[#C25E3E] border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <Clock className="w-3.5 h-3.5 text-[#C25E3E] shrink-0" />
+                )}
+                <span>⏳ Payment pending · <strong className="font-mono">{activeHold.reference}</strong> · {remainingText}</span>
+              </button>
+            )}
+
+            {/* Track Booking Button */}
+            <button
+              type="button"
+              onClick={onOpenTrackBooking}
+              className="inline-flex items-center gap-1 text-xs font-semibold text-[#143628] hover:text-[#C25E3E] px-2.5 py-1.5 rounded-md hover:bg-[#F4EFE6] transition-colors cursor-pointer"
+              title="Look up your booking status by reference ID"
+            >
+              <Search className="w-3.5 h-3.5" />
+              <span>Track Booking</span>
+            </button>
+
             <Button
               variant="terracotta"
               size="md"
@@ -185,23 +249,44 @@ export function Navbar({ currentPage, onNavigate, onOpenBooking }) {
 
           {/* Mobile Actions */}
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:hidden">
-            <button
-              type="button"
-              onClick={onOpenBooking}
-              className="
-                rounded-md
-                bg-[#C25E3E]
-                px-2.5 py-1.5
-                text-[11px] font-semibold
-                tracking-wide text-white
-                transition-colors
-                hover:bg-[#A94F34]
-                cursor-pointer
-                shrink-0
-              "
-            >
-              Book Stay
-            </button>
+            {isHoldLive ? (
+              <button
+                type="button"
+                onClick={onActiveHoldClick}
+                disabled={isValidatingHold}
+                className="
+                  inline-flex items-center gap-1
+                  rounded-md
+                  bg-amber-100 border border-[#C5A059]
+                  px-2 py-1.5
+                  text-[11px] font-semibold
+                  text-[#143628]
+                  cursor-pointer
+                  shrink-0
+                "
+              >
+                <Clock className="w-3 h-3 text-[#C25E3E]" />
+                <span>{activeHold.reference}</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={onOpenBooking}
+                className="
+                  rounded-md
+                  bg-[#C25E3E]
+                  px-2.5 py-1.5
+                  text-[11px] font-semibold
+                  tracking-wide text-white
+                  transition-colors
+                  hover:bg-[#A94F34]
+                  cursor-pointer
+                  shrink-0
+                "
+              >
+                Book Stay
+              </button>
+            )}
 
             <button
               type="button"
@@ -229,6 +314,24 @@ export function Navbar({ currentPage, onNavigate, onOpenBooking }) {
           </div>
         </div>
       </div>
+
+      {/* Mobile Active Hold Alert Bar (when hold is active) */}
+      {isHoldLive && (
+        <div className="sm:hidden bg-[#143628] text-[#F9F6F0] px-3.5 py-1.5 border-t border-[#C5A059]/40 flex items-center justify-between text-[11px]">
+          <span className="flex items-center gap-1.5 text-[#DFCA95]">
+            <Clock className="w-3.5 h-3.5 text-[#C5A059]" />
+            <span>Hold active: <strong className="font-mono text-white">{activeHold.reference}</strong> ({remainingText})</span>
+          </span>
+          <button
+            type="button"
+            onClick={onActiveHoldClick}
+            disabled={isValidatingHold}
+            className="text-white bg-[#C25E3E] px-2.5 py-0.5 rounded text-[10px] font-semibold cursor-pointer"
+          >
+            {isValidatingHold ? '...' : 'Pay 50%'}
+          </button>
+        </div>
+      )}
 
       {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
@@ -271,6 +374,29 @@ export function Navbar({ currentPage, onNavigate, onOpenBooking }) {
             </nav>
 
             <div className="flex flex-col gap-2 border-t border-[#E8DFCE] pt-3 pb-4">
+              {/* Track Booking in Mobile Drawer */}
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenTrackBooking();
+                }}
+                className="
+                  flex w-full items-center justify-center gap-2
+                  rounded-md
+                  border border-[#143628]/30
+                  px-4 py-2.5
+                  text-xs sm:text-sm font-semibold
+                  text-[#143628]
+                  transition-colors
+                  hover:bg-[#143628]/5
+                  cursor-pointer
+                "
+              >
+                <Search className="h-4 w-4 text-[#143628]" />
+                Track My Reservation
+              </button>
+
               <Button
                 variant="terracotta"
                 size="md"
@@ -311,3 +437,5 @@ export function Navbar({ currentPage, onNavigate, onOpenBooking }) {
     </header>
   );
 }
+
+export default Navbar;
